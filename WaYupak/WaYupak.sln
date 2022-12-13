@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaYupak", "WaYupak\WaYupak.csproj", "{76B32DFC-BE94-427B-B4B0-ACF628612317}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaYuPak.Console", "WaYuPak.Console\WaYuPak.Console.csproj", "{97856760-79FC-4B6D-96BD-6900D0ACEFF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76B32DFC-BE94-427B-B4B0-ACF628612317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76B32DFC-BE94-427B-B4B0-ACF628612317}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76B32DFC-BE94-427B-B4B0-ACF628612317}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76B32DFC-BE94-427B-B4B0-ACF628612317}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97856760-79FC-4B6D-96BD-6900D0ACEFF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97856760-79FC-4B6D-96BD-6900D0ACEFF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97856760-79FC-4B6D-96BD-6900D0ACEFF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97856760-79FC-4B6D-96BD-6900D0ACEFF5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08190553-856B-48EA-90A6-11625D08E0FE}
+	EndGlobalSection
+EndGlobal
