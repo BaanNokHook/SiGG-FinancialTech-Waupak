@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYupak\\WaYuPak.Console\\WaYuPak.Console.csproj": {}
+    "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYuPak.Console\\WaYuPak.Console.csproj": {}
   },
   "projects": {
-    "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYupak\\WaYuPak.Console\\WaYuPak.Console.csproj": {
+    "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYuPak.Console\\WaYuPak.Console.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYupak\\WaYuPak.Console\\WaYuPak.Console.csproj",
+        "projectUniqueName": "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYuPak.Console\\WaYuPak.Console.csproj",
         "projectName": "WaYuPak.Console",
-        "projectPath": "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYupak\\WaYuPak.Console\\WaYuPak.Console.csproj",
+        "projectPath": "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYuPak.Console\\WaYuPak.Console.csproj",
         "packagesPath": "C:\\Users\\pnaja\\.nuget\\packages\\",
-        "outputPath": "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYupak\\WaYuPak.Console\\obj\\",
+        "outputPath": "D:\\LaCasaDePapel\\SiGG\\SiGG-FinancialTech-Waupak\\WaYuPak.Console\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
