@@ -542,6 +542,3 @@ namespace GM.Application.Web.Areas.Report.Controllers
             }
         }
 }
-
-
-
