@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportAverageYTMReport" targetNamespace="http://tempuri.org/ReportAverageYTMReport.xsd" xmlns:mstns="http://tempuri.org/ReportAverageYTMReport.xsd" xmlns="http://tempuri.org/ReportAverageYTMReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportAverageYTMReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportAverageYTMReport" msprop:Generator_UserDSName="ReportAverageYTMReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="AverageYTMTable" msprop:Generator_TableClassName="AverageYTMTableDataTable" msprop:Generator_TableVarName="tableAverageYTMTable" msprop:Generator_TablePropName="AverageYTMTable" msprop:Generator_RowDeletingName="AverageYTMTableRowDeleting" msprop:Generator_RowChangingName="AverageYTMTableRowChanging" msprop:Generator_RowEvHandlerName="AverageYTMTableRowChangeEventHandler" msprop:Generator_RowDeletedName="AverageYTMTableRowDeleted" msprop:Generator_UserTableName="AverageYTMTable" msprop:Generator_RowChangedName="AverageYTMTableRowChanged" msprop:Generator_RowEvArgName="AverageYTMTableRowChangeEvent" msprop:Generator_RowClassName="AverageYTMTableRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="run_date" msprop:Generator_ColumnVarNameInTable="columnrun_date" msprop:Generator_ColumnPropNameInRow="run_date" msprop:Generator_ColumnPropNameInTable="run_dateColumn" msprop:Generator_UserColumnName="run_date" type="xs:string" minOccurs="0" />
+              <xs:element name="lending" msprop:Generator_ColumnVarNameInTable="columnlending" msprop:Generator_ColumnPropNameInRow="lending" msprop:Generator_ColumnPropNameInTable="lendingColumn" msprop:Generator_UserColumnName="lending" type="xs:string" minOccurs="0" />
+              <xs:element name="wtd_avg_rate_lending" msprop:Generator_ColumnVarNameInTable="columnwtd_avg_rate_lending" msprop:Generator_ColumnPropNameInRow="wtd_avg_rate_lending" msprop:Generator_ColumnPropNameInTable="wtd_avg_rate_lendingColumn" msprop:Generator_UserColumnName="wtd_avg_rate_lending" type="xs:string" minOccurs="0" />
+              <xs:element name="borrowing" msprop:Generator_ColumnVarNameInTable="columnborrowing" msprop:Generator_ColumnPropNameInRow="borrowing" msprop:Generator_ColumnPropNameInTable="borrowingColumn" msprop:Generator_UserColumnName="borrowing" type="xs:string" minOccurs="0" />
+              <xs:element name="wtd_avg_rate_borrowing" msprop:Generator_ColumnVarNameInTable="columnwtd_avg_rate_borrowing" msprop:Generator_ColumnPropNameInRow="wtd_avg_rate_borrowing" msprop:Generator_ColumnPropNameInTable="wtd_avg_rate_borrowingColumn" msprop:Generator_UserColumnName="wtd_avg_rate_borrowing" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

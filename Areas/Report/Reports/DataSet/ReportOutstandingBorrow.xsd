@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportOutstandingBorrow" targetNamespace="http://tempuri.org/ReportOutstandingBorrow.xsd" xmlns:mstns="http://tempuri.org/ReportOutstandingBorrow.xsd" xmlns="http://tempuri.org/ReportOutstandingBorrow.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportOutstandingBorrow" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportOutstandingBorrow" msprop:Generator_UserDSName="ReportOutstandingBorrow">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="OutstandingBorrow" msprop:Generator_TableClassName="OutstandingBorrowDataTable" msprop:Generator_TableVarName="tableOutstandingBorrow" msprop:Generator_TablePropName="OutstandingBorrow" msprop:Generator_RowDeletingName="OutstandingBorrowRowDeleting" msprop:Generator_RowChangingName="OutstandingBorrowRowChanging" msprop:Generator_RowEvHandlerName="OutstandingBorrowRowChangeEventHandler" msprop:Generator_RowDeletedName="OutstandingBorrowRowDeleted" msprop:Generator_UserTableName="OutstandingBorrow" msprop:Generator_RowChangedName="OutstandingBorrowRowChanged" msprop:Generator_RowEvArgName="OutstandingBorrowRowChangeEvent" msprop:Generator_RowClassName="OutstandingBorrowRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="counterparty_code" msprop:Generator_ColumnVarNameInTable="columncounterparty_code" msprop:Generator_ColumnPropNameInRow="counterparty_code" msprop:Generator_ColumnPropNameInTable="counterparty_codeColumn" msprop:Generator_UserColumnName="counterparty_code" type="xs:string" minOccurs="0" />
+              <xs:element name="isin_code" msprop:Generator_ColumnVarNameInTable="columnisin_code" msprop:Generator_ColumnPropNameInRow="isin_code" msprop:Generator_ColumnPropNameInTable="isin_codeColumn" msprop:Generator_UserColumnName="isin_code" type="xs:string" minOccurs="0" />
+              <xs:element name="par_unit" msprop:Generator_ColumnVarNameInTable="columnpar_unit" msprop:Generator_ColumnPropNameInRow="par_unit" msprop:Generator_ColumnPropNameInTable="par_unitColumn" msprop:Generator_UserColumnName="par_unit" type="xs:string" minOccurs="0" />
+              <xs:element name="borrow_fits" msprop:Generator_ColumnVarNameInTable="columnborrow_fits" msprop:Generator_ColumnPropNameInRow="borrow_fits" msprop:Generator_ColumnPropNameInTable="borrow_fitsColumn" msprop:Generator_UserColumnName="borrow_fits" type="xs:string" minOccurs="0" />
+              <xs:element name="pledge" msprop:Generator_ColumnVarNameInTable="columnpledge" msprop:Generator_ColumnPropNameInRow="pledge" msprop:Generator_ColumnPropNameInTable="pledgeColumn" msprop:Generator_UserColumnName="pledge" type="xs:string" minOccurs="0" />
+              <xs:element name="non_pledge" msprop:Generator_ColumnVarNameInTable="columnnon_pledge" msprop:Generator_ColumnPropNameInRow="non_pledge" msprop:Generator_ColumnPropNameInTable="non_pledgeColumn" msprop:Generator_UserColumnName="non_pledge" type="xs:string" minOccurs="0" />
+              <xs:element name="period" msprop:Generator_ColumnVarNameInTable="columnperiod" msprop:Generator_ColumnPropNameInRow="period" msprop:Generator_ColumnPropNameInTable="periodColumn" msprop:Generator_UserColumnName="period" type="xs:string" minOccurs="0" />
+              <xs:element name="port" msprop:Generator_ColumnVarNameInTable="columnport" msprop:Generator_ColumnPropNameInRow="port" msprop:Generator_ColumnPropNameInTable="portColumn" msprop:Generator_UserColumnName="port" type="xs:string" minOccurs="0" />
+              <xs:element name="type" msprop:Generator_ColumnVarNameInTable="columntype" msprop:Generator_ColumnPropNameInRow="type" msprop:Generator_ColumnPropNameInTable="typeColumn" msprop:Generator_UserColumnName="type" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

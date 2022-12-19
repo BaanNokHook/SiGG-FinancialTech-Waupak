@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportOutstandingBilateralPrivate" targetNamespace="http://tempuri.org/ReportOutstandingBilateralPrivate.xsd" xmlns:mstns="http://tempuri.org/ReportOutstandingBilateralPrivate.xsd" xmlns="http://tempuri.org/ReportOutstandingBilateralPrivate.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportOutstandingBilateralPrivate" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportOutstandingBilateralPrivate" msprop:Generator_UserDSName="ReportOutstandingBilateralPrivate">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="OutstandingBilateralPrivate" msprop:Generator_TableClassName="OutstandingBilateralPrivateDataTable" msprop:Generator_TableVarName="tableOutstandingBilateralPrivate" msprop:Generator_RowChangedName="OutstandingBilateralPrivateRowChanged" msprop:Generator_TablePropName="OutstandingBilateralPrivate" msprop:Generator_RowDeletingName="OutstandingBilateralPrivateRowDeleting" msprop:Generator_RowChangingName="OutstandingBilateralPrivateRowChanging" msprop:Generator_RowEvHandlerName="OutstandingBilateralPrivateRowChangeEventHandler" msprop:Generator_RowDeletedName="OutstandingBilateralPrivateRowDeleted" msprop:Generator_RowClassName="OutstandingBilateralPrivateRow" msprop:Generator_UserTableName="OutstandingBilateralPrivate" msprop:Generator_RowEvArgName="OutstandingBilateralPrivateRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="trans_no" msprop:Generator_ColumnVarNameInTable="columntrans_no" msprop:Generator_ColumnPropNameInRow="trans_no" msprop:Generator_ColumnPropNameInTable="trans_noColumn" msprop:Generator_UserColumnName="trans_no" type="xs:string" minOccurs="0" />
+              <xs:element name="contract_no" msprop:Generator_ColumnVarNameInTable="columncontract_no" msprop:Generator_ColumnPropNameInRow="contract_no" msprop:Generator_ColumnPropNameInTable="contract_noColumn" msprop:Generator_UserColumnName="contract_no" type="xs:string" minOccurs="0" />
+              <xs:element name="instrument_code" msprop:Generator_ColumnVarNameInTable="columninstrument_code" msprop:Generator_ColumnPropNameInRow="instrument_code" msprop:Generator_ColumnPropNameInTable="instrument_codeColumn" msprop:Generator_UserColumnName="instrument_code" type="xs:string" minOccurs="0" />
+              <xs:element name="instrument_type" msprop:Generator_ColumnVarNameInTable="columninstrument_type" msprop:Generator_ColumnPropNameInRow="instrument_type" msprop:Generator_ColumnPropNameInTable="instrument_typeColumn" msprop:Generator_UserColumnName="instrument_type" type="xs:string" minOccurs="0" />
+              <xs:element name="counterparty_name" msprop:Generator_ColumnVarNameInTable="columncounterparty_name" msprop:Generator_ColumnPropNameInRow="counterparty_name" msprop:Generator_ColumnPropNameInTable="counterparty_nameColumn" msprop:Generator_UserColumnName="counterparty_name" type="xs:string" minOccurs="0" />
+              <xs:element name="trade_date" msprop:Generator_ColumnVarNameInTable="columntrade_date" msprop:Generator_ColumnPropNameInRow="trade_date" msprop:Generator_ColumnPropNameInTable="trade_dateColumn" msprop:Generator_UserColumnName="trade_date" type="xs:string" minOccurs="0" />
+              <xs:element name="settlement_date" msprop:Generator_ColumnVarNameInTable="columnsettlement_date" msprop:Generator_ColumnPropNameInRow="settlement_date" msprop:Generator_ColumnPropNameInTable="settlement_dateColumn" msprop:Generator_UserColumnName="settlement_date" type="xs:string" minOccurs="0" />
+              <xs:element name="maturity_date" msprop:Generator_ColumnVarNameInTable="columnmaturity_date" msprop:Generator_ColumnPropNameInRow="maturity_date" msprop:Generator_ColumnPropNameInTable="maturity_dateColumn" msprop:Generator_UserColumnName="maturity_date" type="xs:string" minOccurs="0" />
+              <xs:element name="period" msprop:Generator_ColumnVarNameInTable="columnperiod" msprop:Generator_ColumnPropNameInRow="period" msprop:Generator_ColumnPropNameInTable="periodColumn" msprop:Generator_UserColumnName="period" type="xs:string" minOccurs="0" />
+              <xs:element name="purchase_price" msprop:Generator_ColumnVarNameInTable="columnpurchase_price" msprop:Generator_ColumnPropNameInRow="purchase_price" msprop:Generator_ColumnPropNameInTable="purchase_priceColumn" msprop:Generator_UserColumnName="purchase_price" type="xs:string" minOccurs="0" />
+              <xs:element name="cur" msprop:Generator_ColumnVarNameInTable="columncur" msprop:Generator_ColumnPropNameInRow="cur" msprop:Generator_ColumnPropNameInTable="curColumn" msprop:Generator_UserColumnName="cur" type="xs:string" minOccurs="0" />
+              <xs:element name="policy_rate" msprop:Generator_ColumnVarNameInTable="columnpolicy_rate" msprop:Generator_ColumnPropNameInRow="policy_rate" msprop:Generator_ColumnPropNameInTable="policy_rateColumn" msprop:Generator_UserColumnName="policy_rate" type="xs:string" minOccurs="0" />
+              <xs:element name="spread" msprop:Generator_ColumnVarNameInTable="columnspread" msprop:Generator_ColumnPropNameInRow="spread" msprop:Generator_ColumnPropNameInTable="spreadColumn" msprop:Generator_UserColumnName="spread" type="xs:string" minOccurs="0" />
+              <xs:element name="repo_rate" msprop:Generator_ColumnVarNameInTable="columnrepo_rate" msprop:Generator_ColumnPropNameInRow="repo_rate" msprop:Generator_ColumnPropNameInTable="repo_rateColumn" msprop:Generator_UserColumnName="repo_rate" type="xs:string" minOccurs="0" />
+              <xs:element name="sec_code_col" msprop:Generator_ColumnVarNameInTable="columnsec_code_col" msprop:Generator_ColumnPropNameInRow="sec_code_col" msprop:Generator_ColumnPropNameInTable="sec_code_colColumn" msprop:Generator_UserColumnName="sec_code_col" type="xs:string" minOccurs="0" />
+              <xs:element name="h_col" msprop:Generator_ColumnVarNameInTable="columnh_col" msprop:Generator_ColumnPropNameInRow="h_col" msprop:Generator_ColumnPropNameInTable="h_colColumn" msprop:Generator_UserColumnName="h_col" type="xs:string" minOccurs="0" />
+              <xs:element name="unit_col" msprop:Generator_ColumnVarNameInTable="columnunit_col" msprop:Generator_ColumnPropNameInRow="unit_col" msprop:Generator_ColumnPropNameInTable="unit_colColumn" msprop:Generator_UserColumnName="unit_col" type="xs:string" minOccurs="0" />
+              <xs:element name="par_value_col" msprop:Generator_ColumnVarNameInTable="columnpar_value_col" msprop:Generator_ColumnPropNameInRow="par_value_col" msprop:Generator_ColumnPropNameInTable="par_value_colColumn" msprop:Generator_UserColumnName="par_value_col" type="xs:string" minOccurs="0" />
+              <xs:element name="cash_amount_col" msprop:Generator_ColumnVarNameInTable="columncash_amount_col" msprop:Generator_ColumnPropNameInRow="cash_amount_col" msprop:Generator_ColumnPropNameInTable="cash_amount_colColumn" msprop:Generator_UserColumnName="cash_amount_col" type="xs:string" minOccurs="0" />
+              <xs:element name="market_value_col" msprop:Generator_ColumnVarNameInTable="columnmarket_value_col" msprop:Generator_ColumnPropNameInRow="market_value_col" msprop:Generator_ColumnPropNameInTable="market_value_colColumn" msprop:Generator_UserColumnName="market_value_col" type="xs:string" minOccurs="0" />
+              <xs:element name="reserve_col" msprop:Generator_ColumnVarNameInTable="columnreserve_col" msprop:Generator_ColumnPropNameInRow="reserve_col" msprop:Generator_ColumnPropNameInTable="reserve_colColumn" msprop:Generator_UserColumnName="reserve_col" type="xs:string" minOccurs="0" />
+              <xs:element name="col_col" msprop:Generator_ColumnVarNameInTable="columncol_col" msprop:Generator_ColumnPropNameInRow="col_col" msprop:Generator_ColumnPropNameInTable="col_colColumn" msprop:Generator_UserColumnName="col_col" type="xs:string" minOccurs="0" />
+              <xs:element name="sec_col" msprop:Generator_ColumnVarNameInTable="columnsec_col" msprop:Generator_ColumnPropNameInRow="sec_col" msprop:Generator_ColumnPropNameInTable="sec_colColumn" msprop:Generator_UserColumnName="sec_col" type="xs:string" minOccurs="0" />
+              <xs:element name="port" msprop:Generator_ColumnVarNameInTable="columnport" msprop:Generator_ColumnPropNameInRow="port" msprop:Generator_ColumnPropNameInTable="portColumn" msprop:Generator_UserColumnName="port" type="xs:string" minOccurs="0" />
+              <xs:element name="current_status" msprop:Generator_ColumnVarNameInTable="columncurrent_status" msprop:Generator_ColumnPropNameInRow="current_status" msprop:Generator_ColumnPropNameInTable="current_statusColumn" msprop:Generator_UserColumnName="current_status" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

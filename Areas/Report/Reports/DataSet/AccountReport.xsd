@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="AccountReport" targetNamespace="http://tempuri.org/AccountReport.xsd" xmlns:mstns="http://tempuri.org/AccountReport.xsd" xmlns="http://tempuri.org/AccountReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="AccountReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_DataSetName="AccountReport" msprop:Generator_UserDSName="AccountReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Table" msprop:Generator_TableClassName="TableDataTable" msprop:Generator_TableVarName="tableTable" msprop:Generator_RowChangedName="TableRowChanged" msprop:Generator_TablePropName="Table" msprop:Generator_RowDeletingName="TableRowDeleting" msprop:Generator_RowChangingName="TableRowChanging" msprop:Generator_RowEvHandlerName="TableRowChangeEventHandler" msprop:Generator_RowDeletedName="TableRowDeleted" msprop:Generator_RowClassName="TableRow" msprop:Generator_UserTableName="Table" msprop:Generator_RowEvArgName="TableRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="posting_date" msprop:Generator_ColumnVarNameInTable="columnposting_date" msprop:Generator_ColumnPropNameInRow="posting_date" msprop:Generator_ColumnPropNameInTable="posting_dateColumn" msprop:Generator_UserColumnName="posting_date" type="xs:string" minOccurs="0" />
+              <xs:element name="port" msprop:Generator_ColumnVarNameInTable="columnport" msprop:Generator_ColumnPropNameInRow="port" msprop:Generator_ColumnPropNameInTable="portColumn" msprop:Generator_UserColumnName="port" type="xs:string" minOccurs="0" />
+              <xs:element name="description" msprop:Generator_ColumnVarNameInTable="columndescription" msprop:Generator_ColumnPropNameInRow="description" msprop:Generator_ColumnPropNameInTable="descriptionColumn" msprop:Generator_UserColumnName="description" type="xs:string" minOccurs="0" />
+              <xs:element name="account_no" msprop:Generator_ColumnVarNameInTable="columnaccount_no" msprop:Generator_ColumnPropNameInRow="account_no" msprop:Generator_ColumnPropNameInTable="account_noColumn" msprop:Generator_UserColumnName="account_no" type="xs:string" minOccurs="0" />
+              <xs:element name="account_name" msprop:Generator_ColumnVarNameInTable="columnaccount_name" msprop:Generator_ColumnPropNameInRow="account_name" msprop:Generator_ColumnPropNameInTable="account_nameColumn" msprop:Generator_UserColumnName="account_name" type="xs:string" minOccurs="0" />
+              <xs:element name="dr_amount" msprop:Generator_ColumnVarNameInTable="columndr_amount" msprop:Generator_ColumnPropNameInRow="dr_amount" msprop:Generator_ColumnPropNameInTable="dr_amountColumn" msprop:Generator_UserColumnName="dr_amount" type="xs:float" minOccurs="0" />
+              <xs:element name="cr_amount" msprop:Generator_ColumnVarNameInTable="columncr_amount" msprop:Generator_ColumnPropNameInRow="cr_amount" msprop:Generator_ColumnPropNameInTable="cr_amountColumn" msprop:Generator_UserColumnName="cr_amount" type="xs:float" minOccurs="0" />
+              <xs:element name="as_of_date" msprop:Generator_ColumnVarNameInTable="columnas_of_date" msprop:Generator_ColumnPropNameInRow="as_of_date" msprop:Generator_ColumnPropNameInTable="as_of_dateColumn" msprop:Generator_UserColumnName="as_of_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="date_start" msprop:Generator_ColumnVarNameInTable="columndate_start" msprop:Generator_ColumnPropNameInRow="date_start" msprop:Generator_ColumnPropNameInTable="date_startColumn" msprop:Generator_UserColumnName="date_start" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="date_end" msprop:Generator_ColumnVarNameInTable="columndate_end" msprop:Generator_ColumnPropNameInRow="date_end" msprop:Generator_ColumnPropNameInTable="date_endColumn" msprop:Generator_UserColumnName="date_end" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="entry_cur" msprop:Generator_ColumnVarNameInTable="columnentry_cur" msprop:Generator_ColumnPropNameInRow="entry_cur" msprop:Generator_ColumnPropNameInTable="entry_curColumn" msprop:Generator_UserColumnName="entry_cur" type="xs:string" minOccurs="0" />
+              <xs:element name="cost_center" msprop:Generator_ColumnVarNameInTable="columncost_center" msprop:Generator_ColumnPropNameInRow="cost_center" msprop:Generator_ColumnPropNameInTable="cost_centerColumn" msprop:Generator_UserColumnName="cost_center" type="xs:string" minOccurs="0" />
+              <xs:element name="cur" msprop:Generator_ColumnVarNameInTable="columncur" msprop:Generator_ColumnPropNameInRow="cur" msprop:Generator_ColumnPropNameInTable="curColumn" msprop:Generator_UserColumnName="cur" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

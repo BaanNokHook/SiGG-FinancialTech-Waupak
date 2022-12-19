@@ -1,0 +1,165 @@
+﻿@model GM.Data.Model.Report.ReportCriteriaModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar"></ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Amend Cancel Report
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed partialViewWrapper">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                @*<iframe src='@System.Configuration.ConfigurationManager.AppSettings["Reportpath"]/AmendCancelReport?controllername=@this.ViewContext.RouteData.Values["controller"].ToString()' style="border:0;width:100%;height: auto;min-height: 750px;overflow: hidden!important;"></iframe>*@
+                <div class="container-fluid container-fixed">
+                    <div class="row row-fixed">
+                        <div class="col-xs-12 col-fixed">
+                            <div class="box-content">
+                                <div class="box-header">
+                                    <div class="left-item">
+                                        <div class="title">
+                                            <h3>Search Report</h3>
+                                        </div>
+                                    </div>
+                                    <div class="right-item">
+                                        <button id="user-master" class="btn btn-link less-more-option">
+                                            Show less option
+                                        </button>
+                                    </div>
+                                </div>
+                                @using (Html.BeginForm())
+                                {
+                                    <div class="form-container form-horizontal">
+                                        <div class="row">
+                                            <div class="col-xs-12 form-wrapper-950 form-center-fix">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.asofdate, new { @class = "control-label col-xs-2" })
+                                                    <div class="col-xs-4">
+                                                        <div class="input-group date input-date">
+                                                            @Html.EditDateFor(model => model.asofdate_string, new { @class = "form-control date-time-picker" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    @Html.LabelFor(model => model.trans_no, new { @class = "control-label col-xs-2" })
+                                                    <div class="col-xs-4">
+                                                        @Html.EditorFor(model => model.trans_no, new { htmlAttributes = new { @class = "form-control w-100" } })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="advance-form">
+                                            <div class="row">
+                                                <div class="col-xs-12 form-wrapper-950 form-center-fix">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.trans_status, new { @class = "control-label col-xs-2" })
+                                                        <div class="col-xs-4">
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_trans_status" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.trans_status_name, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.trans_status, new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.trans_status_name, new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillTransStatus", (string) ViewContext.RouteData.Values["controller"])" id="txt_trans_status" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_trans_status"></ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @Html.LabelFor(model => model.cust_type, new { @class = "control-label col-xs-2" })
+                                                        <div class="col-xs-4">
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_cust_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.cust_type_name, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.cust_type, new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.cust_type_name, new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillCustType", (string) ViewContext.RouteData.Values["controller"])" id="txt_cust_type" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_cust_type"></ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.report_type, new { @class = "control-label col-xs-2" })
+                                                        <div class="col-xs-4">
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_report_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.report_type_name, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.report_type, new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.report_type_name, new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillReportType", (string) ViewContext.RouteData.Values["controller"])" id="txt_report_type" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_report_type"></ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-4">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Button Section -->
+                                        <div class="row">
+                                            <hr>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 mt-25" style="text-align: center;">
+                                                <!-- PDF export button -->
+                                                <!-- Excel Export Button -->
+                                                <button class="btn btn-excel btn-round btn-main mr-4" name="Excel" type="submit">
+                                                    <i class="feather-icon icon-download"></i>
+                                                    Export in Excel
+                                                </button>
+                                                <button class="btn btn-link btn-link-secondary" onclick="formreset()" type="reset">Clear Data</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/Areas/Report/Scripts/GM.ReportAmendCancel.js")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/Areas/Report/Scripts/GM.Validation.js")
+
+    <script>
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavReportAmendCancel').val());
+        });
+    </script>
+}

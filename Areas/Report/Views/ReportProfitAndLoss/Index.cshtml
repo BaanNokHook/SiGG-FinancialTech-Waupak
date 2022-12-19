@@ -1,0 +1,204 @@
+﻿@model GM.Data.Model.Report.ReportCriteriaModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar"></ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Profit And Loss
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed partialViewWrapper">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                @*<iframe src='@System.Configuration.ConfigurationManager.AppSettings["Reportpath"]/ProfitAndLossReport?controllername=@this.ViewContext.RouteData.Values["controller"].ToString()' style="border:0;width:100%;height: auto;min-height: 750px;overflow: hidden!important;"></iframe>*@
+                <div class="container-fluid container-fixed">
+                    <div class="row row-fixed">
+                        <div class="col-xs-12 col-fixed">
+                            <div class="box-content">
+                                <div class="box-header">
+                                    <div class="left-item">
+                                        <div class="title">
+                                            <h3>Search Report</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                @using (Html.BeginForm())
+                                {
+                                    <div class="form-container form-horizontal">
+                                        <div class="row">
+                                            <div class="col-xs-12 form-wrapper-950 form-center-fix">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-2">ประเภทธุรกิจ</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_repodealtype" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.repo_deal_type_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.repo_deal_type, new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.repo_deal_type_name, new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <input type="hidden" data-action="@Url.Action("FillRepoDealType", (string) ViewContext.RouteData.Values["controller"])" id="txt_repodealtype">
+                                                                <ul id="ul_repodealtype"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <label class="control-label col-xs-2">Excel Category</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_excel_category" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.excel_category, "Daily", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.excel_category, new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.excel_category, new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" id="txt_excel_category" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                                <ul id="ul_excel_category">
+                                                                    <li class="searchterm">
+                                                                        <a data-toggle="tooltip" title="Daily" onclick="AddTextForDDL('Daily', 'txt_excel_category', 'D', 'null', 'null')">Daily</a>
+                                                                    </li>
+                                                                    <li class="searchterm">
+                                                                        <a data-toggle="tooltip" title="Monthly" onclick="AddTextForDDL('Monthly', 'txt_excel_category', 'M', 'null', 'null')">Monthly</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 form-wrapper-950 form-center-fix">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-2">as of Date</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="input-group date input-range input-date">
+                                                            @Html.EditDateFor(model => model.asofdate_from_string, new { @class = "form-control date-time-picker" })
+                                                            <span class="input-group-addon default date-pick-btn">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                        <span id="asofdate_from_string_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                                    </div>
+                                                    <label class="control-label col-xs-2">To</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="input-group date input-range input-date">
+                                                            @Html.EditDateFor(model => model.asofdate_to_string, new { @class = "form-control date-time-picker" })
+                                                            <span class="input-group-addon default date-pick-btn">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                        <span id="asofdate_to_string_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-2">Portfolio</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_port" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.port_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.port, new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.port_name, new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <input type="hidden" data-action="@Url.Action("FillPort", (string) ViewContext.RouteData.Values["controller"])" id="txt_port">
+                                                                <ul id="ul_port"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <label class="control-label col-xs-2">Cur</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_currency" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.currency, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.currency, new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.currency, new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillCurrency", (string) ViewContext.RouteData.Values["controller"])" id="txt_currency" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_currency"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-2">Counter Party</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.counterparty_code_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.counterparty_id, new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.counterparty_code_name, new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillCounterParty", (string) ViewContext.RouteData.Values["controller"])" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_counterparty"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Button Section -->
+                                        <div class="row">
+                                            <hr>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 mt-25" style="text-align: center;">
+                                                <!-- PDF export button -->
+                                                <!-- Excel Export Button -->
+                                                <button class="btn btn-excel btn-round btn-main mr-4" name="Excel" type="submit">
+                                                    <i class="feather-icon icon-download"></i>
+                                                    Export in Excel
+                                                </button>
+                                                <button class="btn btn-link btn-link-secondary" onclick="window.location.reload()" type="reset">Clear Data</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/Areas/Report/Scripts/GM.ReportProfitAndLoss.js")
+    @*@Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/Areas/Report/Scripts/GM.Validation.js")*@
+    <script>
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavReportProfitAndLoss').val());
+        });
+    </script>
+}

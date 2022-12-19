@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="EodReconcileReportDs" targetNamespace="http://tempuri.org/EodReconcileReportDs.xsd" xmlns:mstns="http://tempuri.org/EodReconcileReportDs.xsd" xmlns="http://tempuri.org/EodReconcileReportDs.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="EodReconcileReportDs" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="EodReconcileReportDs" msprop:Generator_UserDSName="EodReconcileReportDs">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="EodReconcileTable" msprop:Generator_TableClassName="EodReconcileTableDataTable" msprop:Generator_TableVarName="tableEodReconcileTable" msprop:Generator_TablePropName="EodReconcileTable" msprop:Generator_RowDeletingName="EodReconcileTableRowDeleting" msprop:Generator_RowChangingName="EodReconcileTableRowChanging" msprop:Generator_RowEvHandlerName="EodReconcileTableRowChangeEventHandler" msprop:Generator_RowDeletedName="EodReconcileTableRowDeleted" msprop:Generator_UserTableName="EodReconcileTable" msprop:Generator_RowChangedName="EodReconcileTableRowChanged" msprop:Generator_RowEvArgName="EodReconcileTableRowChangeEvent" msprop:Generator_RowClassName="EodReconcileTableRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="repo_deal_type_name" msprop:Generator_ColumnVarNameInTable="columnrepo_deal_type_name" msprop:Generator_ColumnPropNameInRow="repo_deal_type_name" msprop:Generator_ColumnPropNameInTable="repo_deal_type_nameColumn" msprop:Generator_UserColumnName="repo_deal_type_name" type="xs:string" minOccurs="0" />
+              <xs:element name="bo_state" msprop:Generator_ColumnVarNameInTable="columnbo_state" msprop:Generator_ColumnPropNameInRow="bo_state" msprop:Generator_ColumnPropNameInTable="bo_stateColumn" msprop:Generator_UserColumnName="bo_state" type="xs:string" minOccurs="0" />
+              <xs:element name="mt_code" msprop:Generator_ColumnVarNameInTable="columnmt_code" msprop:Generator_ColumnPropNameInRow="mt_code" msprop:Generator_ColumnPropNameInTable="mt_codeColumn" msprop:Generator_UserColumnName="mt_code" type="xs:string" minOccurs="0" />
+              <xs:element name="trans_no" msprop:Generator_ColumnVarNameInTable="columntrans_no" msprop:Generator_ColumnPropNameInRow="trans_no" msprop:Generator_ColumnPropNameInTable="trans_noColumn" msprop:Generator_UserColumnName="trans_no" type="xs:string" minOccurs="0" />
+              <xs:element name="security" msprop:Generator_ColumnVarNameInTable="columnsecurity" msprop:Generator_ColumnPropNameInRow="security" msprop:Generator_ColumnPropNameInTable="securityColumn" msprop:Generator_UserColumnName="security" type="xs:string" minOccurs="0" />
+              <xs:element name="trade_date" msprop:Generator_ColumnVarNameInTable="columntrade_date" msprop:Generator_ColumnPropNameInRow="trade_date" msprop:Generator_ColumnPropNameInTable="trade_dateColumn" msprop:Generator_UserColumnName="trade_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="settlement_date" msprop:Generator_ColumnVarNameInTable="columnsettlement_date" msprop:Generator_ColumnPropNameInRow="settlement_date" msprop:Generator_ColumnPropNameInTable="settlement_dateColumn" msprop:Generator_UserColumnName="settlement_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="maturity_date" msprop:Generator_ColumnVarNameInTable="columnmaturity_date" msprop:Generator_ColumnPropNameInRow="maturity_date" msprop:Generator_ColumnPropNameInTable="maturity_dateColumn" msprop:Generator_UserColumnName="maturity_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="trans_state" msprop:Generator_ColumnVarNameInTable="columntrans_state" msprop:Generator_ColumnPropNameInRow="trans_state" msprop:Generator_ColumnPropNameInTable="trans_stateColumn" msprop:Generator_UserColumnName="trans_state" type="xs:string" minOccurs="0" />
+              <xs:element name="purchase_price" msprop:Generator_ColumnVarNameInTable="columnpurchase_price" msprop:Generator_ColumnPropNameInRow="purchase_price" msprop:Generator_ColumnPropNameInTable="purchase_priceColumn" msprop:Generator_UserColumnName="purchase_price" type="xs:decimal" minOccurs="0" />
+              <xs:element name="interest_amount" msprop:Generator_ColumnVarNameInTable="columninterest_amount" msprop:Generator_ColumnPropNameInRow="interest_amount" msprop:Generator_ColumnPropNameInTable="interest_amountColumn" msprop:Generator_UserColumnName="interest_amount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="holdingTax_amt" msprop:Generator_ColumnVarNameInTable="columnholdingTax_amt" msprop:Generator_ColumnPropNameInRow="holdingTax_amt" msprop:Generator_ColumnPropNameInTable="holdingTax_amtColumn" msprop:Generator_UserColumnName="holdingTax_amt" type="xs:decimal" minOccurs="0" />
+              <xs:element name="termination_value" msprop:Generator_ColumnVarNameInTable="columntermination_value" msprop:Generator_ColumnPropNameInRow="termination_value" msprop:Generator_ColumnPropNameInTable="termination_valueColumn" msprop:Generator_UserColumnName="termination_value" type="xs:decimal" minOccurs="0" />
+              <xs:element name="payment_method" msprop:Generator_ColumnVarNameInTable="columnpayment_method" msprop:Generator_ColumnPropNameInRow="payment_method" msprop:Generator_ColumnPropNameInTable="payment_methodColumn" msprop:Generator_UserColumnName="payment_method" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

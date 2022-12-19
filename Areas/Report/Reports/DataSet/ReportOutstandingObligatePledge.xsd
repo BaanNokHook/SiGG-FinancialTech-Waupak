@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportOutstandingObligatePledge" targetNamespace="http://tempuri.org/ReportOutstandingObligatePledge.xsd" xmlns:mstns="http://tempuri.org/ReportOutstandingObligatePledge.xsd" xmlns="http://tempuri.org/ReportOutstandingObligatePledge.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportOutstandingObligatePledge" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportOutstandingObligatePledge" msprop:Generator_UserDSName="ReportOutstandingObligatePledge">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent" msprop:Generator_RowClassName="DataTable1Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="asof_date" msprop:Generator_ColumnVarNameInTable="columnasof_date" msprop:Generator_ColumnPropNameInRow="asof_date" msprop:Generator_ColumnPropNameInTable="asof_dateColumn" msprop:Generator_UserColumnName="asof_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="repo_type" msprop:Generator_ColumnVarNameInTable="columnrepo_type" msprop:Generator_ColumnPropNameInRow="repo_type" msprop:Generator_ColumnPropNameInTable="repo_typeColumn" msprop:Generator_UserColumnName="repo_type" type="xs:string" minOccurs="0" />
+              <xs:element name="source" msprop:Generator_ColumnVarNameInTable="columnsource" msprop:Generator_ColumnPropNameInRow="source" msprop:Generator_ColumnPropNameInTable="sourceColumn" msprop:Generator_UserColumnName="source" type="xs:string" minOccurs="0" />
+              <xs:element name="port" msprop:Generator_ColumnVarNameInTable="columnport" msprop:Generator_ColumnPropNameInRow="port" msprop:Generator_ColumnPropNameInTable="portColumn" msprop:Generator_UserColumnName="port" type="xs:string" minOccurs="0" />
+              <xs:element name="instrument_code" msprop:Generator_ColumnVarNameInTable="columninstrument_code" msprop:Generator_ColumnPropNameInRow="instrument_code" msprop:Generator_ColumnPropNameInTable="instrument_codeColumn" msprop:Generator_UserColumnName="instrument_code" type="xs:string" minOccurs="0" />
+              <xs:element name="isin_code" msprop:Generator_ColumnVarNameInTable="columnisin_code" msprop:Generator_ColumnPropNameInRow="isin_code" msprop:Generator_ColumnPropNameInTable="isin_codeColumn" msprop:Generator_UserColumnName="isin_code" type="xs:string" minOccurs="0" />
+              <xs:element name="cur" msprop:Generator_ColumnVarNameInTable="columncur" msprop:Generator_ColumnPropNameInRow="cur" msprop:Generator_ColumnPropNameInTable="curColumn" msprop:Generator_UserColumnName="cur" type="xs:string" minOccurs="0" />
+              <xs:element name="par" msprop:Generator_ColumnVarNameInTable="columnpar" msprop:Generator_ColumnPropNameInRow="par" msprop:Generator_ColumnPropNameInTable="parColumn" msprop:Generator_UserColumnName="par" type="xs:decimal" minOccurs="0" />
+              <xs:element name="obligate" msprop:Generator_ColumnVarNameInTable="columnobligate" msprop:Generator_ColumnPropNameInRow="obligate" msprop:Generator_ColumnPropNameInTable="obligateColumn" msprop:Generator_UserColumnName="obligate" type="xs:decimal" minOccurs="0" />
+              <xs:element name="pledge" msprop:Generator_ColumnVarNameInTable="columnpledge" msprop:Generator_ColumnPropNameInRow="pledge" msprop:Generator_ColumnPropNameInTable="pledgeColumn" msprop:Generator_UserColumnName="pledge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="nonpledge" msprop:Generator_ColumnVarNameInTable="columnnonpledge" msprop:Generator_ColumnPropNameInRow="nonpledge" msprop:Generator_ColumnPropNameInTable="nonpledgeColumn" msprop:Generator_UserColumnName="nonpledge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="period" msprop:Generator_ColumnVarNameInTable="columnperiod" msprop:Generator_ColumnPropNameInRow="period" msprop:Generator_ColumnPropNameInTable="periodColumn" msprop:Generator_UserColumnName="period" type="xs:decimal" minOccurs="0" />
+              <xs:element name="start_obligate_date" msprop:Generator_ColumnVarNameInTable="columnstart_obligate_date" msprop:Generator_ColumnPropNameInRow="start_obligate_date" msprop:Generator_ColumnPropNameInTable="start_obligate_dateColumn" msprop:Generator_UserColumnName="start_obligate_date" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="expire_obligate_date" msprop:Generator_ColumnVarNameInTable="columnexpire_obligate_date" msprop:Generator_ColumnPropNameInRow="expire_obligate_date" msprop:Generator_ColumnPropNameInTable="expire_obligate_dateColumn" msprop:Generator_UserColumnName="expire_obligate_date" type="xs:dateTime" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

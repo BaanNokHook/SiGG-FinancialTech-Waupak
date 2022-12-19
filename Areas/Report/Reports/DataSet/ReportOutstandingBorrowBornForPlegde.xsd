@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportOutstandingBorrowBornForPlegde" targetNamespace="http://tempuri.org/ReportOutstandingBorrowBornForPlegde.xsd" xmlns:mstns="http://tempuri.org/ReportOutstandingBorrowBornForPlegde.xsd" xmlns="http://tempuri.org/ReportOutstandingBorrowBornForPlegde.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportOutstandingBorrowBornForPlegde" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportOutstandingBorrowBornForPlegde" msprop:Generator_UserDSName="ReportOutstandingBorrowBornForPlegde">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="OutstandingBorrowBornForPlegde" msprop:Generator_TableClassName="OutstandingBorrowBornForPlegdeDataTable" msprop:Generator_TableVarName="tableOutstandingBorrowBornForPlegde" msprop:Generator_TablePropName="OutstandingBorrowBornForPlegde" msprop:Generator_RowDeletingName="OutstandingBorrowBornForPlegdeRowDeleting" msprop:Generator_RowChangingName="OutstandingBorrowBornForPlegdeRowChanging" msprop:Generator_RowEvHandlerName="OutstandingBorrowBornForPlegdeRowChangeEventHandler" msprop:Generator_RowDeletedName="OutstandingBorrowBornForPlegdeRowDeleted" msprop:Generator_UserTableName="OutstandingBorrowBornForPlegde" msprop:Generator_RowChangedName="OutstandingBorrowBornForPlegdeRowChanged" msprop:Generator_RowEvArgName="OutstandingBorrowBornForPlegdeRowChangeEvent" msprop:Generator_RowClassName="OutstandingBorrowBornForPlegdeRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="born_code" msprop:Generator_ColumnVarNameInTable="columnborn_code" msprop:Generator_ColumnPropNameInRow="born_code" msprop:Generator_ColumnPropNameInTable="born_codeColumn" msprop:Generator_UserColumnName="born_code" type="xs:string" minOccurs="0" />
+              <xs:element name="isin_code" msprop:Generator_ColumnVarNameInTable="columnisin_code" msprop:Generator_ColumnPropNameInRow="isin_code" msprop:Generator_ColumnPropNameInTable="isin_codeColumn" msprop:Generator_UserColumnName="isin_code" type="xs:string" minOccurs="0" />
+              <xs:element name="par_unit" msprop:Generator_ColumnVarNameInTable="columnpar_unit" msprop:Generator_ColumnPropNameInRow="par_unit" msprop:Generator_ColumnPropNameInTable="par_unitColumn" msprop:Generator_UserColumnName="par_unit" type="xs:string" minOccurs="0" />
+              <xs:element name="borrow_fits" msprop:Generator_ColumnVarNameInTable="columnborrow_fits" msprop:Generator_ColumnPropNameInRow="borrow_fits" msprop:Generator_ColumnPropNameInTable="borrow_fitsColumn" msprop:Generator_UserColumnName="borrow_fits" type="xs:string" minOccurs="0" />
+              <xs:element name="pledge" msprop:Generator_ColumnVarNameInTable="columnpledge" msprop:Generator_ColumnPropNameInRow="pledge" msprop:Generator_ColumnPropNameInTable="pledgeColumn" msprop:Generator_UserColumnName="pledge" type="xs:string" minOccurs="0" />
+              <xs:element name="non_pledge" msprop:Generator_ColumnVarNameInTable="columnnon_pledge" msprop:Generator_ColumnPropNameInRow="non_pledge" msprop:Generator_ColumnPropNameInTable="non_pledgeColumn" msprop:Generator_UserColumnName="non_pledge" type="xs:string" minOccurs="0" />
+              <xs:element name="period" msprop:Generator_ColumnVarNameInTable="columnperiod" msprop:Generator_ColumnPropNameInRow="period" msprop:Generator_ColumnPropNameInTable="periodColumn" msprop:Generator_UserColumnName="period" type="xs:string" minOccurs="0" />
+              <xs:element name="port" msprop:Generator_ColumnVarNameInTable="columnport" msprop:Generator_ColumnPropNameInRow="port" msprop:Generator_ColumnPropNameInTable="portColumn" msprop:Generator_UserColumnName="port" type="xs:string" minOccurs="0" />
+              <xs:element name="type" msprop:Generator_ColumnVarNameInTable="columntype" msprop:Generator_ColumnPropNameInRow="type" msprop:Generator_ColumnPropNameInTable="typeColumn" msprop:Generator_UserColumnName="type" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

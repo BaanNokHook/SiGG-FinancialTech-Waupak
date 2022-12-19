@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportCallMargin" targetNamespace="http://tempuri.org/ReportCallMargin.xsd" xmlns:mstns="http://tempuri.org/ReportCallMargin.xsd" xmlns="http://tempuri.org/ReportCallMargin.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportCallMargin" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportCallMargin" msprop:Generator_UserDSName="ReportCallMargin">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CallMargin" msprop:Generator_TableClassName="CallMarginDataTable" msprop:Generator_TableVarName="tableCallMargin" msprop:Generator_TablePropName="CallMargin" msprop:Generator_RowDeletingName="CallMarginRowDeleting" msprop:Generator_RowChangingName="CallMarginRowChanging" msprop:Generator_RowEvHandlerName="CallMarginRowChangeEventHandler" msprop:Generator_RowDeletedName="CallMarginRowDeleted" msprop:Generator_UserTableName="CallMargin" msprop:Generator_RowChangedName="CallMarginRowChanged" msprop:Generator_RowEvArgName="CallMarginRowChangeEvent" msprop:Generator_RowClassName="CallMarginRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="counterparty_code" msprop:Generator_ColumnVarNameInTable="columncounterparty_code" msprop:Generator_ColumnPropNameInRow="counterparty_code" msprop:Generator_ColumnPropNameInTable="counterparty_codeColumn" msprop:Generator_UserColumnName="counterparty_code" type="xs:string" minOccurs="0" />
+              <xs:element name="threshold" msprop:Generator_ColumnVarNameInTable="columnthreshold" msprop:Generator_ColumnPropNameInRow="threshold" msprop:Generator_ColumnPropNameInTable="thresholdColumn" msprop:Generator_UserColumnName="threshold" type="xs:string" minOccurs="0" />
+              <xs:element name="cur" msprop:Generator_ColumnVarNameInTable="columncur" msprop:Generator_ColumnPropNameInRow="cur" msprop:Generator_ColumnPropNameInTable="curColumn" msprop:Generator_UserColumnName="cur" type="xs:string" minOccurs="0" />
+              <xs:element name="receive" msprop:Generator_ColumnVarNameInTable="columnreceive" msprop:Generator_ColumnPropNameInRow="receive" msprop:Generator_ColumnPropNameInTable="receiveColumn" msprop:Generator_UserColumnName="receive" type="xs:decimal" minOccurs="0" />
+              <xs:element name="pay" msprop:Generator_ColumnVarNameInTable="columnpay" msprop:Generator_ColumnPropNameInRow="pay" msprop:Generator_ColumnPropNameInTable="payColumn" msprop:Generator_UserColumnName="pay" type="xs:decimal" minOccurs="0" />
+              <xs:element name="remark" msprop:Generator_ColumnVarNameInTable="columnremark" msprop:Generator_ColumnPropNameInRow="remark" msprop:Generator_ColumnPropNameInTable="remarkColumn" msprop:Generator_UserColumnName="remark" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

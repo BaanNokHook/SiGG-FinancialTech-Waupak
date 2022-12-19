@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportMarginByCounterparty" targetNamespace="http://tempuri.org/ReportMarginByCounterparty.xsd" xmlns:mstns="http://tempuri.org/ReportMarginByCounterparty.xsd" xmlns="http://tempuri.org/ReportMarginByCounterparty.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportMarginByCounterparty" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportMarginByCounterparty" msprop:Generator_UserDSName="ReportMarginByCounterparty">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="MarginByCounterparty" msprop:Generator_TableClassName="MarginByCounterpartyDataTable" msprop:Generator_TableVarName="tableMarginByCounterparty" msprop:Generator_TablePropName="MarginByCounterparty" msprop:Generator_RowDeletingName="MarginByCounterpartyRowDeleting" msprop:Generator_RowChangingName="MarginByCounterpartyRowChanging" msprop:Generator_RowEvHandlerName="MarginByCounterpartyRowChangeEventHandler" msprop:Generator_RowDeletedName="MarginByCounterpartyRowDeleted" msprop:Generator_UserTableName="MarginByCounterparty" msprop:Generator_RowChangedName="MarginByCounterpartyRowChanged" msprop:Generator_RowEvArgName="MarginByCounterpartyRowChangeEvent" msprop:Generator_RowClassName="MarginByCounterpartyRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="call_date" msprop:Generator_ColumnVarNameInTable="columncall_date" msprop:Generator_ColumnPropNameInRow="call_date" msprop:Generator_ColumnPropNameInTable="call_dateColumn" msprop:Generator_UserColumnName="call_date" type="xs:string" minOccurs="0" />
+              <xs:element name="threshold" msprop:Generator_ColumnVarNameInTable="columnthreshold" msprop:Generator_ColumnPropNameInRow="threshold" msprop:Generator_ColumnPropNameInTable="thresholdColumn" msprop:Generator_UserColumnName="threshold" type="xs:decimal" minOccurs="0" />
+              <xs:element name="cur" msprop:Generator_ColumnVarNameInTable="columncur" msprop:Generator_ColumnPropNameInRow="cur" msprop:Generator_ColumnPropNameInTable="curColumn" msprop:Generator_UserColumnName="cur" type="xs:string" minOccurs="0" />
+              <xs:element name="exposure" msprop:Generator_ColumnVarNameInTable="columnexposure" msprop:Generator_ColumnPropNameInRow="exposure" msprop:Generator_ColumnPropNameInTable="exposureColumn" msprop:Generator_UserColumnName="exposure" type="xs:decimal" minOccurs="0" />
+              <xs:element name="margin_position_yesterday" msprop:Generator_ColumnVarNameInTable="columnmargin_position_yesterday" msprop:Generator_ColumnPropNameInRow="margin_position_yesterday" msprop:Generator_ColumnPropNameInTable="margin_position_yesterdayColumn" msprop:Generator_UserColumnName="margin_position_yesterday" type="xs:decimal" minOccurs="0" />
+              <xs:element name="accrue_int_position_yesterday" msprop:Generator_ColumnVarNameInTable="columnaccrue_int_position_yesterday" msprop:Generator_ColumnPropNameInRow="accrue_int_position_yesterday" msprop:Generator_ColumnPropNameInTable="accrue_int_position_yesterdayColumn" msprop:Generator_UserColumnName="accrue_int_position_yesterday" type="xs:decimal" minOccurs="0" />
+              <xs:element name="net_exposure" msprop:Generator_ColumnVarNameInTable="columnnet_exposure" msprop:Generator_ColumnPropNameInRow="net_exposure" msprop:Generator_ColumnPropNameInTable="net_exposureColumn" msprop:Generator_UserColumnName="net_exposure" type="xs:decimal" minOccurs="0" />
+              <xs:element name="margin_call" msprop:Generator_ColumnVarNameInTable="columnmargin_call" msprop:Generator_ColumnPropNameInRow="margin_call" msprop:Generator_ColumnPropNameInTable="margin_callColumn" msprop:Generator_UserColumnName="margin_call" type="xs:decimal" minOccurs="0" />
+              <xs:element name="margin_balance" msprop:Generator_ColumnVarNameInTable="columnmargin_balance" msprop:Generator_ColumnPropNameInRow="margin_balance" msprop:Generator_ColumnPropNameInTable="margin_balanceColumn" msprop:Generator_UserColumnName="margin_balance" type="xs:decimal" minOccurs="0" />
+              <xs:element name="int_margin" msprop:Generator_ColumnVarNameInTable="columnint_margin" msprop:Generator_ColumnPropNameInRow="int_margin" msprop:Generator_ColumnPropNameInTable="int_marginColumn" msprop:Generator_UserColumnName="int_margin" type="xs:decimal" minOccurs="0" />
+              <xs:element name="interest_per_day" msprop:Generator_ColumnVarNameInTable="columninterest_per_day" msprop:Generator_ColumnPropNameInRow="interest_per_day" msprop:Generator_ColumnPropNameInTable="interest_per_dayColumn" msprop:Generator_UserColumnName="interest_per_day" type="xs:decimal" minOccurs="0" />
+              <xs:element name="accru_int" msprop:Generator_ColumnVarNameInTable="columnaccru_int" msprop:Generator_ColumnPropNameInRow="accru_int" msprop:Generator_ColumnPropNameInTable="accru_intColumn" msprop:Generator_UserColumnName="accru_int" type="xs:decimal" minOccurs="0" />
+              <xs:element name="interest_paid_margin_activity" msprop:Generator_ColumnVarNameInTable="columninterest_paid_margin_activity" msprop:Generator_ColumnPropNameInRow="interest_paid_margin_activity" msprop:Generator_ColumnPropNameInTable="interest_paid_margin_activityColumn" msprop:Generator_UserColumnName="interest_paid_margin_activity" type="xs:decimal" minOccurs="0" />
+              <xs:element name="tax_margin_activity" msprop:Generator_ColumnVarNameInTable="columntax_margin_activity" msprop:Generator_ColumnPropNameInRow="tax_margin_activity" msprop:Generator_ColumnPropNameInTable="tax_margin_activityColumn" msprop:Generator_UserColumnName="tax_margin_activity" type="xs:decimal" minOccurs="0" />
+              <xs:element name="margin_payment_margin_activity" msprop:Generator_ColumnVarNameInTable="columnmargin_payment_margin_activity" msprop:Generator_ColumnPropNameInRow="margin_payment_margin_activity" msprop:Generator_ColumnPropNameInTable="margin_payment_margin_activityColumn" msprop:Generator_UserColumnName="margin_payment_margin_activity" type="xs:decimal" minOccurs="0" />
+              <xs:element name="remark" msprop:Generator_ColumnVarNameInTable="columnremark" msprop:Generator_ColumnPropNameInRow="remark" msprop:Generator_ColumnPropNameInTable="remarkColumn" msprop:Generator_UserColumnName="remark" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

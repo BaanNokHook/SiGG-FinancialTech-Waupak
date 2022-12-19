@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="EodReconcileCallMarginReportDs" targetNamespace="http://tempuri.org/EodReconcileCallMarginReportDs.xsd" xmlns:mstns="http://tempuri.org/EodReconcileCallMarginReportDs.xsd" xmlns="http://tempuri.org/EodReconcileCallMarginReportDs.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="EodReconcileCallMarginReportDs" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="EodReconcileCallMarginReportDs" msprop:Generator_UserDSName="EodReconcileCallMarginReportDs">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="EodReconcileCallMarginTable" msprop:Generator_TableClassName="EodReconcileCallMarginTableDataTable" msprop:Generator_TableVarName="tableEodReconcileCallMarginTable" msprop:Generator_TablePropName="EodReconcileCallMarginTable" msprop:Generator_RowDeletingName="EodReconcileCallMarginTableRowDeleting" msprop:Generator_RowChangingName="EodReconcileCallMarginTableRowChanging" msprop:Generator_RowEvHandlerName="EodReconcileCallMarginTableRowChangeEventHandler" msprop:Generator_RowDeletedName="EodReconcileCallMarginTableRowDeleted" msprop:Generator_UserTableName="EodReconcileCallMarginTable" msprop:Generator_RowChangedName="EodReconcileCallMarginTableRowChanged" msprop:Generator_RowEvArgName="EodReconcileCallMarginTableRowChangeEvent" msprop:Generator_RowClassName="EodReconcileCallMarginTableRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="counter_party_code" msprop:Generator_ColumnVarNameInTable="columncounter_party_code" msprop:Generator_ColumnPropNameInRow="counter_party_code" msprop:Generator_ColumnPropNameInTable="counter_party_codeColumn" msprop:Generator_UserColumnName="counter_party_code" type="xs:string" minOccurs="0" />
+              <xs:element name="counter_party_name" msprop:Generator_ColumnVarNameInTable="columncounter_party_name" msprop:Generator_ColumnPropNameInRow="counter_party_name" msprop:Generator_ColumnPropNameInTable="counter_party_nameColumn" msprop:Generator_UserColumnName="counter_party_name" type="xs:string" minOccurs="0" />
+              <xs:element name="amount" msprop:Generator_ColumnVarNameInTable="columnamount" msprop:Generator_ColumnPropNameInRow="amount" msprop:Generator_ColumnPropNameInTable="amountColumn" msprop:Generator_UserColumnName="amount" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
