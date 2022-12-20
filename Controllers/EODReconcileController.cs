@@ -116,11 +116,11 @@ namespace GM.Application.Web.Controllers
                     //    new
                     //    {
                     //        asofDate = asofDate,
-                    //        access_token = "repo2019"
+                    //        access_token = "repo2022"
                     //    }, this.Request.Url.Scheme);
                   }  
 
-                        string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/ReportEodBoReconcile/index?asofDate={0}&access_token=repo2019",   
+                        string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/ReportEodBoReconcile/index?asofDate={0}&access_token=repo2022",   
                               asofDate);   
                         
                         if (urlReport.StartsWith("https://"))     
@@ -152,10 +152,10 @@ namespace GM.Application.Web.Controllers
                     //    {
                     //        asofDate = asofDate,
                     //        type = type,
-                    //        access_token = "repo2019"
+                    //        access_token = "repo2022"
                     //    }, this.Request.Url.Scheme);
 
-                    string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/ReportEodBoReconcile/Index?asofDate={0}&type={1}&access_token=repo2019",   
+                    string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/ReportEodBoReconcile/Index?asofDate={0}&type={1}&access_token=repo2022",   
                         asofDate, type);   
 
                     if (urlReport.StartsWith("https://"))   
@@ -189,10 +189,10 @@ namespace GM.Application.Web.Controllers
                     //    {
                     //        asofDate = asofDate,
                     //        type = type,
-                    //        access_token = "repo2019"
+                    //        access_token = "repo2022"
                     //    }, this.Request.Url.Scheme);
 
-                    string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/ReportEodReconcileCallMargin/Index?asofDate={0}&type={1}&access_token=repo2019",   
+                    string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/ReportEodReconcileCallMargin/Index?asofDate={0}&type={1}&access_token=repo2022",   
                         asofDate, type);    
 
                         if (urlReport.StartsWith("https://"))   

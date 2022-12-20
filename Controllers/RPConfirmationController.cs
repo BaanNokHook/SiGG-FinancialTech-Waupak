@@ -525,10 +525,10 @@ namespace GM.Application.Web.Controllers
                     //        trans_no = trans_no,
                     //        print_confirm_bo1_by = print_confirm_bo1_by,
                     //        print_confirm_bo2_by = print_confirm_bo2_by,
-                    //        access_token = "repo2019"
+                    //        access_token = "repo2022"
                     //    }, this.Request.Url.Scheme);
 
-                    string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/RPConfirmationReport/DownloadPDF?trans_no={0}&print_confirm_bo1_by={1}&print_confirm_bo2_by={2}&access_token=repo2019",
+                    string urlReport = string.Format(PublicConfig.GetValue("Reportpath") + "/RPConfirmationReport/DownloadPDF?trans_no={0}&print_confirm_bo1_by={1}&print_confirm_bo2_by={2}&access_token=repo2022",
                         trans_no, print_confirm_bo1_by, print_confirm_bo2_by);
 
                     if (urlReport.StartsWith("https://"))
