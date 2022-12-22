@@ -1,0 +1,96 @@
+﻿
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar"></ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Activity Log
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3></h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                        </div>
+                    </div>
+                    <div class="form-container form-horizontal" style="min-height: 150px;">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-1100">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-3">Date From</label>
+                                    <div class="col-xs-4">
+                                        <div class="input-group date input-range input-date">
+                                            <input class="form-control date-time-picker" id="date_from" type="text">
+                                            <span class="input-group-addon default date-pick-btn">
+                                                <span class="feather-icon icon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4 col-fix-range-to">
+                                        <div class="input-group date input-range input-date">
+                                            <span class="input-group-addon text-in-group pl-0">To</span>
+                                            <input class="form-control date-time-picker" id="date_to" type="text">
+                                            <span class="input-group-addon default">
+                                                <span class="feather-icon icon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <button class="btn btn-excel btn-round btn-main mr-4" id="btnExport" onclick="GM.Activity.Export(this)">
+                                            Export in Excel
+                                            <i class="feather-icon icon-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+
+        var isUpdate = "@IsUpdate";
+        var isDelete = "@IsDelete";
+
+    </script>
+    @*@Scripts.Render("~/module/Activity")*@
+    @Scripts.Render("~/module/validation")
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/Activity")
+
+}

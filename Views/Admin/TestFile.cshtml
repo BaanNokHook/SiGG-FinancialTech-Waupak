@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "TestFile";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <div id="elfinder"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link href="~/Content/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/elfinder/css/elfinder.full.css" rel="stylesheet" />
+}
+
+@section Scripts {
+
+    <script src="~/Content/jquery-ui/jquery-ui.js"></script>
+    <script src="~/Content/elfinder/js/elfinder.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var myCommands = elFinder.prototype._options.commands;
+
+            var disabled = ['extract', 'archive', 'resize', 'help', 'select', 'cut']; // Not yet implemented commands in ElFinder.Net
+
+            $.each(disabled, function (i, cmd) {
+                (idx = $.inArray(cmd, myCommands)) !== -1 && myCommands.splice(idx, 1);
+            });
+
+            var selectedFile = null;
+
+            var options = {
+                height: $(window).height() - 100,
+                url: '/connector', 
+                rememberLastDir: false, 
+                commands: myCommands,
+                //lang: 'pt_BR',
+                uiOptions: {
+                    toolbar: [
+                        ['back', 'forward'],
+                        ['reload'],
+                        ['home', 'up'],
+                        ['mkdir', 'mkfile', 'upload'],
+                        ['open', 'download'],
+                        ['info'],
+                        ['quicklook'],
+                        ['copy', 'cut', 'paste'],
+                        //['rm'],
+                        ['duplicate', 'rename', 'edit'],
+                        ['view', 'sort']
+                    ],
+                    navbar: {
+                        minWidth: 150,
+                        maxWidth: 500
+                    }
+                },
+                contextmenu : {
+                    // navbarfolder menu
+                    navbar : ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'info'],
+
+                    // current directory menu
+                    cwd    : ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'info'],
+
+                    // current directory file menu
+                    files  : [
+                        'getfile', '|','open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
+                        'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info'
+                    ]
+                },
+                handlers: {
+                    select: function (event, elfinderInstance) {
+
+                        if (event.data.selected.length == 1) {
+                            var item = $('#' + event.data.selected[0]);
+                            if (!item.hasClass('directory')) {
+                                selectedFile = event.data.selected[0];
+                                $('#elfinder-selectFile').show();
+                                return;
+                            }
+                        }
+                        $('#elfinder-selectFile').hide();
+                        selectedFile = null;
+                    }
+                }
+            };
+            $('#elfinder').elfinder(options).elfinder('instance');
+
+            $('.elfinder-toolbar:first').append('<div class="ui-widget-content ui-corner-all elfinder-buttonset" id="elfinder-selectFile" style="display:none; float:right;">' +
+                '<div class="ui-state-default elfinder-button" title="Select" style="width: 100px;"></div>');
+            $('#elfinder-selectFile').click(function () {
+                if (selectedFile != null)
+                    $.post('file/selectFile', { target: selectedFile }, function (response) {
+                        alert(response);
+                    });
+
+            });
+        });
+    </script>
+}

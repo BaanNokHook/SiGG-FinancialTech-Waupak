@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Wizard Query";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+
+                <div id="alert-msg"></div>
+
+                <!-- Div Detail -->
+                <div class="box-nav-tab">
+                    <ul class="nav nav-tabs compact">
+                        <li role="presentation" class="active">
+                            <a data-toggle="tab" href="#query">Query</a>
+                        </li>
+                        <li role="presentation">
+                            <a data-toggle="tab" href="#non-query">Execute Non Query</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content dashboard-content">
+                    <div id="query" class="box-content have-nav tab-pane in active">
+                        <div class="content-container">
+                            <!-- Div Form -->
+                            <form method="post" id="queryForm">
+                                <div class="form-container form-horizontal">
+                                    <div class="col-xs-12 form-center-fix">
+                                        <div class="row">
+                                            <button type="button" class="btn btn-primary" onclick="WizardQuery.executeQuery('@Url.Action("ExecuteQuery", "Admin")', 'query')">Execute</button>
+                                            <button type="button" class="btn btn-primary" onclick="WizardQuery.exportQuery('@Url.Action("ExportQueryExcel", "Admin")')">Export Excel</button>
+                                            <button type="button" class="btn btn-primary" onclick="WizardQuery.exportQuery('@Url.Action("ExportQuerySQL", "Admin")')">Export SQL</button>
+                                            <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Dashboard", "Admin")';return false;">Back</button>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px;">
+                                            <textarea id="text-query" name="TextQuery" class="col-xs-12" style="min-height: 300px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="non-query" class="box-content have-nav tab-pane">
+                        <div class="content-container">
+                            <!-- Div Form -->
+                            <form method="post" id="nonQueryForm">
+                                <div class="form-container form-horizontal">
+                                    <div class="col-xs-12 form-center-fix">
+                                        <div class="row">
+                                            <button type="button" class="btn btn-primary" onclick="WizardQuery.executeQuery('@Url.Action("ExecuteQuery", "Admin")', 'nonquery')">Execute</button>
+                                            <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Dashboard", "Admin")';return false;">Back</button>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px;">
+                                            <textarea id="text-nonquery" name="TextQuery" class="col-xs-12" style="min-height: 300px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Div Result -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Result</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="tableResult" class="table table-striped display"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/SweetAlert")
+    @Scripts.Render("~/bundles/datatable")
+    <script src="~/Scripts/GM.WizardQuery.js"></script>
+}

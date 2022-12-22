@@ -1,0 +1,500 @@
+﻿@model GM.Data.View.Master.AgencyViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="col-xs-12 col-fixed">
+
+    <div class="box-content" id="search-form-modal">
+        <div class="box-header">
+            <div class="left-item">
+                <div class="title">
+                    <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                </div>
+            </div>
+            <div class="right-item">
+                <button id="user-master" class="btn btn-link less-more-option">
+                    Show more option
+                    <i class="feather-icon icon-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(mode => Model.FormSearch.agency_code)
+                        @Html.EditorFor(model => model.FormSearch.agency_code, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <!--  col-md-6   -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(mode => Model.FormSearch.active_flag)
+                        @Html.DropDownListFor(model => model.FormSearch.active_flag, (SelectList)ViewBag.ActiveFlags, "- Please select -", new { @class = "form-control" })
+                    </div>
+                </div>
+                <!--  col-md-6   -->
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FormSearch.agency_name)
+                        @Html.EditorFor(model => model.FormSearch.agency_name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <!--  col-md-6   -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FormSearch.in_ex)
+                            @Html.EditorFor(model => model.FormSearch.in_ex, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+                <!--  col-md-6   -->
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FormSearch.ds_name)
+                        @Html.EditorFor(model => model.FormSearch.ds_name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <!--  col-md-6   -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-group">
+
+                        </div>
+                    </div>
+                </div>
+                <!--  col-md-6   -->
+            </div>
+            <div class="row">
+                <hr>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Data Table(new) -->
+    <div class="box-content table-content">
+        <div class="group box-header-wrapper">
+            <div class="box-header">
+                <div class="left-item">
+                    <div class="title">
+                        <h3>Details</h3>
+                    </div>
+                </div>
+                <div class="right-item">
+                    <div class="add-data">
+                        <!-- <button class="btn btn-primary btn-round" type="button" data-toggle="modal" data-target="#edit-modal">
+                          + Add User
+                        </button> -->
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="add">
+                                + Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="box-header delete-item hide">
+                <div class="left-item">
+                    <div class="static-text">
+                        <span>1 item(s) selected</span>
+                    </div>
+                    <div class="option">
+
+                        <button class="btn btn-delete btn-round" type="button" data-toggle="modal" data-target="#confirm-delete">
+                            Delete
+                        </button>
+                    </div>
+                    <div class="option">
+                        <button class="btn btn-link btn-link-secondary" type="button">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="outer-table-wrapper">
+            <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>@Html.LabelFor(mode => mode.FormSearch.row_no)</th>
+                        <th>@Html.LabelFor(mode => mode.FormSearch.agency_code)</th>
+                        <th>@Html.LabelFor(mode => mode.FormSearch.agency_name)</th>
+                        <th>@Html.LabelFor(mode => mode.FormSearch.in_ex)</th>
+                        <th>@Html.LabelFor(mode => mode.FormSearch.ds_name)</th>
+                        <th>@Html.LabelFor(mode => mode.FormSearch.active_flag)</th>
+                        <th class="action" style="text-align:center;">
+                            <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                        </th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Form Right Modal -->
+    <div class="modal right fade" id="action-form-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            <i class="feather-icon icon-x"></i>
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel2">Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h4>
+                </div>
+
+
+                <div class="modal-body group">
+                    <form action="agency/Create"></form>
+
+                    @using (Html.BeginForm("Create", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))
+                    {
+
+                        @*@Html.HiddenFor(model => model.FormAction.agency_code)*@
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="col-xs-12 text-form">
+                                    @Html.LabelFor(mode => Model.FormAction.agency_code)
+                                    @Html.EditorFor(model => model.FormAction.agency_code, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                </div>
+
+                                <div class="col-xs-12 text-form">
+                                    @Html.LabelFor(mode => Model.FormAction.agency_name)
+                                    @Html.EditorFor(model => model.FormAction.agency_name, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                </div>
+
+                                <div class="col-xs-12 text-form">
+                                    @Html.LabelFor(mode => Model.FormAction.in_ex)
+                                    @Html.EditorFor(model => model.FormAction.in_ex, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                </div>
+                                <div class="col-xs-12 text-form">
+                                    @Html.LabelFor(mode => Model.FormAction.ds_name)
+                                    @Html.EditorFor(model => model.FormAction.ds_name, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                </div>
+                                <div class="col-xs-12 text-form">
+                                    @Html.LabelFor(mode => Model.FormAction.active_flag)
+                                    @Html.DropDownListFor(model => model.FormAction.active_flag, (SelectList)ViewBag.ActiveFlags, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-primary btn-round btn-main btn-form-save">+ Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</button>
+                                <button type="reset" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+    </div>
+
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    <script>
+    $(document).ready(function () {
+
+        //Override Function
+        GM.System.Sidebar.Handler = function () {
+            $('#x-table-data').DataTable().columns.adjust();
+        }
+
+        GM.Agency = {};
+        GM.Agency.Table = $('#x-table-data').DataTable({
+            dom: 'Bfrtip',
+            select: false,
+            searching: true,
+            scrollY: '70vh',
+            scrollX: true,
+            order: [
+                [1, "desc"]
+            ],
+            buttons:
+            [
+                //{
+                //    text: 'Refresh',
+                //    action: function (e, dt, node, config) {
+                //        dt.ajax.reload();
+                //    }
+                //}
+            ],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                "type": "POST"
+            },
+
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            select: true,
+            columnDefs:
+            [
+
+                { targets: 0, orderable: false, data: "row_no", width: 30,},
+                { targets: 1, data: "agency_code" },
+                { targets: 2, data: "agency_name" },
+                { targets: 3, data: "in_ex" },
+                { targets: 4, data: "ds_name" },
+                {
+                    targets: 5,
+                    data: "active_flag",
+                    render: function (data, type, row, meta) {
+
+                        if (data) {
+                            return 'Yes';
+                        }
+                        else {
+                            return 'No';
+                        }
+                    }
+                },
+
+                {
+                    targets: 6,
+                    data: "agency_code",
+                    className: "dt-body-center",
+                    width: 60,
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<button class="btn btn-default btn-round" key="' + row.agency_code + '" form-mode="edit"   onclick="GM.Agency.Form(this)" ><i class="feather-icon icon-edit"></i></button>';
+                        html += '<button class="btn btn-delete  btn-round" key="' + row.agency_code + '" form-mode="delete" onclick="GM.Agency.Form(this)" ><i class="feather-icon icon-trash-2"></i></button>';
+                        return html;
+                    }
+                }
+            ],
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 1
+            },
+
+        })
+        GM.Agency.Table.SelectAll = function (check) {
+
+            if ($(check)[0].checked) {
+                GM.Agency.Table.rows().select();
+            }
+            else {
+                GM.Agency.Table.rows().deselect();
+            }
+        }
+
+        GM.Agency.Form = function (btn) {
+
+                var mode = $(btn).attr("form-mode");
+
+                GM.Message.Clear();
+                GM.Agency.Form.Initial();
+
+                if (mode)
+                {
+                    var key = $(btn).attr("key");
+
+
+                    switch (mode)
+                    {
+                        case "add":
+
+                                $(".modal-title").text("Create @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                $('#FormAction_agency_code').attr('readonly', false);
+
+                                $('#action-form-modal').modal('show');
+                                $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Create');
+
+                                $("#action-form").attr("action", "@Url.Action("Create", (string)this.ViewContext.RouteData.Values["controller"])");
+
+                            break;
+
+                        case "edit":
+
+                                GM.Agency.Get({
+                                    id: key,
+                                    form: 'action-form',
+                                    handler: function (response, status, jqxhr) {
+                                        //console.log("response:", response);
+                                    }
+                                });
+
+
+                                $('#FormAction_agency_code').attr('readonly', true);
+                                $('#action-form-modal').modal('show');
+                                $(".modal-title").text("Edit @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Update');
+                                $("#action-form").attr("action", "@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"])");
+
+                            break;
+
+                        case "delete":
+                            $(".modal-title").text("Are you sure you want to delete this?");
+                                GM.Agency.Get({
+                                    id: key,
+                                    form: 'action-form',
+                                    handler: function (response, status, jqxhr) {
+                                        //console.log("response:", response);
+                                    }
+                                });
+
+                                $('#FormAction_agency_code').attr('readonly', true);
+                                $('#action-form-modal').modal('show');
+                                $("#action-form :submit").removeClass('btn-primary').addClass('btn-delete').text('Delete');
+                                //console.log("Show form delete -> local");
+
+                                $("#action-form").attr("action", "@Url.Action("Delete", (string)this.ViewContext.RouteData.Values["controller"])");
+
+
+                            break;
+                    }
+                }
+        };
+
+        GM.Agency.Form.Search = function () {
+
+            $('#search-form :input').each(function () {
+                var input = $(this);
+                var key = input[0].name.split('.')[1];
+                //console.log(key)
+                switch (key) {
+                    case "agency_code": GM.Agency.Table.columns(1).search($(this).val()); break;
+                    case "agency_name": GM.Agency.Table.columns(2).search($(this).val()); break;
+                    case "in_ex": GM.Agency.Table.columns(3).search($(this).val()); break;
+                    case "ds_name": GM.Agency.Table.columns(4).search($(this).val()); break;
+                    case "active_flag": GM.Agency.Table.columns(5).search($(this).val()); break;
+                }
+            });
+
+            GM.Agency.Table.draw();
+        };
+        GM.Agency.Form.Initial = function () {
+            $("#action-form")[0].reset();
+        }
+
+        GM.Agency.Get = function (op) {
+            $.get("@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"])", { id: op.id, t: GM.Time })
+             .done(function (response, status, jqxhr) {
+                    // this is the "success" callback
+                    GM.Agency.Form.DataBinding({ form: op.form, data: response });
+                    op.handler(response)
+             })
+             .fail(function (jqxhr, status, error) {
+              });
+        };
+
+        GM.Agency.Form.DataBinding = function (p) {
+            $('#' + p.form + ' :input').each(function () {
+                var input   = $(this);
+                var key     = input[0].name.split('.')[1];
+                $(this).val(p.data[key] + '');
+
+                console.log('(' + key + ') => ' + p.data[key]);
+            });
+        };
+        $("#action-form").on('submit', function (e) {
+
+            GM.Message.Clear();
+
+            e.preventDefault() // prevent the form's normal submission
+
+            var dataToPost = $(this).serialize()
+            var action = $(this).attr('action')
+            GM.Mask('#action-form-modal .modal-content');
+            $.post(action, dataToPost)
+
+                .done(function (response, status, jqxhr) {
+                    // this is the "success" callback
+                    GM.Unmask();
+
+                    if (response.Success) {
+                        GM.Message.Success('.modal-body', response.Message);
+                        GM.Defer(function () {
+                            $('#action-form-modal').modal('hide');
+                            GM.Agency.Table.draw();
+                        }, 500);
+                    }
+                    else {
+                        GM.Message.Error('.modal-body', response.Message);
+                    }
+                })
+
+                .fail(function (jqxhr, status, error) {
+                    // this is the ""error"" callback
+                    //console.log("fail");
+                });
+        });
+        $("#search-form").on('submit', function (e) {
+
+             e.preventDefault()
+
+            GM.Message.Clear();
+            GM.Agency.Form.Search();
+        });
+
+        $("#search-form").on('reset', function (e) {
+            GM.Defer(function () {
+                GM.Message.Clear();
+                GM.Agency.Form.Search();
+            }, 100)
+        });
+
+        $('#btnAdd').on("click", function () {
+            GM.Agency.Form(this);
+        });
+
+
+    });
+    </script>
+    @Scripts.Render("~/module/validation")
+}

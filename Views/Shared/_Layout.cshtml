@@ -1,49 +1,125 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WaYupak</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WaYupak.styles.css" asp-append-version="true" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="Content/img/favicon.png" sizes="32x32" type="image/png">
+    <title>Private REPO System</title>
+    @Styles.Render("~/content/cssapp")
+    @Styles.Render("~/bundles/fontawesome")
+
+    <!-- =============== PAGE VENDOR STYLES =============== -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+@*<script src="/Vendor/html5shiv/html5shiv.min.js"></script>
+    <script src="/Vendor/respond/respond.min.js"></script>*@
+
+@*<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>*@
+
+    <!-- DO NOT DELETE!! : HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+
+         @Scripts.Render("~/content/oldbrowser")
+
+    <![endif]-->
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WaYupak</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - WaYupak - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+  
+    <aside class="main-sidebar">
+        <!-- topbar-->
+        @Html.Partial("_Header")
+        <!-- topbar-->
+
+        <!-- sidebar-->
+        @Html.Partial("_Sidebar")
+        <!-- sidebar-->
+    </aside>
+  
+
+        <section class="working-section outer-responsive-fixed">
+            <header class="inner-responsive-fixed top-bar">
+                <nav class="navbar navbar-default">
+                    <div>
+                        <div class="sidebar-toggle">
+                            <button class="btn btn-icon">
+                                <i class="feather-icon icon-menu"></i>
+                            </button>
+                        </div>
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">
+                                <img src="~/Content/img/repo_logo.png" />
+                            </a>
+                        </div>
+                        <div class="vertical-line"></div>
+                        <div class="time-date nav navbar-nav navbar-text">
+                            <i class="feather-icon icon-calendar"></i>
+                            <span>12/12/2017</span>
+                            <i class="feather-icon icon-clock"></i>
+                            <span>00:00</span>
+                        </div>
+                        <div class="nav navbar-nav navbar-right">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i class="feather-icon icon-user"></i>@User.Identity.Name
+                                    <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="muted-text">
+                                        <p>Username : @User.Identity.Name</p>
+                                        <p>Role : Admin</p>
+                                    </div>
+                                    <ul>
+                                        <!-- <li role="separator" class="divider"></li> -->
+                                        <li class="link">
+                                            <a href="@Url.Action("Logout", "Account")">
+                                                <i class="feather-icon icon-log-out"></i>Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <section class="working-content">
+                <div class="container-fluid container-fixed">
+                    <!-- PageTitle -->
+                    <div class="row row-fixed">
+                        <div class="col-lg-12 col-fixed">
+                            <div class="page-title">
+                                <div class="breadcrumb-wrap">
+                                    <ol class="breadcrumb">
+                                        <li>
+                                            <a href="/">Home</a>
+                                        </li>
+                                        <li class="active">@Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</li>
+                                        <li class="active">@Html.DisplayString((string)this.ViewContext.RouteData.Values["action"])</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Content Zone -->
+                    <div class="row row-fixed">
+                        @RenderBody()
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- JS Plugin-->
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/treefilter")
+        @Scripts.Render("~/bundles/application")
+
+        @RenderSection("scripts", required: false)
+
 </body>
 </html>
