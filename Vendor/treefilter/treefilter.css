@@ -1,0 +1,38 @@
+.tf-tree .tf-child-true>ul {
+  padding-left: 0;
+  display: none;
+}
+
+.tf-tree ul.tf-search-result {
+  display: block
+}
+
+.tf-tree ul.tf-search-result>li {
+  display: none;
+}
+
+.tf-tree ul.tf-search-result>li.tf-search-result {
+  display: block;
+}
+
+.tf-tree .tf-child-true.tf-open>ul {
+  display: block;
+}
+
+.tf-tree .tf-child-true.tf-open>a:after {
+  -webkit-transform: rotate(-90deg);
+}
+
+.tf-tree .tf-child-true>a:after {
+  display: block;
+  font-family: "Feather Icon";
+  content: "\e843";
+  right: 5px;
+  top: 8px;
+  font-size: 18px;
+  position: absolute;
+  transition: 0.2s;
+}
+.tf-tree .tf-child-false>a:after {
+  display: none;
+}
