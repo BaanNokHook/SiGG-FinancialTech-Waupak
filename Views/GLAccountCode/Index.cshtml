@@ -1,0 +1,502 @@
+﻿@model GM.Data.View.GLProcess.GLAccountCodeViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- Div Page Title -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                            @*<li>
+                                <a href="Home\Index">Home</a>
+                            </li>
+                            <li class="active">GL Process</li>
+                            <li class="active">Account Code</li>
+                            <li class="active">GL Account Code</li>*@
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            GL Account Code
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Div Content -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Div Search -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", "GLAccountCode", FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.account_num, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.account_num, new { htmlAttributes = new { @class = "form-control", @onkeypress = "return text_OnKeyPress_NumberOnlyAndMinus(this);" } })
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.account_name, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.account_name, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.acct_port, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_acct_port" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.acct_port_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.acct_port, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.acct_port_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillAccountPort", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_acct_port" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_acct_port"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="add" @(!IsCreate ? "disabled" : "")>
+                                            + Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.account_num)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.account_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.acct_port)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.exp_acct_num)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.acct_remark)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Add Form Right Modal -->
+<div class="modal right fade" id="action-form-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h4>
+            </div>
+            <div class="modal-body group">
+                @using (Html.BeginForm("Create", "GLAccountCode", FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))
+                {
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    @Html.LabelForRequired(mode => Model.FormAction.account_num, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.account_num, new { htmlAttributes = new { @class = "form-control", @onkeypress = "return text_OnKeyPress_NumberOnlyAndMinus(this);" } })
+                                        <span id="account_num_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(mode => Model.FormAction.account_name, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.account_name, new { htmlAttributes = new { @class = "form-control " } })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FormAction.acct_port, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_acct_port_action" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.FormAction.acct_port_name, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.FormAction.acct_port, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.FormAction.acct_port_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillAccountPort", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_acct_port_action" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_acct_port_action"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(mode => Model.FormAction.exp_acct_num, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.exp_acct_num, new { htmlAttributes = new { @class = "form-control " } })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(mode => Model.FormAction.acct_remark, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.acct_remark, new { htmlAttributes = new { @class = "form-control " } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary btn-round btn-main btn-form-save">+ Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</button>
+                            <button type="reset" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #search-form .text-box {
+            width: 235px !important;
+        }
+
+        #search-form .dropdown {
+            width: 235px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+
+        var isUpdate = "@IsUpdate";
+        var isDelete = "@IsDelete";
+
+        function FormatDecimal(Num, point) {
+            var format = Number(parseFloat(Num).toFixed(point)).toLocaleString('en', {
+                minimumFractionDigits: point
+            });
+            return format;
+        }
+
+        $(document).ready(function () {
+            GM.GLAccountCode = {};
+            GM.GLAccountCode.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                select: false,
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                order: [
+                    [1, "asc"]
+                ],
+                buttons: [],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columnDefs:
+                    [
+                        {
+                            targets: 0, data: "RowNumber"
+                        },
+                        {
+                            targets: 1, data: "account_num"
+                        },
+                        {
+                            targets: 2, data: "account_name"
+                        },
+                        {
+                            targets: 3, data: "acct_port"
+                        },
+                        {
+                            targets: 4, data: "exp_acct_num"
+                        },
+                        {
+                            targets: 5, data: "acct_remark"
+                        },
+                        {
+                            targets: 6, orderable: false, data: "account_num", className: "dt-body-center", width: 60, render: function (data, type, row, meta) {
+                                var html = '';
+
+                                if (isUpdate == "True") {
+                                    html += '<button class="btn btn-default btn-round" key="' + row.account_num + '" form-mode="edit" onclick="GM.GLAccountCode.Form(this)"><i class="feather-icon icon-edit"></i></button>';
+                                }
+                                else {
+                                    html += '<button class="btn btn-default btn-round" key="' + row.account_num + '" form-mode="view" onclick="GM.GLAccountCode.Form(this)"><i class="feather-icon icon-edit"></i></button>';
+                                }
+
+                                if (isDelete == "True") {
+                                    html += '<button class="btn btn-delete  btn-round" key="' + row.account_num + '" form-mode="delete" onclick="GM.GLAccountCode.Form(this)"><i class="feather-icon icon-trash-2"></i></button>';
+                                }
+                                else {
+                                    html += '<button class="btn btn-delete  btn-round" key="' + row.account_num + '" form-mode="delete" onclick="GM.GLAccountCode.Form(this)" disabled><i class="feather-icon icon-trash-2"></i></button>';
+                                }
+
+                                return html;
+                            }
+                        }
+                    ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                }
+
+            });
+
+            GM.GLAccountCode.Form = function (btn) {
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                GM.GLAccountCode.Form.Initial();
+
+                if (mode) {
+                    var key = $(btn).attr("key");
+                    var keysecond = $(btn).attr("keysecond");
+                    switch (mode) {
+                        case "add":
+                            // Step 1 : Set title
+                            $(".modal-title").text("Create @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                            // Step 2 : Set Button
+                            $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Create');
+                            $("#action-form :submit").removeAttr("onclick");
+                            // Step 3 : Set Action
+                            $("#action-form").attr("action", "@Url.Action("Create", "GLAccountCode")");
+                            //// Step 4 : Set Input
+
+                            $("#FormAction_account_num").attr('readonly', false);
+                            $("#FormAction_account_num").val("");
+                            $("#ddl_acct_port_action").removeAttr('disabled');
+                            $("#ddl_acct_port_action").find(".selected-data").text("Select...");
+                            $("#ddl_acct_port_action").find(".selected-value").text("");
+                            $("#FormAction_account_name").attr('readonly', false);
+                            $("#FormAction_account_name").val("");
+                            $("#FormAction_exp_acct_num").attr('readonly', false);
+                            $("#FormAction_exp_acct_num").val("");
+                            $("#FormAction_acct_remark").attr('readonly', false);
+                            $("#FormAction_acct_remark").val("");
+                            $("#action-form").attr("isdelete", "false");
+                            //$("#FormAction_start_date").removeAttr('disabled', 'disabled');
+                            //$("#FormAction_start_date").val("");
+                            //$("#FormAction_expire_date").removeAttr('disabled', 'disabled');
+                            //$("#FormAction_expire_date").val("");
+                            // Step 5 : Show modal
+                            $('#action-form-modal').modal('show');
+
+                            break;
+                        case "edit":
+                            // Step 0 : Select Data
+                            GM.GLAccountCode.Get({
+                                id: key,
+                                form: 'action-form',
+                                handler: function (response, status, jqxhr) {
+                                }
+                            });
+                            // Step 1 : Set title
+                            $(".modal-title").text("Edit @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                            // Step 2 : Set Button
+                            $("#action-form :submit").removeAttr("onclick");
+                            $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Update');
+                            // Step 3 : Set Action
+                            $("#action-form").attr("action", "@Url.Action("Edit", "GLAccountCode")");
+                            // Step 4 : Set Input
+                            $("#FormAction_account_num").attr('readonly', true);                           
+                            $("#FormAction_account_name").attr('readonly', false);
+                            $("#FormAction_account_name").val("");
+                            $("#ddl_acct_port_action").removeAttr('disabled');
+                            $("#FormAction_exp_acct_num").attr('readonly', false);
+                            $("#FormAction_exp_acct_num").val("");
+                            $("#FormAction_acct_remark").attr('readonly', false);
+                            $("#FormAction_acct_remark").val("");                            
+                          
+                            $("#action-form").attr("isdelete", "false");
+                            // Step 5 : Show modal
+                            break;
+                        case "delete":
+                            // Step 0 : Select Data
+                            GM.GLAccountCode.Get({
+                                id: key,
+                                form: 'action-form',
+                                handler: function (response, status, jqxhr) {
+                                }
+                            });
+                            // Step 1 : Set title
+                            $(".modal-title").text("Are you sure you want to delete this?");
+                            // Step 2 : Set Button
+                            $("#action-form :submit").removeClass('btn-primary').addClass('btn-delete').text('Delete');
+                            //$("#action-form :submit").attr("onclick", "Delete('" + key + "', '" + keysecond + "')");
+                           // $("#action-form").attr("action", "notpost");
+                            $("#action-form").attr("isdelete", "true");
+                            $("#action-form").attr("action", "@Url.Action("Delete", "GLAccountCode")");
+                            $("#action-form").attr("keyvalue", key);
+                            $("#action-form").attr("keyvalue2", keysecond);
+
+                            $("#FormAction_account_num").attr('readonly', true);
+                            $("#FormAction_account_name").attr('readonly', true);
+                            $("#ddl_acct_port_action").attr('disabled', 'disabled');
+                            $("#FormAction_exp_acct_num").attr('readonly', true);
+                            $("#FormAction_acct_remark").attr('readonly', true);
+                           
+                            // Step 4 : Show modal
+
+                            break;
+                        case "view":
+                            // Step 0 : Select Data
+                            GM.GLAccountCode.Get({
+                                id: key,
+                                form: 'action-form',
+                                handler: function (response, status, jqxhr) {
+                                }
+                            });
+                            // Step 1 : Set title
+                            $(".modal-title").text("Create @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                            // Step 2 : Set Button
+                            $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Update');
+                            $("#action-form :submit").attr('disabled', "disabled");
+                            $("#action-form").attr("isdelete", "false");
+                            // Step 3 : Set Input
+                            //$("#ddl_user_action").attr('disabled', 'disabled');
+                            //$("#Txt_desk_group_name").attr('disabled', 'disabled');
+                            //$("#FormAction_limit_amount").attr('disabled', 'disabled');
+                            //$("#FormAction_threshold_amount").attr('disabled', 'disabled');
+                            //$("#FormAction_threshold_percent").attr('disabled', 'disabled');
+                            //$("#ddl_cur_action").attr('disabled', 'disabled');
+                            //$("#FormAction_start_date").attr('disabled', 'disabled');
+                            //$("#FormAction_expire_date").attr('disabled', 'disabled');
+                            //radioyes.attr('disabled', 'disabled');
+                            //radiono.attr('disabled', 'disable');
+
+                            // Step 4 : Show modal
+
+                            break;
+                    }
+                }
+            };
+
+            GM.GLAccountCode.Get = function (op) {
+                $.get("@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"])", { account_num: op.id, t: GM.Time })
+                .done(function (response, status, jqxhr) {
+                    // this is the "success" callback
+                    if (response.RowNumber == null) {
+                        swal("Warning", "Record have been remove!", "warning");
+                        GM.GLAccountCode.Form.Search();
+                        op.handler(response);
+                    }
+                    else {
+                        $('#action-form-modal').modal('show');
+                        GM.GLAccountCode.Form.DataBinding({ form: op.form, data: response });
+                        op.handler(response);
+                    }
+
+                })
+                .fail(function (jqxhr, status, error) {
+              });
+            };
+
+            $("#NavBar").html($('#NavGLAccountCode').val());
+        });
+        // End (document).ready
+    </script>
+    @Scripts.Render("~/module/glaccountcode")
+    @Scripts.Render("~/module/validation")
+}
