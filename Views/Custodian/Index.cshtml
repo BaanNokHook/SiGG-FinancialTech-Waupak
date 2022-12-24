@@ -1,0 +1,294 @@
+﻿@model GM.Data.View.Static.CustodianViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                            @*<li>
+                                <a href="..\Home\Index">Home</a>
+                            </li>
+                            <li class="active">Static Process</li>
+                            <li class="active">Static</li>
+                            <li class="active">Custodian</li>*@
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Custodian
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            @*<button id="user-master" class="btn btn-link less-more-option">
+                                    Show less option
+                                    <i class="feather-icon icon-chevron-up"></i>
+                                </button>*@
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.custodian_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.custodian_code, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.custodian_shortname, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.custodian_shortname, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" onclick="location.href='/Custodian/Add';return false;" @(!IsCreate ? "disabled" : "")>
+                                            + Add Custodian
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.custodian_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.custodian_shortname)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.custodian_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.contact)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.tel_no)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        function Delete(custodian_id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $('.spinner').css('display', 'block');
+                    var data = { custodian_id: custodian_id };
+                    //console.log("Show form delete -> local");
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Delete", (string)this.ViewContext.RouteData.Values["controller"])",
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        success: function (d) {
+                            $('.spinner').css('display', 'none');
+                            if (d.success) {
+                                setTimeout(function () {
+                                    swal("Deleted!", "Delete Success.", "success");
+                                }, 100);
+                                $('#action-form-modal').modal('hide');
+                                GM.Message.Clear();
+                                GM.Custodian.Form.Search();
+                                GM.Custodian.Table.draw();
+                            } else {
+                                // DoSomethingElse()
+                                swal("Deleted!", "Error : " + d.responseText, "error");
+                            }
+                        },
+                        error: function (d) {
+                            $('.spinner').css('display', 'none');
+                            // TODO: Show error
+                            GM.Message.Clear();
+                        }
+                    });
+                } else {
+                    GM.Message.Clear();
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            GM.Custodian = {};
+            GM.Custodian.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                select: false,
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                //order: [
+                //    [2, "desc"]
+                //],
+                buttons: [],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columnDefs: [
+                    { targets: 0, data: "RowNumber", orderable: false },
+                    { targets: 1, data: "custodian_code" },
+                    { targets: 2, data: "custodian_shortname" },
+                    { targets: 3, data: "custodian_name" },
+                    { targets: 4, data: "contact" },
+                    { targets: 5, data: "tel_no" },
+                    {
+                        targets: 6,
+                        data: "RowNumber",
+                        className: "dt-body-center",
+                        width: 60,
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<button class="btn btn-default btn-round" form-mode="edit"   onclick="location.href=\'@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"] )?custodian_id=' + row.custodian_id + '\'" @(!IsView? "disabled":"") ><i class="feather-icon icon-edit"></i></button>';
+                            html += '<button class="btn btn-delete  btn-round" key="' + row.custodian_id + '" form-mode="delete" onclick="GM.Custodian.Delete(this)" @(!IsDelete? "disabled":"") ><i class="feather-icon icon-trash-2"></i></button>';
+                            return html;
+                        }
+                    }
+                ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                }
+            });
+
+            GM.Custodian.Delete = function (btn) {
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                if (mode) {
+                    var key = $(btn).attr("key");
+                    switch (mode) {
+                        case "delete":
+                            Delete(key);
+                            break;
+                    }
+                }
+            };
+
+            GM.Custodian.Form = {};
+            GM.Custodian.Form.Search = function () {
+                $('#search-form :input').each(function () {
+                    var input = $(this);
+                    var key = input[0].name.split('.')[1];
+
+                    switch (key) {
+                        case "custodian_code": GM.Custodian.Table.columns(1).search($(this).val()); break;
+                        case "custodian_shortname": GM.Custodian.Table.columns(2).search($(this).val()); break;
+                    }
+
+                });
+                GM.Custodian.Table.draw();
+            };
+
+            $("#search-form").on('submit', function (e) {
+
+                e.preventDefault();
+                GM.Message.Clear();
+                GM.Custodian.Form.Search();
+            });
+
+            $("#search-form").on('reset', function (e) {
+
+                GM.Defer(function() {
+                        GM.Message.Clear();
+                        GM.Custodian.Form.Search();
+                    },
+                    100);
+
+            });
+
+            $("#NavBar").html($('#NavCustodian').val());
+        });
+    </script>
+}

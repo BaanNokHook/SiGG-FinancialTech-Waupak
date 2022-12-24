@@ -1,0 +1,173 @@
+﻿@model GM.Data.Model.Static.CustodianModel
+
+<div id="custodian-detail" class="box-content no-padding">
+    <div id="custodian-detail-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#custodian-detail-form">
+        <div class="left-item">
+            <div class="title">
+                <i class="feather-icon icon-minus"></i><h3>Custodian Detail</h3>
+            </div>
+        </div>
+    </div>
+    <div id="custodian-detail-form" class="form-container form-horizontal have-head collapse in">
+        <div class="row">
+            <div class="col-xs-12 form-wrapper-1100">
+                <div class="form-group-wrapper">
+                    <div class="form-group">
+                        @Html.LabelForRequired(model => model.custodian_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.custodian_code, new { htmlAttributes = new { @class = "form-control" } })
+                            <span id="custodian_code_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                        </div>
+                        @Html.LabelForRequired(model => model.custodian_shortname, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.custodian_shortname, new { htmlAttributes = new { @class = "form-control" } })
+                            <span id="custodian_shortname_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelForRequired(model => model.custodian_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.custodian_name, new { htmlAttributes = new { @class = "form-control" } })
+                            <span id="custodian_name_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                        </div>
+                        @Html.LabelFor(model => model.swift_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorFor(model => model.swift_code, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.swift_code, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.sa_acc_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorFor(model => model.sa_acc_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.sa_acc_no, "", new { @class = "text-danger" })
+                        </div>
+                        @Html.LabelFor(model => model.ca_acc_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorFor(model => model.ca_acc_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ca_acc_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="custodian-address" class="box-content no-padding">
+    <div id="custodian-address-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#custodian-address-form">
+        <div class="left-item">
+            <div class="title">
+                <i class="feather-icon icon-plus"></i><h3>Custodian Address</h3>
+            </div>
+        </div>
+    </div>
+    <div id="custodian-address-form" class="form-container form-horizontal have-head collapse">
+        <div class="row">
+            <div class="col-xs-12 form-wrapper-1100">
+                <div class="form-group-wrapper">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.contact, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.contact, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.address1, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.TextAreaFor(model => model.address1, new { @class = "form-control", rows = "5" })
+                        </div>
+                        @Html.LabelFor(model => model.address2, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.TextAreaFor(model => model.address2, new { @class = "form-control", rows = "5" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.address3, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.TextAreaFor(model => model.address3, new { @class = "form-control", rows = "5" })
+                        </div>
+                        @Html.LabelFor(model => model.address4, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.TextAreaFor(model => model.address4, new { @class = "form-control", rows = "5" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.province_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" id="ddl_province" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    @Html.SpanFor(model => model.province_name, "Select...", new { @class = "selected-data" })
+                                    @Html.TextBoxFor(model => model.province_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                    @Html.TextBoxFor(model => model.province_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                    <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="search-dropdown-menu">
+                                        <input type="text" data-action="@Url.Action("FillProvince", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_province" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                        <i class="feather-icon icon-search"></i>
+                                    </div>
+                                    <hr>
+                                    <ul id="ul_province"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.LabelFor(model => model.district_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" id="ddl_district" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    @Html.SpanFor(model => model.district_name, "Select...", new { @class = "selected-data" })
+                                    @Html.TextBoxFor(model => model.district_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                    @Html.TextBoxFor(model => model.district_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                    <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="search-dropdown-menu">
+                                        <input type="text" data-action="@Url.Action("FillDistrict", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_district" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                        <i class="feather-icon icon-search"></i>
+                                    </div>
+                                    <hr>
+                                    <ul id="ul_district"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.sub_district_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" id="ddl_sub_district" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    @Html.SpanFor(model => model.sub_district_name, "Select...", new { @class = "selected-data" })
+                                    @Html.TextBoxFor(model => model.sub_district_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                    @Html.TextBoxFor(model => model.sub_district_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                    <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="search-dropdown-menu">
+                                        <input type="text" data-action="@Url.Action("FillSubDistrict", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_sub_district" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                        <i class="feather-icon icon-search"></i>
+                                    </div>
+                                    <hr>
+                                    <ul id="ul_sub_district"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.LabelFor(model => model.post_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.post_code, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.tel_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.tel_no, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.fax_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-xs-4">
+                            @Html.EditorForValidate(model => model.fax_no, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+﻿@model GM.Data.Model.Static.CustodianModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    bool isUpdate = IsUpdate;
+}
+@using (Html.BeginForm("Edit", "Custodian", FormMethod.Post, new { id = "action-form" }))
+{
+    <section class="working-content two-nav-padding" data-spy="scroll" data-target="#counterparty-scrollspy" data-offset="200">
+        <div class="container-fluid container-fixed">
+            <!--Second Navbar-->
+            <nav id="counterparty-scrollspy" class="navbar navbar-defult top-navbar section-nav-wrapper">
+                <div class="navbar-wrapper sub-topnav section-nav">
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="detail-li">
+                            <a href="#custodian-detail" onclick="CustodianForm.expandPanel('custodian-detail')">Detail</a>
+                        </li>
+                        <li id="address-li">
+                            <a href="#custodian-address" onclick="CustodianForm.expandPanel('custodian-address')">Address</a>
+                        </li>
+                        <li>
+                            <div class="vertical-line"></div>
+                        </li>
+                        <li class="submit-nav">
+                            <button type="submit" class="btn btn-link" @(!isUpdate ? "disabled" : "")>Submit</button>
+                            <button type="button" class="btn btn-link" onclick="location.href='@Url.Action("Index", "Custodian")'">Back</button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Div PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title">
+                        <div class="breadcrumb-wrap">
+                            <ol class="breadcrumb" id="NavBar">
+                                @*<li>
+                                        <a href="..\Home\Index">Home</a>
+                                    </li>
+                                    <li class="active">Static Process</li>
+                                    <li class="active">Static</li>
+                                    <li class="active">Custodian</li>
+                                    <li class="active">Edit</li>*@
+                            </ol>
+                        </div>
+                        <div class="title">
+                            <h1>
+                                Custodian
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+                    @{
+                        Html.RenderPartial("_Form");
+                    }
+
+                    <div id="custodian-submit" class="page-button-submit">
+                        <button type="submit" class="btn btn-primary btn-round btn-big" @(!isUpdate ? "disabled" : "")>Submit</button>
+                        <a class="btn btn-link" onClick="window.location.reload(true)">Clear Data</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @Html.HiddenFor(model => model.custodian_id)
+}
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/SweetAlert")
+    @Scripts.Render("~/module/custodianform")
+    <script>
+        var isUpdate = "@isUpdate";
+        if (isUpdate == "True") {
+            CustodianForm.initEdit("@Url.Action("Index", "Custodian")");
+        }
+        else {
+            CustodianForm.initView();
+        }
+
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavCustodian').val());
+        });
+    </script>
+}
