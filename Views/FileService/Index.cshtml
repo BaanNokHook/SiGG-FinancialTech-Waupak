@@ -1,0 +1,198 @@
+﻿@model GM.Data.View.Static.LogInOutViewModel
+
+@{
+    ViewBag.Title = "File Servie";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="..\Home\Index">Home</a>
+                            </li>
+                            <li class="active">Admin</li>
+                            <li class="active">File Service</li>
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            File Service
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                        </div>
+                    </div>
+                    <form>
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2" for="search_service">Service</label>
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_search_service" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span id="search_service" class="selected-data">Select...</span>
+                                                    <input name="search_service" type="hidden" value="" />
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="hidden" data-action="@Url.Action("FillService", (string) this.ViewContext.RouteData.Values["controller"])" id="txt_search_service" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    </div>
+                                                    <ul id="ul_search_service"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="treegrid" class="table table-striped display nowrap">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="alignCenter">download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td class="alignCenter" width="100px">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link href="~/Content/vendors/fancytree/dist/skin-win8-n/ui.fancytree.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/SweetAlertCss")
+    <style>
+        th.alignCenter {
+            text-align: center;
+        }
+
+        td.alignCenter {
+            text-align: center;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/Content/vendors/fancytree/dist/jquery.fancytree-all-deps.js"></script>
+    <script src="~/Content/vendors/download/jquery.fileDownload.js"></script>
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+
+        function DownloadFile(service, path) {
+            var linkDownloadFile = '@Url.Action("DownloadFile", (string) this.ViewContext.RouteData.Values["controller"])?service='+ service +'&path=' + path;
+            $.fileDownload(linkDownloadFile)
+                .done(function() { alert('File download a success!'); })
+                .fail(function() { alert('File download failed!'); });
+        }
+
+        $(function () { // on page load
+
+            var data = [{title: "Please select service"}];
+
+            $("#ddl_search_service").click(function() {
+                var txt_search = $('#txt_search_service');
+                var data = { datastr: null };
+                GM.Utility.DDLAutoComplete(txt_search, data, null);
+                txt_search.val("");
+            });
+
+            $('#txt_search_service').keyup(function() {
+                var data = { datastr: this.value };
+                GM.Utility.DDLAutoComplete(this, data, null);
+            });
+
+            $("#ul_search_service").on("click", ".searchterm", function (event) {
+                var tree = $.ui.fancytree.getTree();
+                if ($("#search_service").val().length > 0) {
+                    var url = {
+                        data: {
+                            service: $("#search_service").val()
+                        },
+                        url: "@Url.Action("GetHeadList", (string) this.ViewContext.RouteData.Values["controller"])"
+                    };
+
+                    var lazyLoad = function(event, data) {
+                        data.result = {
+                            data: {
+                                service: $("#search_service").val(),
+                                path: data.node.key
+                            },
+                            url: "@Url.Action("GetNodeList", (string) this.ViewContext.RouteData.Values["controller"])"
+                        };
+                    };
+
+                    tree.setOption("source", url);
+                    tree.setOption("lazyLoad", lazyLoad);
+                } else {
+                    tree.reload(data);
+                }
+            });
+
+            $("#treegrid").fancytree({
+                extensions: ["table"],
+                autoCollapse: true,
+                source: data,
+                renderColumns: function(event, data) {
+                    if ($("#search_service").val().length > 0) {
+                        var service = $("#search_service").val();
+                        var node = data.node,
+                            $tdList = $(node.tr).find(">td");
+                        if (!node.folder && node.key.length > 0) {
+                            var linkDownload =
+                                '<button class="btn btn-default btn-round" onclick="DownloadFile(\''+ service + '\',\'' + node.key + '\')"><i class="feather-icon icon-download"></i></button>';
+                            $tdList.eq(1).html(linkDownload);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
