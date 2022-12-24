@@ -1,0 +1,299 @@
+﻿@model GM.Data.Model.ExchangeRate.ExchangeRateModel
+<div class="form-container form-horizontal">
+    <div class="row">
+
+        <div class="col-xs-12 form-wrapper-1100">
+            <div class="form-group-wrapper">
+                <div class="form-group">
+                    @Html.LabelForRequired(model => model.source_type, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" style="min-width: 150px;" id="ddl_source_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                @Html.SpanFor(model => model.source_desc, "Select...", new { @class = "selected-data" })
+                                @Html.TextBoxFor(model => model.source_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                @Html.TextBoxFor(model => model.source_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="search-dropdown-menu">
+                                    <input type="text" data-action="@Url.Action("FillExchangeRateSource", (string) this.ViewContext.RouteData.Values["controller"])" id="txt_source_type" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                </div>
+                                <ul id="ul_rp_source"></ul>
+                            </div>
+                            <span id="source_type_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        @Html.PFor(model => model.source_type_desc, "", new { @class = "form-control-static", @id = "source_type_desc", @style = "font-weight: bold;" }, true)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForRequired(model => model.exchange_type, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" style="min-width:150px;" id="ddl_exchange_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                @Html.SpanFor(model => model.exchange_desc, "Select...", new { @class = "selected-data" })
+                                @Html.TextBoxFor(model => model.exchange_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                @Html.TextBoxFor(model => model.exchange_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="search-dropdown-menu">
+                                    <input type="text" data-action="@Url.Action("FillExchangeRateType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_exchange_type" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                </div>
+                                <ul id="ul_exchange"></ul>
+                            </div>
+                            <span id="exchange_type_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelForRequired(model => model.asof_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        <div class="input-group date">
+                            @Html.EditDateFor(model => model.asof_date, new { id = "txt_asof_date", @class = "form-control date-time-picker-weekend" })
+                            <span class="input-group-addon">
+                                <span class="feather-icon icon-calendar-weekend"></span>
+                            </span>
+                        </div>
+                        <span id="asof_date_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.exch_rate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        <div class="input-group">
+
+                            @Html.EditorFor(model => model.exch_rate, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+
+                            <div class="input-group-btn dropdown">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" style="min-width:100px;" id="ddl_cur1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        @Html.SpanFor(model => model.cur1, "Select...", new { @class = "selected-data" })
+                                        @Html.TextBoxFor(model => model.cur1, htmlAttributes: new { @class = "selected-value hidden" })
+                                        @Html.TextBoxFor(model => model.cur1, htmlAttributes: new { @class = "selected-data hidden" })
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <div class="search-dropdown-menu">
+                                            <input type="text" data-action="@Url.Action("FillCurrency", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_cur1" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                        </div>
+                                        <ul id="ul_rp_source"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group-btn dropdown">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" style="min-width:100px;" id="ddl_cur2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        @Html.SpanFor(model => model.cur2, "Select...", new { @class = "selected-data" })
+                                        @Html.TextBoxFor(model => model.cur2, htmlAttributes: new { @class = "selected-value hidden" })
+                                        @Html.TextBoxFor(model => model.cur2, htmlAttributes: new { @class = "selected-data hidden" })
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <div class="search-dropdown-menu">
+                                            <input type="text" data-action="@Url.Action("FillCurrency", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_cur2" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                        </div>
+                                        <ul id="ul_rp_source"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <span id="exch_rate_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MOS1, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.MOS1, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.MOS1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MOS2, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.MOS2, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.MOS2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MOS3, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.MOS3, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.MOS3, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MOS6, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.MOS6, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.MOS6, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MOS9, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.MOS9, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.MOS9, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR1, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR1, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR2, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR2, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR3, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR3, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR3, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR4, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR4, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR4, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR5, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR5, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR5, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR6, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR6, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR6, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR7, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR7, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR7, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR8, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR8, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR8, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR9, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR9, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR9, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YR10, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.YR10, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.YR10, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.tenor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" style="min-width:150px;" id="ddl_tenor" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                @Html.SpanFor(model => model.tenor, "Select...", new { @class = "selected-data" })
+                                @Html.HiddenFor(model => model.tenor, htmlAttributes: new { @class = "selected-value" })
+                                @Html.TextBoxFor(model => model.tenor, htmlAttributes: new { @class = "selected-data hidden" })
+                                <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <input type="hidden" id="txt_tenor">
+                                <ul id="ul_tenor">
+                                    <li class="searchterm">
+                                        <a onclick='ClearDDL("txt_tenor", "Select...")'>Select...</a>
+                                    </li>
+                                    <li class="searchterm">
+                                        <a data-toggle="tooltip" title="SPOT" onclick='AddTextForDDL4Value("SPOT", "txt_tenor", "SPOT","null","null","null","null","null","null")'>SPOT</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <span id="tenor_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.bid_value, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.bid_value, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.bid_value, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ask_value, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.ask_value, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.ask_value, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.rate_bid, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.rate_bid, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.rate_bid, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.rate_offer, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.rate_offer, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.rate_offer, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.rate_avg, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-xs-4">
+                        @Html.EditorFor(model => model.rate_avg, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @oninput = "return ExchangeRateForm.numberOnlyAndDot(this);", @onfocusout = "return ExchangeRateForm.auto6digit(this);" } })
+                        @Html.ValidationMessageFor(model => model.rate_avg, "", new { @class = "text-danger" })
+                        <span id="rate_avg_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

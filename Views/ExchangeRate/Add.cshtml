@@ -1,0 +1,104 @@
+﻿@model GM.Data.Model.ExchangeRate.ExchangeRateModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@using (Html.BeginForm("Add", "ExchangeRate", FormMethod.Post, new { id = "action-form" }))
+{
+    <section class="working-content">
+        <div class="container-fluid container-fixed">
+            <!--Second Navbar-->
+            <nav id="exchangerate-scrollspy" class="navbar navbar-defult top-navbar section-nav-wrapper">
+                <div class="navbar-wrapper sub-topnav section-nav">
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="detail-li">
+                            <a href="#exchangerate-detail" onclick="expandpanel('exchangerate-detail')">Detail</a>
+                        </li>
+                        <li>
+                            <div class="vertical-line"></div>
+                        </li>
+                        <li class="submit-nav">
+                            <button type="submit" class="btn btn-link">Submit</button>
+                            <button type="button" class="btn btn-link" onclick="location.href='@Url.Action("Index", "ExchangeRate")'">Back</button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title">
+                        <div class="breadcrumb-wrap">
+                            <ol class="breadcrumb" id="NavBar">
+                                <li>
+                                    @*<a href="..\Home\Index">Home</a>
+                                        </li>
+                                        <li class="active">Market Process</li>
+                                        <li class="active">Exchange Rate</li>
+                                        <li class="active">Exchange Rate</li>
+                                        <li class="active">Add</li>*@
+                            </ol>
+                        </div>
+                        <div class="title">
+                            <h1>
+                                Exchange Rate
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+
+                    <!-- exchange rate Detail -->
+                    <div id="exchangerate-detail" class="box-content no-padding">
+                        <div id="exchangerate-detail-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#exchangerate-detail-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-minus"></i><h3>Exchange Rate Detail</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="exchangerate-detail-form" class="form-container form-horizontal have-head collapse in">
+
+                            @{
+                                Html.RenderPartial("_Form");
+                            }
+
+
+                        </div>
+                        <div id="exchangerate-submit" class="page-button-submit">
+                            <button type="submit" class="btn btn-primary btn-round btn-big">Submit</button>
+                            <button type="button" class="btn btn-link" onclick="location.href='@Url.Action("Add", "ExchangeRate")'">Clear Data</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@section Styles{
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    @*@Scripts.Render("~/module/exchangerateform")*@
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/exchangerateform")
+    @Scripts.Render("~/bundles/datatable")
+    <script>
+        ExchangeRateForm.initAdd("@Url.Action("Index", "ExchangeRate")");
+
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavExchangeRate').val());
+
+        });
+    </script>
+}

@@ -1,0 +1,597 @@
+﻿@model GM.Data.View.ExchangeRate.ExchangeRateViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                            @*<li>
+                                    <a href="..\Home\Index">Home</a>
+                                </li>
+                                <li class="active">Market Process</li>
+                                <li class="active">Exchange Rate</li>
+                                <li class="active">Exchange Rate</li>*@
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Exchange Rate
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            @*<button id="user-master" class="btn btn-link less-more-option">
+                                    Show less option
+                                    <i class="feather-icon icon-chevron-up"></i>
+                                </button>*@
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.asof_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-10">
+                                            <div class="input-group">
+                                                @Html.EditDateFor(model => model.FormSearch.asof_date, new { @class = "form-control date-time-picker" })
+                                                <span class="input-group-addon default date-pick-btn">
+                                                    <span class="feather-icon icon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.source_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_source_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.source_type, "Select...", new { @class = "selected-data" })
+                                                    @Html.Hidden("FormSearch.source_type_code", null, new { @class = "selected-value" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.source_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillExchangeRateSource", (string) this.ViewContext.RouteData.Values["controller"])" id="txt_source_type" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    </div>
+                                                    <ul id="ul_source_type"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.exchange_type, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_exchange_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.exchange_type, "Select...", new { @class = "selected-data" })
+                                                    @Html.Hidden("FormSearch.exchange_type_code", null, new { @class = "selected-value" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.exchange_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillExchangeRateType", (string) this.ViewContext.RouteData.Values["controller"])" id="txt_exchange_type" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    </div>
+                                                    <ul id="ul_exchange_type"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" onclick="location.href='/ExchangeRate/Add';return false;" @(!IsCreate ? "disabled" : "")>
+                                            + Add Exchange Rate
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.TableList.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.source_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.source_desc)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.exchange_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.exchange_desc)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.asof_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.cur1)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.cur2)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.exch_rate)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.MOS1)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.MOS2)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.MOS3)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.MOS6)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.MOS9)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR1)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR2)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR3)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR4)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR5)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR6)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR7)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR8)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR9)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.YR10)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.tenor)</th>
+                                    <th style="visibility: hidden;">@Html.LabelFor(mode => mode.TableList.bid_value)</th>
+                                    <th style="visibility: hidden;">@Html.LabelFor(mode => mode.TableList.ask_value)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.rate_bid)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.rate_offer)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.rate_avg)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+
+        function FormatDecimal(value, point) {
+            //const f = Math.pow(10, point);
+            return (value).toFixed(point);
+        }
+
+        function Delete(exchange_type, source_type, asof_date, cur1, cur2) {
+            swal({
+                title: "Are you sure?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $('.spinner').css('display', 'block');
+                    var data = { exchange_type: exchange_type, source_type: source_type, asof_date: asof_date, cur1: cur1, cur2: cur2 };
+                    //console.log("Show form delete -> local");
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Delete", (string)this.ViewContext.RouteData.Values["controller"])",
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        success: function (d) {
+                            $('.spinner').css('display', 'none');
+                            if (d.success) {
+                                setTimeout(function () {
+                                    swal("Deleted!", "Delete Success.", "success");
+                                }, 100);
+                                $('#action-form-modal').modal('hide');
+                                GM.Message.Clear();
+                                GM.ExchangeRate.Form.Search();
+                                GM.ExchangeRate.Table.draw();
+                            } else {
+                                // DoSomethingElse()
+                                swal("Deleted!", "Error : " + d.responseText, "error");
+                            }
+                        },
+                        error: function (d) {
+                            $('.spinner').css('display', 'none');
+                            // TODO: Show error
+                            GM.Message.Clear();
+                        }
+                    });
+                } else {
+                    GM.Message.Clear();
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            var budate = $("#BusinessDate").text();
+
+            var formatmmddyyyydate = budate.split("/");
+            formatmmddyyyydate = formatmmddyyyydate[1] + "/" + formatmmddyyyydate[0] + "/" + formatmmddyyyydate[2];
+            var b_date = new Date(formatmmddyyyydate);
+
+            $('#FormSearch_asof_date').data("DateTimePicker").date(b_date);
+
+            GM.ExchangeRate = {};
+            GM.ExchangeRate.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                select: false,
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                order: [
+                    [3, "desc"]
+                ],
+                buttons: [],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columnDefs:
+                [
+                    { targets: 0, data: "RowNumber", orderable: false },
+                    { targets: 1, data: "source_type", visible: false },
+                    { targets: 2, data: "source_desc", orderable: false },
+                    { targets: 3, data: "exchange_type", visible: false },
+                    { targets: 4, data: "exchange_desc", orderable: false },
+                    {
+                        targets: 5, data: "asof_date",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    { targets: 6, data: "cur1", orderable: false },
+                    { targets: 7, data: "cur2", orderable: false  },
+                    {
+                        targets: 8, data: "exch_rate", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 9, data: "MOS1", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 10, data: "MOS2", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 11, data: "MOS3", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 12, data: "MOS6", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 13, data: "MOS9", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 14, data: "YR1", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 15, data: "YR2", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 16, data: "YR3", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 17, data: "YR4", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 18, data: "YR5", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 19, data: "YR6", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 20, data: "YR7", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 21, data: "YR8", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 22, data: "YR9", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 23, data: "YR10", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    { targets: 24, data: "tenor", orderable: false  },
+                    {
+                        targets: 25, data: "bid_value", orderable: false, visible: false,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 26, data: "ask_value", orderable: false, visible: false,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 27, data: "rate_bid", orderable: false,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 28, data: "rate_offer", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 29, data: "rate_avg", orderable: false ,
+                        className: 'dt-body-right',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (data != null) {
+                                html = FormatDecimal(data, 6);
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        targets: 30, orderable: false ,
+                        data: "RowNumber",
+                        className: "dt-body-center",
+                        width: 60,
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<button class="btn btn-default btn-round" form-mode="edit"   onclick="location.href=\'@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"] )?exchange_type=' + row.exchange_type + '&source_type=' + row.source_type + '&asof_date=' + moment(row.asof_date).format('DD/MM/YYYY') + '&cur1=' + row.cur1 + '&cur2=' + row.cur2 + '\'" @(!IsView? "disabled":"") ><i class="feather-icon icon-edit"></i></button>';
+                            html += '<button class="btn btn-delete  btn-round" key="' + row.exchange_type + '" key2="' + row.source_type + '" key3="' + moment(row.asof_date).format('DD/MM/YYYY') + '" key4="' + row.cur1 + '" key5="' + row.cur2 + '" form-mode="delete" onclick="GM.ExchangeRate.Delete(this)" @(!IsDelete? "disabled":"") ><i class="feather-icon icon-trash-2"></i></button>';
+                            return html;
+                        }
+                    }
+                ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                },
+                fnPreDrawCallback: function () {
+                    $('#x-table-data').DataTable().columns(5).search($('#FormSearch_asof_date').val());
+                }
+            });
+
+            GM.ExchangeRate.Delete = function (btn) {
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                if (mode) {
+                    var key = $(btn).attr("key");
+                    var key2 = $(btn).attr("key2");
+                    var key3 = $(btn).attr("key3");
+                    var key4 = $(btn).attr("key4");
+                    var key5 = $(btn).attr("key5");
+                    switch (mode) {
+                    case "delete":
+                        Delete(key, key2, key3, key4, key5);
+                        break;
+                    }
+                }
+            };
+
+            GM.ExchangeRate.Form = function (btn) {
+            }
+
+            $("#NavBar").html($('#NavExchangeRate').val());
+        });
+    </script>
+    @*@Scripts.Render("~/module/exchangerateindex")*@
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/exchangerateindex")
+}
