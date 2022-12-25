@@ -1,0 +1,116 @@
+﻿@model GM.Data.View.Master.LoginViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "";
+    var isOnline = ViewBag.isOnline;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="~/Content/resources/img/favicon_2.png" sizes="32x32" type="image/png">
+    <title>Private REPO System</title>
+    @Styles.Render("~/Content/cssapp")
+    @Styles.Render("~/bundles/SweetAlertCss")
+    
+    <!-- DO NOT DELETE!! : HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../Vendor/html5shiv/html5shiv.min.js"></script>
+      <script src="../Vendor/respond/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="signin-page">
+    <header>
+        <div class="brand-logo">
+            <img src="~/Content/img/ktb_logo_white_new@2x.png">
+        </div>
+    </header>
+    <section class="login-section">
+        <div class="login-box box-content">
+            <div class="repo-logo">
+                <img src="~/Content/img/repo_logo_2.png">
+            </div>
+
+            @using (Html.BeginForm("Login", "Login", new { ReturnUrl = @Request.QueryString["ReturnUrl"] }, FormMethod.Post, new { data_parsley_validate = "", novalidate = "", role = "form", id = "validation-form", @class = "single-col-form", autocomplete = "off" }))
+            {
+
+                @*@Html.ValidationSummary()*@
+                @Html.ValidationMessage("ErrorMsg", "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.isKick)
+                <div class="text-form group">
+                    <label>Username</label>
+
+                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", placeholder = "Username", autocomplete = "off", required = "required", aria_describedby = "basic-addon1" } })
+                    <div class="col-md-12 text-left">
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="text-form group">
+                    <label>Password</label>
+                    @Html.EditorFor(mode => mode.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", required = "required", aria_describedby = "basic-addon1" } })
+
+                    <div class="col-md-12 text-left">
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="login-button">
+                    <button type="submit" class="btn btn-primary btn-round">Login</button>
+                </div>
+                <div class="version-program">
+                    @Html.Partial("_Version")
+                </div>
+            }
+
+
+        </div>
+    </section>
+    <footer>
+        <p>© Copyright 2017 Krung Thai Bank. All Rights Reserved</p>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/treefilter")
+    @Scripts.Render("~/bundles/application")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+        window.onload = function () {
+            console.log("window.onload");
+            var isOnline = "@isOnline";
+            if (isOnline != "")
+            {
+                swal({
+                    title: "Please confirm to continue?",
+                    text: "This user has already logged in using another machine.<br> Do you want to log in?",
+                    html: true,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $('.spinner').css('display', 'block'); // Open Loading
+                            var dataToPost = $("#validation-form").serialize();
+                            $.post("LoginAndKick", dataToPost)
+                                .done(function (response) {
+                                    window.location.href = "/";
+                                });
+                        }
+                    }
+                );
+
+                isOnline = "";
+            }
+    };
+    </script>
+</body>
+</html>
+

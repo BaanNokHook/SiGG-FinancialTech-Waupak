@@ -1,0 +1,171 @@
+﻿@model GM.Data.View.Static.LogInOutViewModel
+
+@{
+    ViewBag.Title = "Log In Out";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="..\Home\Index">Home</a>
+                            </li>
+                            <li class="active">Admin</li>
+                            <li class="active">Log In Out</li>
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Log In Out
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-1100">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FormSearch.module_name, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                    <div class="col-xs-4">
+                                        @Html.EditorFor(model => model.FormSearch.module_name, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    @Html.LabelFor(model => model.FormSearch.action_name, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                    <div class="col-xs-4">
+                                        @Html.EditorFor(model => model.FormSearch.action_name, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-1100">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FormSearch.create_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            @Html.EditDateFor(model => model.FormSearch.create_date, new { @class = "form-control date-time-picker" })
+                                            <span class="input-group-addon default date-pick-btn">
+                                                <span class="feather-icon icon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @Html.LabelFor(model => model.FormSearch.status, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                    <div class="col-xs-4">
+                                        @Html.EditorFor(model => model.FormSearch.status, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <hr>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary btn-round btn-main" type="submit">Confirm</button>
+                                <button type="button" class="btn btn-primary btn-round btn-main" onclick="location.href='@Url.Action("Dashboard", "Admin")';return false;">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.TableList.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.svc_id)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.guid)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.svc_req)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.svc_res)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.svc_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.module_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.action_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.ref_id)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.status)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.status_desc)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.create_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.create_by)</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("Download", (string) this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new {@class = "one-col-form", id = "download-form" }))
+                {
+                    <input type="hidden" id="svcId" name="svcId" />
+                    <input type="hidden" id="type" name="type" />
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script src="~/Scripts/GM.LogInOut.js"></script>
+    <script>
+        var url = {
+            LogInOutList: '@Url.Action("Search", "LogInOut")'
+        };
+
+        LogInOut.init(url);
+    </script>
+}
