@@ -1,0 +1,1746 @@
+﻿@model GM.Data.Model.RPTransaction.RPTransModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+
+    var ErrorMessage = ViewBag.Message;
+}
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        #ui-datepicker-div {
+            z-index: 999 !important;
+        }
+
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #maturity_date_search {
+            z-index: 1;
+        }
+
+        .table-summary {
+            text-align: right;
+            margin-top: -20px;
+            margin-bottom: 20px;
+        }
+
+            .table-summary table {
+                float: right;
+            }
+
+                .table-summary table tr th {
+                    text-align: right;
+                    padding: 6px 8px;
+                }
+
+                    .table-summary table tr th:after {
+                        content: ':';
+                        margin-left: 5px;
+                    }
+
+                .table-summary table tr td {
+                    padding: 6px 8px;
+                }
+    </style>
+}
+
+<section class="working-content working-content-d1" data-spy="scroll" data-target="#security-scrollspy" data-offset="120">
+    <div class="container-fluid container-fixed">
+        @using (Html.BeginForm("Add", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Get, new { @class = "one-col-form", id = "search-form" }))
+        {
+            <!-- PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title-wrapper">
+                        <div class="left-content">
+                            <div class="page-title">
+                                <div class="title">
+                                    <h1>
+                                        Deal Entry
+                                    </h1>
+                                </div>
+                                <div class="breadcrumb-wrap">
+                                    <ol class="breadcrumb" id="NavBar"></ol>
+                                </div>
+                                <div class="vertical-line d1"></div>
+                                <div class="dropdown page-action">
+                                    <button class="btn btn-primary dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Deal Option
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a onclick="GM.RPDealEntry.Submit(this);">Submit</a>
+                                        </li>
+                                        @if (Model.trans_no != null && Model.trans_no.Trim() != "")
+                                        {
+                                            <li>
+                                                <a onclick="location.href='/RPDealEntry/Edit?transno=' + @Model.trans_no + '&isCopy=True'">Copy Deal</a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <a onclick="location.href='@Url.Action("Index", "RPDealEntry")'">Back</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+                    <!-- Box Outside -->
+                    <div class="box-outside box-outside-d1 no-padding">
+                        <div class="header-row">
+                            <div class="form-container form-container-d1 form-inline">
+                                <div class="row">
+                                    <div class="col-xs-12 no-padding">
+                                        <div class="form-group-wrapper">
+                                            <div class="deal-status">
+                                                <span class="title">Deal Status :</span>
+                                                <span class="label label-deal-new">New</span>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">Trans No</label>
+                                                <p class="form-control-static" style="color:red">@Model.trans_no &nbsp;</p>
+                                                @Html.HiddenFor(model => model.trans_no)
+                                                @Html.HiddenFor(model => model.SessionName)
+                                                @Html.HiddenFor(model => model.isAmend)
+                                                @Html.HiddenFor(model => model.isCopy)
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">User</label>
+                                                <p id="userid" class="form-control-static">@Model.user_id</p>
+                                                @Html.HiddenFor(model => model.user_id)
+                                                @Html.HiddenFor(model => model.isover_limit)
+                                                @Html.HiddenFor(model => model.desk_group_id)
+                                                @Html.HiddenFor(model => model.desk_group_name)
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">Username</label>
+                                                <p class="form-control-static">@Model.username</p>
+                                                @Html.HiddenFor(model => model.username)
+                                                @Html.HiddenFor(model => model.page_name)
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                @Html.LabelForRequired(model => model.port, htmlAttributes: new { @class = "control-label" })
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_port" disabled="disabled" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.port_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.port, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.port_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillPortUser", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_port" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_port"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                @Html.LabelForRequired(model => model.desk_book_id, htmlAttributes: new { @class = "control-label" })
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_desk" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.desk_book_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.desk_book_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.desk_book_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillDesk", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_desk" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search hidden"></i>
+                                                        </div>
+                                                        <ul id="ul_desk"></ul>
+                                                    </div>
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.desk_book_id, "", new { @class = "text-danger" })
+                                                <span id="desk_book_id_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                </span>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                @Html.LabelForRequired(model => model.trader_id, htmlAttributes: new { @class = "control-label" })
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_dealer" style="min-width:250px;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.trader_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.trader_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.trader_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillDealer", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_dealer" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_dealer"></ul>
+                                                    </div>
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.trader_id, "", new { @class = "text-danger" })
+                                                <span id="trader_id_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form>
+                        <div class="box-content-wrapper-d1 d-table">
+                            <!-- Deal -->
+                            <div id="deal" class="box-content box-content-d1 first col-30 no-padding d-table-cell">
+                                <div class="form-container form-horizontal form-container-d1">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Deal Detail</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-5 col-lg-4">Instrument</label>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="radio-form no-padding">
+                                                            <div class="radio select-btn-radio">
+                                                                @if (Model.repo_deal_type == "PRP")
+                                                                {
+                                                                    <label class="radio-inline checked">
+                                                                        @Html.RadioButtonFor(m => m.repo_deal_type, "PRP", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true" }) Private Repo
+                                                                    </label>
+
+                                                                    if (Model.port_name == "BANKING")
+                                                                    {
+                                                                        <label class="radio-inline">
+                                                                            @Html.RadioButtonFor(m => m.repo_deal_type, "BRP", htmlAttributes: new { @class = "btn-radio", @ischeck = "false" }) Bilateral Repo
+                                                                        </label>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label class="radio-inline">
+                                                                            @Html.RadioButtonFor(m => m.repo_deal_type, "BRP", htmlAttributes: new { @class = "btn-radio", @ischeck = "false", @disabled = "true" })Bilateral Repo
+                                                                        </label>
+                                                                    }
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="radio-inline">
+                                                                        @Html.RadioButtonFor(m => m.repo_deal_type, "PRP", htmlAttributes: new { @class = "btn-radio", @ischeck = "false" }) Private Repo
+                                                                    </label>
+
+                                                                    if (Model.port_name == "BANKING")
+                                                                    {
+                                                                        <label class="radio-inline checked">
+                                                                            @Html.RadioButtonFor(m => m.repo_deal_type, "BRP", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true" }) Bilateral Repo
+                                                                        </label>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label class="radio-inline checked">
+                                                                            @Html.RadioButtonFor(m => m.repo_deal_type, "BRP", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true", @disabled = "true" })Bilateral Repo
+                                                                        </label>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.trans_deal_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_instrument" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.trans_deal_type_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.trans_deal_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.trans_deal_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillInstrument", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrument" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <ul id="ul_instrument"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.trans_deal_type, "", new { @class = "text-danger" })
+                                                        <span id="trans_deal_type_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.purchase_price, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group" style="width:100%;max-width:250px;">
+                                                            @Html.EditorFor(model => model.purchase_price, new { htmlAttributes = new { @class = "form-control", @onkeypress = "return text_OnKeyPress_NumberOnlyAndDotAndM(this);" } })
+                                                            <div class="input-group-btn multi-dropdown">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-default dropdown-toggle" style="width: 70px;" id="ddl_cur" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                        @Html.SpanFor(model => model.cur, "Search...", new { @class = "selected-data" })
+                                                                        @Html.TextBoxFor(model => model.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                        @Html.TextBoxFor(model => model.cur, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <div class="dropdown-menu">
+                                                                        <div class="search-dropdown-menu">
+                                                                            <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" style="padding-right:0px;padding-left:5px;" id="txt_cur" class="form-control" placeholder="CCY" aria-describedby="basic-addon1">
+                                                                        </div>
+                                                                        <hr>
+                                                                        <ul id="ul_cur"></ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /btn-group -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.purchase_price, "", new { @class = "text-danger" })
+                                                        <span id="purchase_price_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.cur, "", new { @class = "text-danger" })
+                                                        <span id="cur_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.deal_period, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5">
+                                                        <div class="input-group amount-choose" style="max-width: 250px;">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-default" type="button" id="p_minus">
+                                                                    <i class="feather-icon icon-minus"></i>
+                                                                </button>
+                                                            </span>
+                                                            <input id="business_period" type="hidden" name="business_period">
+                                                            @Html.EditorFor(model => model.deal_period, new { htmlAttributes = new { Type = "text", @class = "form-control text-center", @onkeypress = "return text_OnKeyPress_period(this);" } })
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-default" type="button" id="p_plus">
+                                                                    <i class="feather-icon icon-plus"></i>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                        <!-- /input-group -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                        @Html.ValidationMessageFor(model => model.deal_period, "", new { @class = "text-danger" })
+                                                        <span id="deal_period_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.trade_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => model.trade_date, new { @class = "form-control date-time-picker-weekend" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <span id="trade_date_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.settlement_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => model.settlement_date, new { @class = "form-control date-time-picker-weekend" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <span id="settlement_date_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.maturity_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => model.maturity_date, new { @class = "form-control date-time-picker-weekend" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                        @Html.ValidationMessageFor(model => model.maturity_date, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.trans_in_term_id, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_transinterm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.trans_in_term_id_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.trans_in_term_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.trans_in_term_id_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillRpIntTerm", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_transinterm" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_transinterm"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.trans_in_term_id, "", new { @class = "text-danger" })
+                                                        <span id="trans_in_term_id_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.bilateral_contract_no, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group" style="width: 100%;max-width: 250px;">
+                                                            @if (Model.repo_deal_type == "PRP")
+                                                            {
+                                                                @Html.EditorFor(model => model.bilateral_contract_no, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.EditorFor(model => model.bilateral_contract_no, new { htmlAttributes = new { @class = "form-control" } })
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.bilateral_contract_no, "", new { @class = "text-danger" })
+                                                        <span id="bilateral_contract_no_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.purpose, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_purpose" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.purpose_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.purpose, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.purpose_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillPurpose", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_purpose" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_purpose"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.purpose, "", new { @class = "text-danger" })
+                                                        <span id="purpose_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.trans_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_trans_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.trans_type_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.trans_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.trans_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillTransType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_trans_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_trans_type"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.trans_type, "", new { @class = "text-danger" })
+                                                        <span id="trans_type_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.basis_code, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_basiscode" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.basis_code_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.basis_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.basis_code_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillBasisCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_basiscode" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_basiscode"></ul>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.basis_code, "", new { @class = "text-danger" })
+                                                        <span id="basis_code_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Interest -->
+                            <div id="amount" class="box-content box-content-d1 second col-30 no-padding d-table-cell">
+                                <div class="form-container form-horizontal form-container-d1">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Interest</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.interest_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="radio-form no-padding">
+                                                            <div class="radio select-btn-radio">
+                                                                @if (Model.interest_type == "FIXED")
+                                                                {
+                                                                    <label class="radio-inline checked">
+                                                                        @Html.RadioButtonFor(m => m.interest_type, "FIXED", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true" }) Fixed Rate
+                                                                    </label>
+                                                                    <label class="radio-inline">
+                                                                        @Html.RadioButtonFor(m => m.interest_type, "FLOAT", htmlAttributes: new { @class = "btn-radio", @ischeck = "false" }) Float Rate
+                                                                    </label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="radio-inline">
+                                                                        @Html.RadioButtonFor(m => m.interest_type, "FIXED", htmlAttributes: new { @class = "btn-radio", @ischeck = "false" }) Fixed Rate
+                                                                    </label>
+                                                                    <label class="radio-inline checked">
+                                                                        @Html.RadioButtonFor(m => m.interest_type, "FLOAT", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true" }) Float Rate
+                                                                    </label>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.interest_rate, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @if (Model.interest_type == "FIXED")
+                                                        {
+                                                            <div id="intratetext" class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                                @Html.EditorFor(model => model.interest_rate, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+
+                                                                <span disabled class="input-group-addon">
+                                                                    <span class="text">%</span>
+                                                                </span>
+                                                            </div>
+                                                            <div id="intrateddl" class="dropdown hidden" style="max-width: 250px;">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_intrate" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.interest_floating_index_code, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.interest_rate, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.interest_floating_index_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillFloatRate", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_intrate" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_intrate"></ul>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="intratetext" class="input-group no-btn hidden" style="max-width: 250px;width: 100%;">
+                                                                @Html.EditorFor(model => model.interest_rate, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                                <span disabled class="input-group-addon">
+                                                                    <span class="text">%</span>
+                                                                </span>
+                                                            </div>
+                                                            <div id="intrateddl" class="dropdown" style="max-width: 250px;">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_intrate" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.interest_floating_index_code, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.interest_rate, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.interest_floating_index_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillFloatRate", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_intrate" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_intrate"></ul>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.interest_rate, "", new { @class = "text-danger" })
+                                                        <span id="interest_rate_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.interest_floating_index_code, "", new { @class = "text-danger" })
+                                                        <span id="interest_floating_index_code_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+
+                                                    @Html.LabelForRequired(model => model.interest_spread, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            @if (Model.interest_spread != null && Model.interest_spread.Value > 0)
+                                                            {
+                                                                @Html.EditorFor(model => model.interest_spread, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.EditorFor(model => model.interest_spread, new { htmlAttributes = new { @class = "form-control", @readonly = "true", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                            }
+
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <span id="interest_spread_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-5 col-lg-4">Total Int.</label>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditorFor(model => model.interest_total, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-link link-w-icon hidden" type="button" data-toggle="modal" data-target="#check-interest" id="btn_checkinterest">
+                                                    <i class="feather-icon icon-search"></i>
+                                                    <span>Check interest Period</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Cost</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.cost_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="radio-form no-padding">
+                                                            <div class="radio select-btn-radio">
+                                                                @if (Model.cost_type == "FIXED")
+                                                                {
+                                                                    <label class="radio-inline checked">
+                                                                        @Html.RadioButtonFor(m => m.cost_type, "FIXED", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true" }) Fixed Rate
+                                                                    </label>
+                                                                    <label class="radio-inline">
+                                                                        @Html.RadioButtonFor(m => m.cost_type, "FLOAT", htmlAttributes: new { @class = "btn-radio", @ischeck = "false" }) Float Rate
+                                                                    </label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="radio-inline">
+                                                                        @Html.RadioButtonFor(m => m.cost_type, "FIXED", htmlAttributes: new { @class = "btn-radio", @ischeck = "false" }) Fixed Rate
+                                                                    </label>
+                                                                    <label class="radio-inline checked">
+                                                                        @Html.RadioButtonFor(m => m.cost_type, "FLOAT", htmlAttributes: new { @class = "btn-radio", @checked = "checked", @ischeck = "true" }) Float Rate
+                                                                    </label>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.cost_of_fund, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @if (Model.cost_type == "FIXED")
+                                                        {
+                                                            <div id="costoffundtext" class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                                @Html.EditorFor(model => model.cost_of_fund, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                                <span disabled class="input-group-addon">
+                                                                    <span class="text">%</span>
+                                                                </span>
+                                                            </div>
+                                                            <div id="costoffundddl" class="dropdown hidden" style="max-width: 250px;">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_costoffund" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.cost_floating_index_code, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.cost_of_fund, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.cost_floating_index_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillFloatRate", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_costoffund" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_costoffund"></ul>
+                                                                </div>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.cost_of_fund, "", new { @class = "text-danger" })
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="costoffundtext" class="input-group no-btn hidden" style="max-width: 250px;width: 100%;">
+                                                                @Html.EditorFor(model => model.cost_of_fund, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                                <span class="input-group-addon">
+                                                                    <span class="text">%</span>
+                                                                </span>
+                                                            </div>
+                                                            <div id="costoffundddl" class="dropdown" style="max-width: 250px;">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_costoffund" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.cost_floating_index_code, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.cost_of_fund, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.cost_floating_index_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input type="text" data-action="@Url.Action("FillFloatRate", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_costoffund" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <ul id="ul_costoffund"></ul>
+                                                                </div>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.cost_of_fund, "", new { @class = "text-danger" })
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @Html.ValidationMessageFor(model => model.cost_of_fund, "", new { @class = "text-danger" })
+                                                        <span id="cost_of_fund_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.cost_floating_index_code, "", new { @class = "text-danger" })
+                                                        <span id="cost_floating_index_code_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.cost_spread, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            @if (Model.interest_spread != null && Model.interest_spread.Value > 0)
+                                                            {
+                                                                @Html.EditorFor(model => model.cost_spread, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.EditorFor(model => model.cost_spread, new { htmlAttributes = new { @class = "form-control", @readonly = "true", @oninput = "return numberOnlyAndDotAndMinute(this);" } })
+                                                            }
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <span id="cost_spread_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-5 col-lg-4">Total Cost.</label>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" id="lbl_cost_total" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditorFor(model => model.cost_total, new { htmlAttributes = new { @class = "form-control costotal", @readonly = "true" } })
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Extendable Deal</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.extend, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_append" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.extend_name, "No", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.extend, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.extend_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillAppendDeal", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_append" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <ul id="ul_append"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Manual Calculate</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ismanual_cal, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                @Html.CheckBoxFor(m => m.ismanual_cal.Value, htmlAttributes: new { @checked = "checked" }) @*Yes*@
+                                                                @Html.HiddenFor(model => model.ismanual_cal)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Counter Party -->
+                            <div id="counter-party-deal" class="box-content box-content-d1 third col-40 no-padding d-table-cell">
+                                <div class="form-container form-horizontal form-container-d1">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Total Amount</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group" style="display: none;">
+                                                    <label class="control-label col-xs-5 col-md-5 col-lg-5">Repurchase Price</label>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7" type="PFor">
+                                                        @Html.PFor(model => model.repurchase_price, "0.00", new { @id = "lbl_repurchase_price", @class = "form-control-static selected-data" })
+                                                        @Html.EditorFor(model => model.repurchase_price, new { htmlAttributes = new { @class = "form-control hidden" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display: none;">
+                                                    <label class="control-label col-xs-5 col-md-5 col-lg-5">Interest Amount</label>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7" type="PFor">
+                                                        @Html.PFor(model => model.interest_amount, "0.00", new { @id = "lbl_interest_amount", @class = "form-control-static selected-data" })
+                                                        @Html.EditorFor(model => model.interest_amount, new { htmlAttributes = new { @class = "form-control hidden" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display: none;">
+                                                    <label class="control-label col-xs-5 col-md-5 col-lg-5">WHT Amount</label>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7" type="PFor">
+                                                        @Html.PFor(model => model.withholding_amount_text, "", new { @id = "withholding_amount_text", @class = "form-control-static selected-data" })
+                                                        @Html.EditorFor(model => model.withholding_amount, new { htmlAttributes = new { @class = "form-control hidden" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-3 col-md-3 col-lg-3" style="padding-left: 3px;">Exchange Rate</label>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <div class="input-group" style="width: 100%;max-width: 300px;">
+                                                            @Html.EditorFor(model => model.exch_rate, new { htmlAttributes = new { @class = "form-control", @onkeypress = "return text_OnKeyPress_NumberOnlyAndDot(this);" } })
+                                                            <div class="input-group-btn multi-dropdown">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-default dropdown-toggle" id="ddl_cur_pair1" style="width:100px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                        @Html.SpanFor(model => model.cur_pair1, "Search...", new { @class = "selected-data" })
+                                                                        @Html.TextBoxFor(model => model.cur_pair1, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                        @Html.TextBoxFor(model => model.cur_pair1, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <div class="dropdown-menu">
+                                                                        <div class="search-dropdown-menu">
+                                                                            <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" style="padding-right:0px;padding-left:5px;" id="txt_cur_pair1" class="form-control" placeholder="CCY" aria-describedby="basic-addon1">
+                                                                        </div>
+                                                                        <hr>
+                                                                        <ul id="ul_cur_pair1"></ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-default dropdown-toggle" id="ddl_cur_pair2" style="width:100px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                        @Html.SpanFor(model => model.cur_pair2, "Search...", new { @class = "selected-data" })
+                                                                        @Html.TextBoxFor(model => model.cur_pair2, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                        @Html.TextBoxFor(model => model.cur_pair2, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <div class="dropdown-menu">
+                                                                        <div class="search-dropdown-menu">
+                                                                            <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" style="padding-right:0px;padding-left:5px;" id="txt_cur_pair2" class="form-control" placeholder="CCY" aria-describedby="basic-addon1">
+                                                                        </div>
+                                                                        <hr>
+                                                                        <ul id="ul_cur_pair2"></ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /btn-group -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Counter Party Detail</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    <label class="{ class = control-label col-xs-3 col-md-3 col-lg-3 }" for="counter_party_id" style="padding-left: 3px;">
+                                                        Counter Party
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <div class="dropdown" style="max-width: 300px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.counter_party_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.counter_party_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.counter_party_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillCounterparty", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_counterparty"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-3 col-md-3 col-lg-3">
+                                                    </div>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        @Html.ValidationMessageFor(model => model.counter_party_id, "", new { @class = "text-danger" })
+                                                        <span id="counter_party_id_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    <label class="control-label col-xs-5 col-md-5 col-lg-5">Swift Code</label>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7" id="lbl_swift_code" type="PFor">
+                                                        @Html.PFor(model => model.swift_code, "", new { @class = "form-control-static selected-data" })
+                                                        @Html.TextBoxFor(model => model.swift_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-3 col-md-3 col-lg-3">Fund Code</label>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <div class="dropdown" style="max-width: 300px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_counterparty_fund" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.counter_party_fund_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.counter_party_fund_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.counter_party_fund_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <input style="display:none" type="text" data-action="@Url.Action("FillCounterPartyFund", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty_fund" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+
+                                                                <ul id="ul_counterparty_fund"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    @Html.LabelForRequired(model => model.wht_tax, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7" id="lbl_wht_tax" type="PFor">
+                                                        @Html.PFor(model => model.absorb, "0.00%", new { @id = "absorb", @class = "form-control-static selected-text" })
+                                                        @Html.TextBoxFor(model => model.wht_tax, htmlAttributes: new { @class = "selected-data hidden" })
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.wht_tax, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    @Html.LabelForRequired(model => model.payment_method, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="input-group" style="max-width:250px;width:100%">
+                                                            <div class="input-group-btn dropdown" style="max-width:125px;width:50%">
+                                                                <button class="btn btn-default dropdown-toggle" style="width:100%;max-width:125px;" id="ddl_counterparty_payment" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.payment_method_text, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.payment_method_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <input style="display:none" type="text" data-action="@Url.Action("FillCounterPartyPayment", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty_payment" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <ul id="ul_counterparty_payment"></ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group-btn dropdown" style="max-width:125px;width:50%">
+                                                                <button class="btn btn-default dropdown-toggle" style="width:100%;max-width:125px;" id="ddl_trans_mt_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.trans_mt_code, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.trans_mt_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.trans_mt_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input style="display:none" type="text" data-action="@Url.Action("FillMTCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_trans_mt_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <hr>
+                                                                    <ul id="ul_trans_mt_code"></ul>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        @Html.ValidationMessageFor(model => model.payment_method, "", new { @class = "text-danger" })
+                                                        <span id="payment_method_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        @Html.ValidationMessageFor(model => model.trans_mt_code, "", new { @class = "text-danger" })
+                                                        <span id="trans_mt_code_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    @Html.LabelForRequired(model => model.formula, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_formula" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.formula_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.formula, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.formula_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillFormula", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_formula" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <ul id="ul_formula"></ul>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        @Html.ValidationMessageFor(model => model.formula, "", new { @class = "text-danger" })
+                                                        <span id="formula_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="display:none">
+                                                    <label class="control-label col-xs-5 col-md-5 col-lg-5">Threshold</label>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7" id="lbl_threshold" type="PFor">
+                                                        @Html.PFor(model => model.threshold, "0.00", new { @class = "form-control-static selected-data" })
+                                                        @Html.TextBoxFor(model => model.threshold, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Roll Over</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-3 col-md-3 col-lg-3">Net Settlement</label>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                @Html.CheckBoxFor(m => m.net_settement_flag.Value, htmlAttributes: new { @checked = "checked" })
+                                                                @Html.HiddenFor(model => model.net_settement_flag)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-3 col-md-3 col-lg-3">Reference No.</label>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <div class="input-group" style="min-width: 300px;">
+                                                            @if (Model.net_settement_flag.Value == false)
+                                                            {
+                                                                @Html.EditorFor(model => model.ref_trans_no, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.EditorFor(model => model.ref_trans_no, new { htmlAttributes = new { @class = "form-control" } })
+                                                            }
+                                                            <div class="pointer"></div>
+                                                            <span class="input-group-addon btnPopupRefNo">
+                                                                <span class="feather-icon icon-search"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-3 col-md-3 col-lg-3">
+                                                    </div>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <span id="ref_trans_no_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Special Case</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-3 col-md-3 col-lg-3" style="padding-left: 3px;">
+                                                        Case
+                                                    </label>
+                                                    <div class="col-xs-9 col-md-9 col-lg-9">
+                                                        <div class="dropdown" style="max-width: 300px;">
+                                                            <button class="btn btn-default dropdown-toggle" id="ddl_SpecialCase" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.special_case_name, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.special_case_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.special_case_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input type="text" data-action="@Url.Action("FillSpecialCase", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_SpecialCase" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <i class="feather-icon icon-search"></i>
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_SpecialCase"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Security -->
+                        <div class="box-content-wrapper-d1">
+                            <div id="security-deal" class="box-content box-content-d1 no-padding">
+                                <div class="form-container form-container-d1 form-inline">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="left-content">
+                                                <div class="form-sub-title w-btn">
+                                                    <h4>Security</h4>
+                                                </div>
+                                            </div>
+                                            <div class="right-content">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="left-content">
+                                                <div class="form-group">
+                                                    <label class="control-label">Source</label>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-default dropdown-toggle" @(Model.page_name == "editpage" ? "disabled" : "") style="min-width:150px;" id="ddl_rp_source" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.rp_source_text, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.rp_source_value, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.rp_source_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("GetDDLPriceSource", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_rp_source" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            </div>
+                                                            <ul id="ul_rp_source"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Price Date</label>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-default dropdown-toggle" @(Model.page_name == "editpage" ? "disabled" : "") style="min-width:150px;" id="ddl_rp_pricedate" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.rp_price_date_text, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.rp_price_date_value, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.rp_price_date_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("GetDDLMarketPrice", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_rp_pricedate" class="form-control hidden" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            </div>
+                                                            <ul id="ul_rp_pricedate"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Instrument Code</label>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-default dropdown-toggle" style="min-width:150px;" id="ddl_instrument_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.instrument_code_name, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.instrument_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.instrument_code_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillInstrumentCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrument_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <i class="feather-icon icon-search"></i>
+                                                            </div>
+                                                            <hr>
+                                                            <ul id="ul_instrument_code"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">ISIN Code</label>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-default dropdown-toggle" style="min-width:150px;" id="ddl_isin_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.isin_code_name, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.isin_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.isin_code_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillISINcode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_isin_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <i class="feather-icon icon-search"></i>
+                                                            </div>
+                                                            <hr>
+                                                            <ul id="ul_isin_code"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="right-content">
+                                                <div class="form-group">
+                                                    <button id="btn_addcol" type="button" class="btn btn-primary">Add Col</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="outer-table-wrapper outer-table-d1 clearfix">
+                                            <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.RowNumber)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.trans_no)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.instrument_code)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.isin_code)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.port_for_label)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.repo_deal_type)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.cur)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.ytm)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.clean_price)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dirty_price)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.haircut)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.unit)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.par)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.market_value)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.cash_amount)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dirty_price_after_hc)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.interest_amount)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.wht_amount)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.temination_value)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.maturity_date)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.coupon_rate)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.par_unit)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.variation)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dm)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.trade_date)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.settlement_date)</th>
+                                                        <th>status</th>
+                                                        <th>instrument_id</th>
+                                                        <th>datafrom</th>
+                                                        <th>rppricedate</th>
+                                                        <th>rpsource</th>
+                                                        <th>purchaseprice</th>
+                                                        <th>counterpartyid</th>
+                                                        <th>interest_total</th>
+                                                        <th>deal_period</th>
+                                                        <th>basis_code</th>
+                                                        <th>wht_tax</th>
+                                                        <th>formula</th>
+                                                        <th>trigger</th>
+                                                        <th class="action" style="text-align:center;width:20px;">
+                                                            <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                                        </th>
+                                                        <th>port</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum Repo Int Amt</label>
+                                                    <p id="Sum_interest_amount" class="form-control-static"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum With Holding Tax Amt</label>
+                                                    <p id="Sum_wht_amount" class="form-control-static"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum Termination Value</label>
+                                                    <p id="Sum_temination_value" class="form-control-static"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum Cash Amount</label>
+                                                    <p id="Sum_cash_amount" class="form-control-static"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Summary -->
+                        <div id="remark-deal" class="box-content no-padding">
+                            <div id="remark-deal-icon" class="box-header big-head expand-able collapsed" aria-expanded="false" data-toggle="collapse" data-target="#remark-deal-form">
+                                <div class="left-item">
+                                    <div class="title">
+                                        <i class="feather-icon icon-plus"></i><h3>Remark</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="remark-deal-form" class="form-container form-horizontal have-head collapse">
+                                <div class="row">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="form-group-wrapper">
+                                            @Html.HiddenFor(model => model.counter_party_id)
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-2">Remark</label>
+                                                <div class="col-xs-3">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-default dropdown-toggle" id="ddl_remark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.remark_desc, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.remark_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.remark_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillRemark", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_remark" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <i class="feather-icon icon-search"></i>
+                                                            </div>
+                                                            <hr>
+                                                            <ul id="ul_remark"></ul>
+                                                        </div>
+                                                        <span id="remark_id_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.deal_remark, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                                <div class="col-xs-7">
+                                                    @Html.TextAreaFor(model => model.deal_remark, new { @class = "form-control", rows = "5" })
+                                                    <span id="deal_remark_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.commentaries, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                                <div class="col-xs-7">
+                                                    @Html.TextAreaFor(model => model.commentaries, new { @class = "form-control", rows = "5" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="deal-submit" class="page-button-submit page-submit-d1">
+                            <button class="btn btn-primary btn-round btn-big" type="button" id="btnSubmit" form-mode="submit" onclick="GM.RPDealEntry.Submit(this)">
+                                Submit
+                            </button>
+                            @if (Model.trans_no != null && Model.trans_no.Trim() != "")
+                            {
+                                <a class="btn btn-link" onClick="location.href='/RPDealEntry/Edit?transno=' + @Model.trans_no + '&isCopy=True'">Copy Deal</a>
+                            }
+                            <a class="btn btn-link" onclick="location.href='@Url.Action("Index", "RPDealEntry")'">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+<!-- Confirm Delete Modal -->
+<div class="modal fade confirm-delete" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Delete Confirmation</h4>
+                <span>1 item(s) Selected</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-text">
+                    <p>Are you sure, you want to delete this following item?</p>
+                    <ul>
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-delete btn-round btn-main">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Security -->
+<div class="modal right fade" id="add-security" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Add Security</h4>
+            </div>
+            <div class="modal-body group">
+                <form>
+                    <div class="form-container form-horizontal">
+                    </div> -->
+                    <div class="row">
+                        <div class="col-xs-12 form-wrapper-1100">
+                            <div class="form-group-wrapper">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-2">Sec ID</label>
+                                    <div class="col-xs-4">
+                                        <input disabled type="text" class="form-control" value="LB196A" aria-describedby="basic-addon1">
+                                    </div>
+                                    <label class="control-label col-xs-2">ISIN Code</label>
+                                    <div class="col-xs-4">
+                                        <input type="text" class="form-control" value="LB196A" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-2">Mat. Date</label>
+                                    <div class="col-xs-4">
+                                        <div class="form-icon-inside short-form">
+                                            <input type="text" class="form-control date-time-picker-weekend" placeholder="Select Date...">
+                                            <i class="feather-icon icon-calendar-weekend"></i>
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-xs-2">Coupon Rate</label>
+                                    <div class="col-xs-4">
+                                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-2">Port</label>
+                                    <div class="col-xs-4">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <span class="selected-data">Port</span>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">THB</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Option 2</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Option 3</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-xs-2">Cur</label>
+                                    <div class="col-xs-4">
+                                        <p class="form-control-static">THB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <hr>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="col-xs-offset-2 col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main">Add Security</button>
+                                    <button class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+<!-- Check Interest -->
+<div class="modal center fade" id="check-interest" tabindex="-1" role="dialog" aria-labelledby="check-interest">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Checking Interest Period</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="clearfix">
+                    <div class="data-list col-xs-7">
+                        <table id="tbl_detailheader">
+                            <tbody>
+                                <tr>
+                                    <th>Settlement Date</th>
+                                    <td><label id="lbl_selltementdate_check"></label></td>
+                                    <th>Maturity Date</th>
+                                    <td><label id="lbl_matdate_check"></label></td>
+                                </tr>
+                                <tr>
+                                    <th>Purchase Price</th>
+                                    <td><label id="lbl_purchase_check"></label></td>
+                                    <th>Repurchase Price</th>
+                                    <td><label id="lbl_repurchase_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Interest</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-interest" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Repo Ref Rate</th>
+                        <th>Ref Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Interest Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalinterest_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-default btn-round btn-long" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal center fade" id="modalRefTransNo" tabindex="-1" role="dialog" aria-labelledby="modalRefTransNo">
+    <div class="modal-dialog modal-extra-lg-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Reference No. by counterparty</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="modal-sub-title inner-padding">
+                    <h4><label id="lbl_counter_party_name"></label></h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="tableRefTransNo" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Trans No</th>
+                                <th>Trans Deal Type</th>
+                                <th>Trade Date</th>
+                                <th>Settlement Date</th>
+                                <th>Maturity Date</th>
+                                <th>Period</th>
+                                <th>Purchase Price</th>
+                                <th>Repurchase Price</th>
+                                <th>Cur</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-default btn-round btn-long" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Styles.Render("~/bundles/SweetAlertCss")
+    <script src="~/Content/jquery-ui/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip;
+            $("#NavBar").html($('#NavRPDealEntry').val());
+        });
+    </script>
+    @*@Scripts.Render("~/module/rpdealentryadd")*@
+    @Scripts.Render("~/module/validation")
+    @Scripts.Render("~/bundles/SweetAlert")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/Constant")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/rpdealentryadd")
+}
+
