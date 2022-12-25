@@ -1,0 +1,1256 @@
+﻿@model GM.Data.Model.CounterParty.IssuerModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    bool isUpdate = IsUpdate;
+}
+
+<section class="working-content two-nav-padding" data-spy="scroll" data-target="#counterparty-scrollspy" data-offset="200">
+    <div class="container-fluid container-fixed">
+        @using (Html.BeginForm())
+        {
+            <!--Div Navbar-->
+            <nav id="Issuer-scrollspy" class="navbar navbar-defult top-navbar section-nav-wrapper">
+                <div class="navbar-wrapper sub-topnav section-nav">
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="detail-li">
+                            <a href="#issuer-detail" onclick="expandpanel('detail')">Detail</a>
+                        </li>
+                        <li id="address-li">
+                            <a href="#issuer-address" onclick="expandpanel('address')">Address</a>
+                        </li>
+                        <li id="taxandother-li">
+                            <a href="#issuer-taxandother" onclick="expandpanel('taxandother')">Tax And Others</a>
+                        </li>
+                        <li id="identify-li">
+                            <a href="#issuer-identify" onclick="expandpanel('identify')">Identify</a>
+                        </li>
+                        <li id="rating-li">
+                            <a href="#issuer-rating" onclick="expandpanel('rating')">Rating</a>
+                        </li>
+                        <li>
+                            <div class="vertical-line"></div>
+                        </li>
+                        <li class="submit-nav">
+                            <button type="submit" class="btn btn-link" @(!isUpdate ? "disabled" : "")>Submit</button>
+                            <button type="button" class="btn btn-link" onclick="location.href='@Url.Action("Index", "Issuer")'">Back</button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Div PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title">
+                        <div class="breadcrumb-wrap">
+                            <ol class="breadcrumb" id="NavBar">
+                                @*<li>
+                                    <a href="..\Home\Index">Home</a>
+                                </li>
+                                <li class="active">Static Process</li>
+                                <li class="active">Counter Party</li>
+                                <li class="active">Issuer</li>*@
+                            </ol>
+                        </div>
+                        <div class="title">
+                            <h1>
+                                Issuer Detail
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Div Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+                    @*@Html.ValidationSummary()*@
+                    <div class="box-outside no-padding">
+                        <div class="header-row">
+                            <div class="deal-status left-content">
+                                <span>Issuer Status :</span>
+                                @if (Model.active_flag == true && Model.verify_flag_bo == true)
+                                {
+                                    <span id="approve" class="label label-accept">Approve</span>
+                                    <span id="unapprove" class="label label-unaccept" style="display:none">UnApprove</span>
+                                    <span id="unactivedata" class="label label-unaccept" style="display:none">UnActive</span>
+                                }
+                                else if (Model.active_flag == true && Model.verify_flag_bo == false)
+                                {
+                                    <span id="approve" class="label label-accept" style="display:none">Approve</span>
+                                    <span id="unapprove" class="label label-unaccept">UnApprove</span>
+                                    <span id="unactivedata" class="label label-unaccept" style="display:none">UnActive</span>
+                                }
+                                else if (Model.active_flag == false)
+                                {
+                                    <span id="approve" class="label label-accept" style="display:none">Approve</span>
+                                    <span id="unapprove" class="label label-unaccept" style="display:none">UnApprove</span>
+                                    <span id="unactivedata" class="label label-unaccept">UnActive</span>
+                                }
+                                <div class="vertical-line"></div>
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        @Html.SpanFor(model => model.statusdata, "Change", new { @class = "selected-data" })
+                                        @Html.TextBoxFor(model => model.statusdata, htmlAttributes: new { @class = "selected-value hidden" })
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="statusissuer">
+                                        <li>
+                                            <a onclick="Setstatus('Approve')">Approve</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Setstatus('UnApprove')">UnApprove</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Setstatus('UnActive')">UnActive</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Div Issuer Detail -->
+                    <div id="issuer-detail" class="box-content no-padding">
+                        <div id="issuer-detail-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#issuer-detail-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-minus"></i><h3>Issuer Detail</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="issuer-detail-form" class="form-container form-horizontal have-head collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper">
+                                        @Html.HiddenFor(model => model.issuer_id)
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.title_des, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_TitleName_Add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.title_des, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.title_name, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.title_des, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillTitleName", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_TitleName_Add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_TitleName_Add"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.cif_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.cif_no, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.issuer_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.issuer_code, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.issuer_code, "", new { @class = "text-danger" })
+                                            </div>
+                                            @Html.LabelForRequired(model => model.issuer_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.issuer_name, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.issuer_name, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.issuer_thainame, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.issuer_thainame, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.issuer_thainame, "", new { @class = "text-danger" })
+                                            </div>
+                                            @Html.LabelForRequired(model => model.issuer_shortname, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.issuer_shortname, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.issuer_shortname, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.issuer_type_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_IssuerType_Add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.issuer_type_desc, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.issuer_type_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.issuer_type_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillIssuerType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_IssuerType_Add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_IssuerType_Add"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.issuer_type_code, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.group_desc, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_IssuerGroup_Add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.group_desc, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.issuer_group_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.group_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillIssuerGroup", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_IssuerGroup_Add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_IssuerGroup_Add"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Div Issuer Address -->
+                    <div id="issuer-address" class="box-content no-padding">
+                        <div id="issuer-address-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#issuer-address-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-plus"></i><h3>Issuer Address</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="issuer-address-form" class="form-container form-horizontal have-head collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.contact_person, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.contact_person, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelFor(model => model.contact_email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.contact_email, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.address_line1, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.TextAreaFor(model => model.address_line1, new { @class = "form-control", rows = "5" })
+                                            </div>
+                                            @Html.LabelFor(model => model.address_line2, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.TextAreaFor(model => model.address_line2, new { @class = "form-control", rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.address_line3, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.TextAreaFor(model => model.address_line3, new { @class = "form-control", rows = "5" })
+                                            </div>
+                                            @Html.LabelFor(model => model.address_line4, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.TextAreaFor(model => model.address_line4, new { @class = "form-control", rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.province_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_province_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.province_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.province_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.province_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillProvince", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_search_province_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_province_add"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.district_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_district_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.district_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.district_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.district_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillDistrict", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_search_district_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_district_add"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.sub_district_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_sub_district_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.sub_district_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.sub_district_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.sub_district_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillSubDistrict", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_search_sub_district_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_sub_district_add"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.zipcode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.zipcode, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.country_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_country_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.country_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.country_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.country_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCountry", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_search_country_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.tel_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.tel_no, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.fax_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.fax_no, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Div Issuer taxandother -->
+                    <div id="issuer-taxandother" class="box-content no-padding">
+                        <div id="issuer-taxandother-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#issuer-taxandother-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-plus"></i><h3>Issuer Tax And Other</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="issuer-taxandother-form" class="form-container form-horizontal have-head collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.wht_tax_pay, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.wht_tax_pay, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelFor(model => model.wht_tax_rec, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.wht_tax_rec, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.tbma_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.tbma_code, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelFor(model => model.bb_firm_acc_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.bb_firm_acc_no, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ao_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.ao_id, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelForRequired(model => model.bot_def_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.bot_def_code, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.bot_def_code, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.ktbisic_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_ktbisic_code_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.ktb_isic_desc, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.ktbisic_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.ktb_isic_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillKTB_ISIC", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_ktbisic_code_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.ktbisic_code, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            @*@Html.LabelFor(model => model.corp_type, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-xs-4">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-default dropdown-toggle" id="ddl_corp_type_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.corp_type_desc, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.corp_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.corp_type_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" data-action="@Url.Action("FillCorpType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_search_corp_type_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                <i class="feather-icon icon-search"></i>
+                                                            </div>
+                                                            <hr>
+                                                            <ul></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.open_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.open_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.close_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.close_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.signed_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.signed_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.custodian_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.custodian_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.custodian_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.custodian_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_custodian_id_add" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.custodian_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.custodian_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.custodian_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCustodian_Id", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_custodian_id_add" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.sa_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.sa_no, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelFor(model => model.ca_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.ca_no, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.netting_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.netting_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.netting_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.default_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.default_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.default_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*@Html.LabelFor(model => model.verify_flag_fo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-sm-4">
+                                                    <div class="radio-form">
+                                                        <div class="radio">
+                                                            <label class="radio-inline c-radio">
+                                                                @Html.RadioButtonFor(m => m.verify_flag_fo, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                            </label>
+                                                            <label class="radio-inline c-radio">
+                                                                @Html.RadioButtonFor(m => m.verify_flag_fo, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                        </div>
+                                        @*<div class="form-group">
+                                                @Html.LabelFor(model => model.verify_flag_bo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-sm-4">
+                                                    <div class="radio-form">
+                                                        <div class="radio">
+                                                            <label class="radio-inline c-radio">
+                                                                @Html.RadioButtonFor(m => m.verify_flag_bo, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                            </label>
+                                                            <label class="radio-inline c-radio">
+                                                                @Html.RadioButtonFor(m => m.verify_flag_bo, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.active_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-sm-10">
+                                                    <div class="radio-form">
+                                                        <div class="radio">
+                                                            <label class="radio-inline c-radio">
+                                                                @Html.RadioButtonFor(m => m.active_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                            </label>
+                                                            <label class="radio-inline c-radio">
+                                                                @Html.RadioButtonFor(m => m.active_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Div Issuer Identify -->
+                    <div id="issuer-identify" class="box-content no-padding">
+                        <div id="issuer-identify-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#issuer-identify-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-plus"></i><h3>Issuer Identify</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="issuer-identify-form" class="form-container form-horizontal have-head collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="col-xs-12 form-sub-title col-form-fix">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 item-panel-table-wrapper">
+                                    <table class="item-panel-table" id="tbIdentify">
+                                        <thead>
+                                        <th>Unique ID</th>
+                                        <th>Identify Type</th>
+                                        <th>Identify No</th>
+                                        <th>Juris Reg Date</th>
+                                        <th>Reg Bus Ename</th>
+                                        <th>Reg Bus Tname</th>
+                                        <th></th>
+                                        <th class="action"></th>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.Identify != null && Model.Identify.Count > 0)
+                                            {
+                                                var rowindex = 0;
+                                                foreach (var Identify in Model.Identify)
+                                                {
+                                                    if (@Identify.unique_id != null)
+                                                    {
+                                                        @Html.HiddenFor(model => Identify.issuer_id);
+
+                                                        if (@Identify.rowstatus == "delete")
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase" style="display: none">
+                                                                <td class="long-data">
+                                                                    @Identify.unique_name
+                                                                    <input name="Identify[@rowindex].unique_id" type="hidden" value="@Identify.unique_id" valuefield="IdentifyRightModal.unique_id" textvalue="@Identify.unique_name" textfield="IdentifyRightModal.unique_name" isdropdown="true">
+                                                                    <input name="Identify[@rowindex].unique_name" type="hidden" value="@Identify.unique_name" valuefield="IdentifyRightModal.unique_id" textvalue="@Identify.unique_name" textfield="IdentifyRightModal.unique_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.identify_type_text
+                                                                    <input name="Identify[@rowindex].identify_type" type="hidden" value="@Identify.identify_type" valuefield="IdentifyRightModal.identify_type" textvalue="@Identify.identify_type_text" textfield="IdentifyRightModal.identify_type_text" isdropdown="true">
+                                                                    <input name="Identify[@rowindex].identify_type_text" type="hidden" value="@Identify.identify_type_text" valuefield="IdentifyRightModal.identify_type" textvalue="@Identify.identify_type_text" textfield="IdentifyRightModal.identify_type_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.identify_no
+                                                                    <input name="Identify[@rowindex].identify_no" type="hidden" value="@Identify.identify_no" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.juris_reg_date
+                                                                    <input name="Identify[@rowindex].juris_reg_date" type="hidden" value="@Identify.juris_reg_date" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.reg_bus_ename
+                                                                    <input name="Identify[@rowindex].reg_bus_ename" type="hidden" value="@Identify.reg_bus_ename" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.reg_bus_tname
+                                                                    <input name="Identify[@rowindex].reg_bus_tname" type="hidden" value="@Identify.reg_bus_tname" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="Identify[@rowindex].rowstatus" type="hidden" value="@Identify.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    <button class="btn btn-default btn-round icon-only" type="button" data-id="@Identify.unique_id" data-action="update" onclick="GM.Issuer.Identify.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-edit"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-delete btn-round icon-only" type="button" data-id="@Identify.unique_id" data-action="delete" onclick="GM.Issuer.Identify.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-trash-2"></i>
+                                                                    </button>
+
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase">
+                                                                <td class="long-data">
+                                                                    @Identify.unique_name
+                                                                    <input name="Identify[@rowindex].unique_id" type="hidden" value="@Identify.unique_id" valuefield="IdentifyRightModal.unique_id" textvalue="@Identify.unique_name" textfield="IdentifyRightModal.unique_name" isdropdown="true">
+                                                                    <input name="Identify[@rowindex].unique_name" type="hidden" value="@Identify.unique_name" valuefield="IdentifyRightModal.unique_id" textvalue="@Identify.unique_name" textfield="IdentifyRightModal.unique_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.identify_type_text
+                                                                    <input name="Identify[@rowindex].identify_type" type="hidden" value="@Identify.identify_type" valuefield="IdentifyRightModal.identify_type" textvalue="@Identify.identify_type_text" textfield="IdentifyRightModal.identify_type_text" isdropdown="true">
+                                                                    <input name="Identify[@rowindex].identify_type_text" type="hidden" value="@Identify.identify_type_text" valuefield="IdentifyRightModal.identify_type" textvalue="@Identify.identify_type_text" textfield="IdentifyRightModal.identify_type_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.identify_no
+                                                                    <input name="Identify[@rowindex].identify_no" type="hidden" value="@Identify.identify_no" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.juris_reg_date
+                                                                    <input name="Identify[@rowindex].juris_reg_date" type="hidden" value="@Identify.juris_reg_date" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.reg_bus_ename
+                                                                    <input name="Identify[@rowindex].reg_bus_ename" type="hidden" value="@Identify.reg_bus_ename" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Identify.reg_bus_tname
+                                                                    <input name="Identify[@rowindex].reg_bus_tname" type="hidden" value="@Identify.reg_bus_tname" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="Identify[@rowindex].rowstatus" type="hidden" value="@Identify.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    <button class="btn btn-default btn-round icon-only" type="button" data-id="@Identify.unique_id" data-action="update" onclick="GM.Issuer.Identify.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-edit"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-delete btn-round icon-only" type="button" data-id="@Identify.unique_id" data-action="delete" onclick="GM.Issuer.Identify.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-trash-2"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        rowindex++;
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xs-12 form-button">
+                                    <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnIdentifyCreate" @(!isUpdate ? "disabled" : "")>
+                                        <i class="feather-icon icon-plus"></i>Add Identify
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Div Issuer Rating -->
+                    <div id="issuer-rating" class="box-content no-padding">
+                        <div id="issuer-rating-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#issuer-rating-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-plus"></i><h3>Issuer Rating</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="issuer-rating-form" class="form-container form-horizontal have-head collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="col-xs-12 form-sub-title col-form-fix">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 item-panel-table-wrapper">
+                                    <table class="item-panel-table" id="tbRating">
+                                        <thead>
+                                        <th>Agency</th>
+                                        <th>Term</th>
+                                        <th>Local Rating</th>
+                                        <th>Foreign Rating</th>
+                                        <th></th>
+                                        <th class="action"></th>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.Rating != null && Model.Rating.Count > 0)
+                                            {
+                                                var rowindex = 0;
+                                                foreach (var Rating in Model.Rating)
+                                                {
+                                                    if (@Rating.agency_code != null)
+                                                    {
+                                                        @Html.HiddenFor(model => Rating.issuer_id);
+                                                        if (@Rating.rowstatus == "delete")
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase" style="display: none">
+                                                                <td class="long-data">
+                                                                    @Rating.agency_name
+                                                                    <input name="Rating[@rowindex].agency_code" type="hidden" value="@Rating.agency_code" valuefield="RatingRightModal.agency_code" textvalue="@Rating.agency_name" textfield="RatingRightModal.agency_name" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].agency_name" type="hidden" value="@Rating.agency_name" valuefield="RatingRightModal.agency_code" textvalue="@Rating.agency_name" textfield="RatingRightModal.agency_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Rating.short_long_term_text
+                                                                    <input name="Rating[@rowindex].short_long_term" type="hidden" value="@Rating.short_long_term" valuefield="RatingRightModal.short_long_term" textvalue="@Rating.short_long_term_text" textfield="RatingRightModal.short_long_term_text" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].short_long_term_text" type="hidden" value="@Rating.short_long_term_text" valuefield="RatingRightModal.short_long_term" textvalue="@Rating.short_long_term_text" textfield="RatingRightModal.short_long_term_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Rating.local_rating_text
+                                                                    <input name="Rating[@rowindex].local_rating" type="hidden" value="@Rating.local_rating" valuefield="RatingRightModal.local_rating" textvalue="@Rating.local_rating_text" textfield="RatingRightModal.local_rating_text" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].local_rating_text" type="hidden" value="@Rating.local_rating_text" valuefield="RatingRightModal.local_rating" textvalue="@Rating.local_rating_text" textfield="RatingRightModal.local_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Rating.foreign_rating_text
+                                                                    <input name="Rating[@rowindex].foreign_rating" type="hidden" value="@Rating.foreign_rating" valuefield="RatingRightModal.foreign_rating" textvalue="@Rating.foreign_rating_text" textfield="RatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].foreign_rating_text" type="hidden" value="@Rating.foreign_rating_text" valuefield="RatingRightModal.foreign_rating" textvalue="@Rating.foreign_rating_text" textfield="RatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="Rating[@rowindex].rowstatus" type="hidden" value="@Rating.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    <button class="btn btn-default btn-round icon-only" type="button" data-id="@Rating.agency_code" data-action="update" onclick="GM.Issuer.Rating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-edit"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-delete btn-round icon-only" type="button" data-id="@Rating.agency_code" data-action="delete" onclick="GM.Issuer.Rating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-trash-2"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase">
+                                                                <td class="long-data">
+                                                                    @Rating.agency_name
+                                                                    <input name="Rating[@rowindex].agency_code" type="hidden" value="@Rating.agency_code" valuefield="RatingRightModal.agency_code" textvalue="@Rating.agency_name" textfield="RatingRightModal.agency_name" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].agency_name" type="hidden" value="@Rating.agency_name" valuefield="RatingRightModal.agency_code" textvalue="@Rating.agency_name" textfield="RatingRightModal.agency_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Rating.short_long_term_text
+                                                                    <input name="Rating[@rowindex].short_long_term" type="hidden" value="@Rating.short_long_term" valuefield="RatingRightModal.short_long_term" textvalue="@Rating.short_long_term_text" textfield="RatingRightModal.short_long_term_text" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].short_long_term_text" type="hidden" value="@Rating.short_long_term_text" valuefield="RatingRightModal.short_long_term" textvalue="@Rating.short_long_term_text" textfield="RatingRightModal.short_long_term_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Rating.local_rating_text
+                                                                    <input name="Rating[@rowindex].local_rating" type="hidden" value="@Rating.local_rating" valuefield="RatingRightModal.local_rating" textvalue="@Rating.local_rating_text" textfield="RatingRightModal.local_rating_text" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].local_rating_text" type="hidden" value="@Rating.local_rating_text" valuefield="RatingRightModal.local_rating" textvalue="@Rating.local_rating_text" textfield="RatingRightModal.local_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @Rating.foreign_rating_text
+                                                                    <input name="Rating[@rowindex].foreign_rating" type="hidden" value="@Rating.foreign_rating" valuefield="RatingRightModal.foreign_rating" textvalue="@Rating.foreign_rating_text" textfield="RatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                    <input name="Rating[@rowindex].foreign_rating_text" type="hidden" value="@Rating.foreign_rating_text" valuefield="RatingRightModal.foreign_rating" textvalue="@Rating.foreign_rating_text" textfield="RatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="Rating[@rowindex].rowstatus" type="hidden" value="@Rating.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    <button class="btn btn-default btn-round icon-only" type="button" data-id="@Rating.agency_code" data-action="update" onclick="GM.Issuer.Rating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-edit"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-delete btn-round icon-only" type="button" data-id="@Rating.agency_code" data-action="delete" onclick="GM.Issuer.Rating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                        <i class="feather-icon icon-trash-2"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        rowindex++;
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xs-12 form-button">
+                                    <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnRatingCreate" @(!isUpdate ? "disabled" : "")>
+                                        <i class="feather-icon icon-plus"></i>Add Rating
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="counterparty-submit" class="page-button-submit">
+                        <button type="submit" class="btn btn-primary btn-round btn-big" @(!isUpdate ? "disabled" : "")>Submit</button>
+                        <button type="button" onclick="location.href='@Url.Action("Edit", "Issuer")?id=@Model.issuer_id'" class="btn btn-link" @(!isUpdate ? "disabled" : "") >Clear Data</button>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Add Identify - Right Modal -->
+<div class="modal right fade" id="modal-form-identify" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Add Identify</h4>
+            </div>
+            <div class="modal-body group">
+                <form id="IdentifyForm">
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.IdentifyRightModal.unique_id, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_unique" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.IdentifyRightModal.unique_name, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.IdentifyRightModal.unique_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.IdentifyRightModal.unique_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillUniqeuid", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_unique" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_uniqueid"></ul>
+                                            </div>
+                                            <span id="unique_id_error" class="field-validation-error text-danger" data-valmsg-for="IdentifyRightModal.unique_id" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.IdentifyRightModal.identify_type, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_identify_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.IdentifyRightModal.identify_type_text, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.IdentifyRightModal.identify_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.IdentifyRightModal.identify_type_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillIdentify", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_identify_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_identify"></ul>
+                                            </div>
+                                            <span id="identify_type_error" class="field-validation-error text-danger" data-valmsg-for="IdentifyRightModal.identify_type" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.IdentifyRightModal.identify_no, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorForValidate(model => model.IdentifyRightModal.identify_no, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        <span id="identify_no_error" class="field-validation-error text-danger" data-valmsg-for="IdentifyRightModal.identify_no" data-valmsg-replace="true">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IdentifyRightModal.juris_reg_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="input-group date">
+                                            @Html.EditDateFor(model => model.IdentifyRightModal.juris_reg_date, new { @class = "form-control date-time-picker-weekend" })
+                                            <span class="input-group-addon">
+                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                            </span>
+                                        </div>
+                                        <span id="juris_reg_date_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IdentifyRightModal.reg_bus_ename, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorForValidate(model => model.IdentifyRightModal.reg_bus_ename, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IdentifyRightModal.reg_bus_tname, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorForValidate(model => model.IdentifyRightModal.reg_bus_tname, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="col-xs-offset-3 col-xs-9">
+                                        <button class="btn btn-primary btn-round btn-main" id="btnIdentifySave" data-action="" type="button">+ Add Bank List</button>
+                                        <button class="btn btn-default btn-round btn-main" id="btnIdentifyCancel" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+</div>
+
+<!-- Add Rating - Right Modal -->
+<div class="modal right fade" id="modal-form-rating" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Add Rating</h4>
+            </div>
+            <div class="modal-body group">
+                <form id="RatingForm">
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.RatingRightModal.agency_code, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_agency" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.RatingRightModal.agency_name, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.agency_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.agency_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillAgency", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_agency" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_agency"></ul>
+                                            </div>
+                                            <span id="agency_code_error" class="field-validation-error text-danger" data-valmsg-for="RatingRightModal.agency_code" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.RatingRightModal.short_long_term, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_term" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.RatingRightModal.short_long_term_text, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.short_long_term, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.short_long_term_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" id="txt_term" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_term">
+                                                    <li class='searchterm'>
+                                                        <a onclick='AddTextForDDL("Short","txt_term","S",null,null)'>Short</a>
+                                                        <a onclick='AddTextForDDL("Long","txt_term","L",null,null)'>Long</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <span id="short_long_term_error" class="field-validation-error text-danger" data-valmsg-for="RatingRightModal.short_long_term" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.RatingRightModal.local_rating, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_localrating" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.RatingRightModal.local_rating_text, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.local_rating, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.local_rating_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillLocalRating", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_localrating" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_localrating"></ul>
+                                            </div>
+                                            <span id="local_rating_error" class="field-validation-error text-danger" data-valmsg-for="RatingRightModal.local_rating" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(model => model.RatingRightModal.foreign_rating, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_foreignrating" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.RatingRightModal.foreign_rating_text, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.foreign_rating, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.RatingRightModal.foreign_rating_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillForeignRating", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_foreignrating" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_foreignrating"></ul>
+                                            </div>
+                                            <span id="foreign_rating_error" class="field-validation-error text-danger" data-valmsg-for="RatingRightModal.foreign_rating" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="col-xs-offset-3 col-xs-9">
+                                        <button class="btn btn-primary btn-round btn-main" id="btnRatingSave" data-action="" type="button">+ Add Rating</button>
+                                        <button class="btn btn-default btn-round btn-main" id="btnRatingCancel" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        $(document).ready(function () {
+
+            var isUpdate = "@isUpdate";
+            if (isUpdate == "False") {
+                $('#ddl_TitleName_Add').attr('disabled', 'disabled');
+                $('#cif_no').attr('disabled', 'disabled');
+                $('#issuer_code').attr('disabled', 'disabled');
+                $('#issuer_name').attr('disabled', 'disabled');
+                $('#issuer_thainame').attr('disabled', 'disabled');
+                $('#issuer_shortname').attr('disabled', 'disabled');
+                $('#ddl_IssuerType_Add').attr('disabled', 'disabled');
+                $('#ddl_IssuerGroup_Add').attr('disabled', 'disabled');
+                $('#contact_person').attr('disabled', 'disabled');
+                $('#contact_email').attr('disabled', 'disabled');
+                $('#address_line1').attr('disabled', 'disabled');
+                $('#address_line2').attr('disabled', 'disabled');
+                $('#address_line3').attr('disabled', 'disabled');
+                $('#address_line4').attr('disabled', 'disabled');
+                $('#ddl_province_add').attr('disabled', 'disabled');
+                $('#ddl_district_add').attr('disabled', 'disabled');
+                $('#ddl_sub_district_add').attr('disabled', 'disabled');
+                $('#zipcode').attr('disabled', 'disabled');
+                $('#ddl_country_add').attr('disabled', 'disabled');
+                $('#tel_no').attr('disabled', 'disabled');
+                $('#fax_no').attr('disabled', 'disabled');
+                $('#wht_tax_pay').attr('disabled', 'disabled');
+                $('#wht_tax_rec').attr('disabled', 'disabled');
+                $('#tbma_code').attr('disabled', 'disabled');
+                $('#bb_firm_acc_no').attr('disabled', 'disabled');
+                $('#ao_id').attr('disabled', 'disabled');
+                $('#bot_def_code').attr('disabled', 'disabled');
+                $('#ddl_ktbisic_code_add').attr('disabled', 'disabled');
+                $('#open_date').attr('disabled', 'disabled');
+                $('#close_date').attr('disabled', 'disabled');
+                $('#signed_date').attr('disabled', 'disabled');
+                $('[name=custodian_flag]').attr('disabled', 'disabled');
+                $('#ddl_custodian_id_add').attr('disabled', 'disabled');
+                $('#sa_no').attr('disabled', 'disabled');
+                $('#ca_no').attr('disabled', 'disabled');
+                $('[name=netting_flag]').attr('disabled', 'disabled');
+                $('[name=default_flag]').attr('disabled', 'disabled');
+            }
+
+            //$("#maxtest").keypress(function () {
+            //    alert($('#maxtest').val());
+            //});
+
+
+            $("#btnIdentifySave").click(function () {
+                var guarantorpercent = $('#IdentifyRightModal_identify_no').val();
+                var input = $('#IdentifyRightModal_identify_no');
+                if (guarantorpercent == "") {
+                    $("#identify_no_error").text("The Identify No field is required.");
+                    input.addClass("input-validation-error");
+                }
+            });
+
+            //set date start end
+            var openDateId = $("#open_date");
+            var closeDateId = $("#close_date");
+            if (openDateId.val().length > 0) {
+                closeDateId.data("DateTimePicker").minDate(openDateId.val());
+            }
+
+            if (closeDateId.val().length > 0) {
+                openDateId.data("DateTimePicker").maxDate(closeDateId.val());
+            }
+            
+            openDateId.on("dp.change", function (e) {
+                closeDateId.data("DateTimePicker").minDate(e.date);
+            });
+
+
+            closeDateId.on("dp.change", function (e) {
+                openDateId.data("DateTimePicker").maxDate(e.date);
+            });
+
+
+            $("#NavBar").html($('#NavIssuer').val());
+        });
+    </script>
+    @Scripts.Render("~/module/issueredit")
+    @Scripts.Render("~/module/validation")
+}
