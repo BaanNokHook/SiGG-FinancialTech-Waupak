@@ -1,0 +1,1808 @@
+﻿@model GM.Data.Model.RPTransaction.RPTransModel
+@{
+    ViewBag.Title = "Approve";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content working-content-d1" data-spy="scroll" data-target="#security-scrollspy" data-offset="120">
+    <div class="container-fluid container-fixed">
+        @using (Html.BeginForm("Approve_Trans", "RPDealApprove", FormMethod.Post, new { @class = "one-col-form", id = "action-form", }))
+        {
+            <!-- PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title-wrapper">
+                        <div class="left-content">
+                            <div class="page-title">
+                                <div class="title">
+                                    <h1>
+                                        Deal Approve
+                                    </h1>
+                                </div>
+                                <div class="breadcrumb-wrap">
+                                    <ol class="breadcrumb" id="NavBar"></ol>
+                                </div>
+                                <div class="vertical-line d1"></div>
+                                <div class="dropdown page-action">
+                                    <button class="btn btn-primary dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Deal Option
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a onclick="GM.RPDealApprove.Approve(this)">Approve</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="GM.RPDealApprove.UnApprove(this)">UnApprove</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="vertical-line d1"></div>
+                                <div class="dropdown page-action">
+                                    <button class="btn btn-primary dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onclick="location.href='@Url.Action("Index", "RPDealApprove")'">
+                                        Back
+                                        <span class="caret"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+                    <!-- Box Outside -->
+                    <div class="box-outside box-outside-d1 no-padding">
+                        <div class="header-row">
+                            <div class="form-container form-container-d1 form-inline">
+                                <div class="row">
+                                    <div class="col-xs-12 no-padding">
+                                        <div class="form-group-wrapper">
+                                            <div class="deal-status">
+                                                <span class="title">Deal Status :</span>
+                                                <span class="label @Model.trans_status_style ">@Model.trans_status</span>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="deal-status">
+                                                <span class="title">Deal State :</span>
+                                                <span class="label @Model.trans_state_style">@Model.trans_state</span>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="deal-status">
+                                                <label class="title">Trans No :</label>
+                                                <span id="Lab_trans_no" class="label label-default">@Model.trans_no</span>
+                                                <input id="Txt_trans_no" type="hidden" name="trans_no" value="@Model.trans_no">
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">User</label>
+                                                <p class="form-control-static">@Model.user_id</p>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">Username</label>
+                                                <p class="form-control-static">@Model.username</p>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">Portfolio</label>
+                                                <div class="dropdown">
+                                                    <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        <span class="selected-data">@Model.port_name</span>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">Deskbook</label>
+                                                <p class="form-control-static">@Model.desk_group_name</p>
+                                            </div>
+                                            <div class="vertical-line d1"></div>
+                                            <div class="form-group">
+                                                <label class="control-label">Dealer Code</label>
+                                                <div class="dropdown">
+                                                    <button disabled class="btn btn-default dropdown-toggle" style="min-width:250px;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        <span class="selected-data">@Model.trader_name</span>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form>
+                        <div class="box-content-wrapper-d1 d-table">
+                            <!-- Deal -->
+                            <div id="deal" class="box-content box-content-d1 first col-30 no-padding d-table-cell">
+                                <div class="form-container form-horizontal form-container-d1">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Deal Detail</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.repo_deal_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="radio-form no-padding">
+                                                            <div class="radio select-btn-radio">
+                                                                <input id="Txt_repo_deal_type" type="hidden" name="repo_deal_type" value="@Model.repo_deal_type">
+                                                                <label id="Lab_repo_deal_type_Pri" class="radio-inline checked">
+                                                                    <input id="repo_deal_type_Pri" disabled class="btn-radio" type="radio" name="inst">Private Repo
+                                                                </label>
+                                                                <label id="Lab_repo_deal_type_Bil" class="radio-inline">
+                                                                    <input id="repo_deal_type_Bil" disabled class="btn-radio" type="radio" name="inst">Bilateral Repo
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.trans_deal_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <input type="hidden" id="trans_deal_type" name="trans_deal_type" value="@Model.trans_deal_type" />
+                                                            <input id="Txt_trans_deal_type_name" type="hidden" name="trans_deal_type_name" value="@Model.trans_deal_type_name">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span id="Sp_trans_deal_type_name" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.purchase_price, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group" style="width:100%;max-width:250px;">
+                                                            <input type="text" readonly class="form-control" aria-label="..." value="@(Model.purchase_price != null ? Model.purchase_price.Value.ToString("N2"):"")" />
+                                                            <input id="Txt_cur" type="hidden" name="cur" value="@Model.cur">
+                                                            <div class="input-group-btn dropdown">
+                                                                <button type="button" disabled class="btn btn-default dropdown-toggle" style="width: 70px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <span class="selected-data">@Model.cur</span>
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                            </div>
+                                                            <!-- /btn-group -->
+                                                        </div>
+                                                        <!-- /input-group -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.deal_period, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5">
+                                                        <div class="input-group amount-choose" style="max-width: 250px;">
+                                                            <span class="input-group-btn">
+                                                                <button disabled class="btn btn-default" type="button">
+                                                                    <i class="feather-icon icon-minus"></i>
+                                                                </button>
+                                                            </span>
+                                                            <input type="text" readonly class="form-control text-center" placeholder="@Model.deal_period">
+                                                            <span class="input-group-btn">
+                                                                <button disabled class="btn btn-default" type="button">
+                                                                    <i class="feather-icon icon-plus"></i>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                        <!-- /input-group -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.trade_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => Model.trade_date, new { id = "Txt_trade_date", @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.settlement_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => Model.settlement_date, new { id = "Txt_settlement_date", @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.maturity_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => Model.maturity_date, new { @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.trans_in_term_id, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span class="selected-data">@Model.trans_in_term_id_name</span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.bilateral_contract_no, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group" style="width: 100%;max-width: 250px;">
+                                                            <input type="text" readonly class="form-control" aria-describedby="basic-addon1" value="@Model.bilateral_contract_no">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.purpose, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span class="selected-data">@Model.purpose</span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.trans_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span class="selected-data">@Model.trans_type</span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.basis_code, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <input id="Txt_basis_code_name" type="hidden" name="basis_code_name" value="@Model.basis_code_name">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span id="Sp_basis_code_name" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-4 col-md-5 col-lg-4">
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Special Case</h4>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-4 col-md-4 col-lg-4" style="padding-left: 3px;">
+                                                    Case
+                                                </label>
+                                                <div class="col-xs-8 col-md-8 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span class="selected-data">@(Model.special_case_name == "" ? "None" : Model.special_case_name)</span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Amount -->
+                            <div id="amount" class="box-content box-content-d1 second col-30 no-padding d-table-cell">
+                                <div class="form-container form-horizontal form-container-d1">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Interest</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.interest_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="radio-form">
+                                                            <div class="radio select-btn-radio">
+                                                                <input id="Txt_interest_type" type="hidden" name="interest_type" value="@Model.interest_type">
+                                                                <label id="Lab_interest_type_Fixed" class="radio-inline checked">
+                                                                    <input id="Radio_interest_type_Fixed" disabled class="btn-radio" type="radio" name="int">Fixed Rate
+                                                                </label>
+                                                                <label id="Lab_interest_type_Float" class="radio-inline">
+                                                                    <input id="Radio_interest_type_Float" disabled class="btn-radio" type="radio" name="int">Float Rate
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.interest_rate, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @if (Model.interest_type == "FIXED")
+                                                        {
+                                                            <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                                <input id="Txt_interest_rate" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.interest_rate != null ? Model.interest_rate.Value.ToString("N8") : "")">
+                                                                <span disabled class="input-group-addon">
+                                                                    <span class="text">%</span>
+                                                                </span>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="intrateddl" class="dropdown" style="max-width: 250px;">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_intrate" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    <span class="selected-data">@Model.interest_floating_index_code</span>
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.interest_spread, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            <input id="Txt_interest_spread" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.interest_spread != null ? Model.interest_spread.Value.ToString("N8"):"")">
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-5 col-lg-4">Total Int.</label>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            <input id="Txt_interest_total_int" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.interest_rate != null && Model.interest_spread != null ? (Model.interest_rate + Model.interest_spread).Value.ToString("N8") : "")">
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-link link-w-icon hidden" type="button" data-toggle="modal" id="btn_checkinterest">
+                                                    @*data-target="#check-interest"*@
+                                                    <i class="feather-icon icon-search"></i>
+                                                    <span>Check interest Period</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Cost</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.cost_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="radio-form">
+                                                            <div class="radio select-btn-radio">
+                                                                <input id="Txt_cost_type" type="hidden" name="cost_type" value="@Model.cost_type">
+                                                                <label id="Lab_cost_type_Fixed" class="radio-inline">
+                                                                    <input id="Radio_cost_type_Fixed" disabled class="btn-radio" type="radio" name="int">Fixed Rate
+                                                                </label>
+                                                                <label id="Lab_cost_type_Float" class="radio-inline">
+                                                                    <input id="Radio_cost_type_Float" disabled class="btn-radio" type="radio" name="int">Float Rate
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.cost_of_fund, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        @if (Model.cost_type == "FIXED")
+                                                        {
+                                                            <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                                <input id="Txt_cost_of_fund" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.cost_of_fund != null ? Model.cost_of_fund.Value.ToString("N8"):"")">
+                                                                <span disabled class="input-group-addon">
+                                                                    <span class="text">%</span>
+                                                                </span>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="intrateddl" class="dropdown" style="max-width: 250px;">
+                                                                <button class="btn btn-default dropdown-toggle" id="ddl_intrate" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    <span class="selected-data">@Model.cost_floating_index_code</span>
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.cost_spread, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            <input id="Txt_cost_spread" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.cost_spread != null ? Model.cost_spread.Value.ToString("N8"):"")">
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-5 col-lg-4">Total Cost.</label>
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                            <input id="Txt_cost_total_int" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.cost_total != null ? Model.cost_total.Value.ToString("N8"):"")">
+                                                            <span disabled class="input-group-addon">
+                                                                <span class="text">%</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>EXTEND DEAL</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.extend, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="dropdown" style="max-width: 250px;width: 100%;">
+                                                            <input id="txt_append_name" type="hidden" name="append_name" value="@Model.extend_name">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span id="Sp_append_name" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Manual Calculate</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ismanual_cal, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                    <div class="col-xs-5 col-md-7 col-lg-8">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                @if (Model.ismanual_cal.Value)
+                                                                {
+                                                                    <input data-val="true" id="ismanual_cal_Value" name="ismanual_cal.Value" type="checkbox" disabled checked="checked">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input data-val="true" id="ismanual_cal_Value" name="ismanual_cal.Value" type="checkbox" disabled>
+                                                                }
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12 form-wrapper-1100">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Roll Over</h4>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-4 col-lg-4">Net Settlement</label>
+                                                    <div class="col-xs-8 col-md-8 col-lg-8">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                @if (Model.net_settement_flag.Value)
+                                                                {
+                                                                    <input data-val="true" id="net_settement_flag" type="checkbox" disabled checked="checked">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input data-val="true" id="net_settement_flag" type="checkbox" disabled>
+                                                                }
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group-wrapper no-mb">
+                                                <div class="form-group">
+                                                    <label class="control-label col-xs-4 col-md-4 col-lg-4">Reference No.</label>
+                                                    <div class="col-xs-8 col-md-8 col-lg-8">
+                                                        <div class="input-group" style="min-width: 250px;">
+                                                            @Html.EditorFor(model => model.ref_trans_no, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                            <div class="pointer"></div>
+                                                            <span class="input-group-addon btnPopupRefNo">
+                                                                <span class="feather-icon icon-search"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Counter Party -->
+                            <div id="counter-party-deal" class="box-content box-content-d1 third col-40 no-padding d-table-cell">
+                                <div class="form-container form-horizontal form-container-d1">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Total Amount</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.repurchase_price, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <p class="form-control-static">@(Model.repurchase_price != null ? Model.repurchase_price.Value.ToString("N2") : "")</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.interest_amount, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <p class="form-control-static">@(Model.interest_amount != null ? Model.interest_amount.Value.ToString("N2") : "")</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.withholding_amount, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <p class="form-control-static">@(Model.withholding_amount != null ? Model.withholding_amount.Value.ToString("N2") : "")</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.exch_rate, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="input-group" style="width: 100%;max-width: 250px;">
+                                                            <input type="text" readonly class="form-control" aria-describedby="basic-addon1" value="@(Model.exch_rate != null ? Model.exch_rate.Value.ToString("N8"):"")">
+                                                            <div class="input-group-btn dropdown">
+                                                                <input id="Txt_cur_pair1" type="hidden" name="cur_pair1" value="@Model.cur_pair1">
+                                                                <button type="button" disabled class="btn btn-default dropdown-toggle" style="width:70px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <span id="Sp_cur_pair1" class="selected-data"></span>
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="input-group-btn dropdown">
+                                                                <input id="Txt_cur_pair2" type="hidden" name="cur_pair2" value="@Model.cur_pair2">
+                                                                <button type="button" disabled class="btn btn-default dropdown-toggle" style="width:70px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <span id="Sp_cur_pair2" class="selected-data"></span>
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Counter Party Detail</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.counter_party_id, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span class="selected-data">@Model.counter_party_name</span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.swift_code, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <p class="form-control-static">@Model.swift_code</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.counter_party_fund_id, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <input id="Txt_counter_party_fun" type="hidden" name="counter_party_fun" value="@Model.counter_party_fund_name">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span id="Sp_counter_party_fun" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.wht_tax, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        @*<p class="form-control-static">@(Model.wht_tax != null ? Model.wht_tax.Value.ToString("N8") : "")</p>*@
+                                                        <p class="form-control-static">@Model.absorb</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelForRequired(model => model.payment_method, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="input-group" style="max-width:250px;width:100%">
+                                                            <div class="input-group-btn dropdown" style="max-width:125px;width:50%">
+                                                                <button class="btn btn-default dropdown-toggle" style="width:100%;max-width:125px;" id="ddl_counterparty_payment" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.payment_method_text, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.payment_method_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <input style="display:none" type="text" data-action="@Url.Action("FillCounterPartyPayment", "RPDealSettlement")" id="txt_counterparty_payment" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    <ul id="ul_counterparty_payment"></ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group-btn dropdown" style="max-width:125px;width:50%">
+                                                                <button class="btn btn-default dropdown-toggle" style="width:100%;max-width:125px;" id="ddl_trans_mt_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    @Html.SpanFor(model => model.trans_mt_code, "Select...", new { @class = "selected-data" })
+                                                                    @Html.TextBoxFor(model => model.trans_mt_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                    @Html.TextBoxFor(model => model.trans_mt_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <div class="search-dropdown-menu">
+                                                                        <input style="display:none" type="text" data-action="@Url.Action("FillTransMTCode", "RPDealSettlement")" id="txt_trans_mt_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                    <hr>
+                                                                    <ul id="ul_trans_mt_code"></ul>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        @Html.ValidationMessageFor(model => model.payment_method, "", new { @class = "text-danger" })
+                                                        <span id="payment_method_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        @Html.ValidationMessageFor(model => model.trans_mt_code, "", new { @class = "text-danger" })
+                                                        <span id="trans_mt_code_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.formula, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="dropdown" style="max-width: 250px;">
+                                                            <input id="txt_formula_name" type="hidden" name="formula" value="@Model.formula">
+                                                            <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                <span id="Sp_formula_name" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-5 col-md-5 col-lg-5">
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.threshold, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <p class="form-control-static">@Model.threshold</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <hr>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 form-sub-title col-form-fix">
+                                                <h4>Early Termination</h4>
+                                            </div>
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.terminate_date, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                    <div class="col-xs-7 col-md-7 col-lg-7">
+                                                        <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                            @Html.EditDateFor(model => model.terminate_date, new { @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                            <span class="input-group-addon">
+                                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.fee_amount, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="input-group" style="width: 100%; max-width: 250px;">
+                                                        @Html.EditorFor(model => model.fee_amount, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @readonly = "" } })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Security -->
+                        <div class="box-content-wrapper-d1">
+                            <div id="security-deal" class="box-content box-content-d1 no-padding">
+                                <div class="form-container form-container-d1 form-inline">
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="left-content">
+                                                <div class="form-sub-title w-btn">
+                                                    <h4>Security</h4>
+                                                </div>
+                                            </div>
+                                            <div class="right-content">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="outer-table-wrapper outer-table-d1 clearfix">
+                                            <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.RowNumber)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.trans_no)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.instrument_code)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.isin_code)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.port_for_label)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.repo_deal_type)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.cur)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.ytm)</th>
+
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.clean_price)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dirty_price)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.haircut)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.unit)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.par)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.market_value)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.cash_amount)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dirty_price_after_hc)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.interest_amount)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.wht_amount)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.temination_value)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.maturity_date)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.coupon_rate)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.par_unit)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.variation)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dm)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.trade_date)</th>
+                                                        <th>@Html.LabelFor(mode => mode.RPTransColateralModel.settlement_date)</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fix-d1">
+                                        <div class="col-xs-12">
+                                            <div class="form-group-wrapper">
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum Repo Int Amt</label>
+                                                    <p id="Sum_interest_amount" class="form-control-static"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum With Holding Tax Amt</label>
+                                                    <p id="Sum_wht_amount" class="form-control-static"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum Termination Value</label>
+                                                    <p id="Sum_temination_value" class="form-control-static"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Sum Cash Amount</label>
+                                                    <p id="Sum_cash_amount" class="form-control-static"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Summary -->
+                        <div id="remark-deal" class="box-content no-padding">
+                            <div id="remark-deal-icon" class="box-header big-head expand-able collapsed" aria-expanded="false" data-toggle="collapse" data-target="#remark-deal-form">
+                                <div class="left-item">
+                                    <div class="title">
+                                        <i class="feather-icon icon-plus"></i><h3>Remark</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="remark-deal-form" class="form-container form-horizontal have-head collapse">
+                                <div class="row">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="form-group-wrapper">
+                                            @Html.HiddenFor(model => model.counter_party_id)
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.remark_id, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                                <div class="col-xs-3">
+                                                    <div class="dropdown">
+                                                        <button disabled class="btn btn-default dropdown-toggle" id="ddl_remark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span class="selected-data">@((Model.remark_desc == null) || (Model.remark_desc == "") ? "None" : Model.remark_desc)</span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.deal_remark, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                                <div class="col-xs-7">
+                                                    <textarea class="form-control" rows="5" name="deal_remark">@Model.deal_remark</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.commentaries, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                                <div class="col-xs-7">
+                                                    <textarea class="form-control" rows="5" name="commentaries">@Model.commentaries</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="deal-submit" class="page-button-submit page-submit-d1">
+                            <input id="Hid_Previous" type="hidden" name="Previous" value="@Model.btn_Previous">
+                            <button class="btn btn-primary btn-round btn-big" type="button" id="Btn_Previous" form-mode="previous" onclick="GM.RPDealApprove.Previous(this)">
+                                previous
+                            </button>
+                            <input id="Hid_Approve" type="hidden" name="Approve" value="@Model.btn_Approve">
+                            <button class="btn btn-success btn-round btn-big" type="button" id="Btn_Approve" form-mode="approve" onclick="GM.RPDealApprove.Approve(this)">
+                                Approve
+                            </button>
+                            <input id="Hid_UnApprove" type="hidden" name="Previous" value="@Model.btn_UnApprove">
+                            <button class="btn btn-warning btn-round btn-big" type="button" id="Btn_UnApprove" form-mode="unapprove" onclick="GM.RPDealApprove.UnApprove(this)">
+                                UnApprove
+                            </button>
+                            <input id="Hid_Next" type="hidden" name="Next" value="@Model.btn_Next">
+                            <button class="btn btn-primary btn-round btn-big" type="button" id="Btn_Next" form-mode="next" onclick="GM.RPDealApprove.Next(this)">
+                                Next
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Check Interest -->
+<div class="modal center fade" id="check-interest" tabindex="-1" role="dialog" aria-labelledby="check-interest">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Checking Interest Period</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="clearfix">
+                    <div class="data-list col-xs-7">
+                        <table id="tbl_detailheader">
+                            <tbody>
+                                <tr>
+                                    <th>Settlement Date</th>
+                                    <td><label id="lbl_selltementdate_check"></label></td>
+                                    <th>Maturity Date</th>
+                                    <td><label id="lbl_matdate_check"></label></td>
+                                </tr>
+                                <tr>
+                                    <th>Purchase Price</th>
+                                    <td><label id="lbl_purchase_check"></label></td>
+                                    <th>Repurchase Price</th>
+                                    <td><label id="lbl_repurchase_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Interest</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-interest" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Interest Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Interest Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalinterest_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Cost of Fund</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-cost-fund" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Cost Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Cost Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalcostoffund_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-default btn-round btn-long" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        .table-summary {
+            text-align: right;
+            margin-top: -20px;
+            margin-bottom: 20px;
+        }
+
+            .table-summary table {
+                float: right;
+            }
+
+                .table-summary table tr th {
+                    text-align: right;
+                    padding: 6px 8px;
+                }
+
+                    .table-summary table tr th:after {
+                        content: ':';
+                        margin-left: 5px;
+                    }
+
+                .table-summary table tr td {
+                    padding: 6px 8px;
+                }
+    </style>
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+            $(document).ready(function () {
+
+                $("#NavBar").html($('#NavRPDealApprove').val());
+                //Function : Btn Previous =====================================
+                var Hid_Previous = $('#Hid_Previous');
+                if (Hid_Previous.val() == false) {
+                    $('#Btn_Previous').prop('disabled', true);
+                }
+                else {
+                    $('#Btn_Previous').prop('disabled', false);
+                }
+
+                GM.RPDealApprove = {};
+                GM.RPDealApprove.Previous = function (btn) {
+                    $('.spinner').css('display', 'block'); // Open Loading
+                    var mode = $(btn).attr("form-mode");
+                    GM.Message.Clear();
+                    window.location.href = "\@Url.Action("Previous", (string)this.ViewContext.RouteData.Values["controller"])" + "?id=" + $('#Lab_trans_no').html();
+                };
+
+                //Function : Btn Next =====================================
+                var Hid_Next = $('#Hid_Next');
+                if (Hid_Next.val() == false) {
+                    $('#Btn_Next').prop('disabled', true);
+                }
+                else {
+                    $('#Btn_Next').prop('disabled', false);
+                }
+
+                GM.RPDealApprove.Next = function (btn) {
+                    $('.spinner').css('display', 'block'); // Open Loading
+                    var mode = $(btn).attr("form-mode");
+                    GM.Message.Clear();
+                    window.location.href = "\@Url.Action("Next", (string)this.ViewContext.RouteData.Values["controller"])" + "?id=" + $('#Lab_trans_no').html();
+                };
+
+
+                //Function : Btn Approve =====================================
+                var Hid_Approve = $('#Hid_Approve');
+                if (Hid_Approve.val() == false) {
+                    $('#Btn_Approve').attr('disabled', 'disabled');
+                    $('#linkBtnApprove').attr('disabled', 'disabled');
+
+                }
+                else {
+                    $('#Btn_Approve').removeAttr('disabled');
+                    $('#linkBtnApprove').removeAttr('disabled');
+                }
+
+                //Function : Btn Approve =====================================
+                GM.RPDealApprove.Approve = function (btn) {
+
+                    if (!ValidateInput()) {
+                        return;
+                    }
+                    setTimeout(function () {
+                        swal({
+                            title: "Comfirm Approve?",
+                            text: "",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "No",
+                            closeOnConfirm: true,
+                            closeOnCancel: true
+                        },
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    $('.spinner').css('display', 'block'); // Open Loading
+                                    GM.Message.Clear();
+                                    var dataToPost = $("#action-form").serialize();
+                                    $.post("Approve_Trans", dataToPost)
+                                        .done(function (response) {
+                                            $('.spinner').css('display', 'none'); // Close Loading
+                                            GM.Unmask();
+                                            console.log(response);
+                                            if (response[0].success) {
+                                                if (response[0].trans_no != "") {
+                                                    setTimeout(function () {
+                                                        swal({
+                                                            title: "Complete",
+                                                            text: "Approve Successfully",
+                                                            type: "success",
+                                                            showCancelButton: false,
+                                                            confirmButtonClass: "btn-success",
+                                                            confirmButtonText: "Yes",
+                                                            cancelButtonText: "No",
+                                                            closeOnConfirm: true,
+                                                            closeOnCancel: true
+                                                        },
+                                                            function () {
+                                                                window.location.href = "\@Url.Action("Approve", (string)this.ViewContext.RouteData.Values["controller"])" + "?trans_no=" + response[0].trans_no;
+                                                            }
+                                                        );
+                                                    }, 100);
+                                                }
+                                                else {
+                                                    setTimeout(function () {
+                                                        swal({
+                                                            title: "Complete",
+                                                            text: "Approve Successfully",
+                                                            type: "success",
+                                                            showCancelButton: false,
+                                                            confirmButtonClass: "btn-success",
+                                                            confirmButtonText: "Yes",
+                                                            cancelButtonText: "No",
+                                                            closeOnConfirm: true,
+                                                            closeOnCancel: true
+                                                        },
+                                                            function () {
+                                                                window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                            }
+                                                        );
+                                                    }, 100);
+                                                }
+                                            }
+                                            else {
+                                                setTimeout(function () {
+                                                    swal({
+                                                        title: "Fail",
+                                                        text: response[0].Message,
+                                                        type: "error",
+                                                        showCancelButton: false,
+                                                        confirmButtonClass: "btn-success",
+                                                        confirmButtonText: "Yes",
+                                                        closeOnConfirm: true
+                                                    },
+                                                        function () {
+                                                            window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                        }
+                                                    );
+                                                }, 100);
+                                            }
+                                        });
+                                }
+                            });
+                    },100);
+                };
+
+                //Function : Btn UnApprove =====================================
+                var Hid_UnApprove = $('#Hid_UnApprove');
+                if (Hid_UnApprove.val() == false) {
+                    $('#Btn_UnApprove').attr('disabled', 'disabled');
+                }
+                else {
+                    $('#Btn_UnApprove').removeAttr('disabled');
+                }
+
+                //Function : Btn UnApprove =====================================
+                GM.RPDealApprove.UnApprove = function (btn) {
+
+                    swal({
+                        title: "Comfirm UnApprove?",
+                        text: "",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $('.spinner').css('display', 'block'); // Open Loading
+                                GM.Message.Clear();
+                                var dataToPost = $("#action-form").serialize();
+                                console.log(dataToPost);
+                                $.post("UnApprove_Trans", dataToPost)
+                                    .done(function (response) {
+                                        $('.spinner').css('display', 'none'); // Close Loading
+                                        GM.Unmask();
+                                        console.log(response);
+                                        if (response[0].Message == "") {
+                                            if (response[0].trans_no != "") {
+                                                setTimeout(function () {
+                                                    swal({
+                                                        title: "Complete",
+                                                        text: "UnApprove Successfully",
+                                                        type: "success",
+                                                        showCancelButton: false,
+                                                        confirmButtonClass: "btn-success",
+                                                        confirmButtonText: "Yes",
+                                                        cancelButtonText: "No",
+                                                        closeOnConfirm: true,
+                                                        closeOnCancel: true
+                                                    },
+                                                        function () {
+                                                            window.location.href = "\@Url.Action("Approve", (string)this.ViewContext.RouteData.Values["controller"])" + "?trans_no=" + response[0].trans_no;
+                                                        }
+                                                    );
+                                                }, 100);
+                                            }
+                                            else {
+                                                setTimeout(function () {
+                                                    swal({
+                                                        title: "Complete",
+                                                        text: "UnApprove Successfully",
+                                                        type: "success",
+                                                        showCancelButton: false,
+                                                        confirmButtonClass: "btn-success",
+                                                        confirmButtonText: "Yes",
+                                                        cancelButtonText: "No",
+                                                        closeOnConfirm: true,
+                                                        closeOnCancel: true
+                                                    },
+                                                        function () {
+                                                            window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                        }
+                                                    );
+                                                }, 100);
+                                            }
+                                        }
+                                        else {
+                                            setTimeout(function () {
+                                                swal({
+                                                    title: "Fail",
+                                                    text: response[0].Message,
+                                                    type: "error",
+                                                    showCancelButton: false,
+                                                    confirmButtonClass: "btn-success",
+                                                    confirmButtonText: "Yes",
+                                                    closeOnConfirm: true
+                                                },
+                                                    function () {
+                                                        window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                    }
+                                                );
+                                            }, 100);
+                                        }
+                                    });
+                            }
+                        });
+                };
+
+                //Function : Binding Table =====================================
+                GM.RPDealApprove.Coll = {};
+                GM.RPDealApprove.Coll.Table = $('#x-table-data').DataTable({
+                    dom: 'Bfrtip',
+                    searching: true,
+                    scrollY: '15vh',
+                    scrollX: true,
+                    order: [
+                        [1, "desc"]
+                    ],
+                    buttons: [],
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        "url": "@Url.Action("Search_Colateral", (string)this.ViewContext.RouteData.Values["controller"])",
+                        "type": "POST",
+                        "data": {
+                            "trans_no": $('#Lab_trans_no').html()
+                        }
+                    },
+                    columnDefs:
+                        [
+                            { targets: 0, data: "RowNumber", orderable: false },
+                            { targets: 1, data: "trans_no", visible: false },
+                            { targets: 2, data: "instrument_code" },
+                            { targets: 3, data: "isin_code" },
+                            { targets: 4, data: "port" },
+                            { targets: 5, data: "repo_deal_type", visible: false },
+                            { targets: 6, data: "cur" },
+                            {
+                                targets: 7, data: "ytm",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal6(data);
+                                    }
+                                    return FormatDecimal6(0);
+                                }
+                            },
+                            {
+                                targets: 8, data: "clean_price",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal6(data);
+                                    }
+                                    return FormatDecimal6(0);
+                                }
+                            },
+                            {
+                                targets: 9, data: "dirty_price",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal6(data);
+                                    }
+                                    return FormatDecimal6(0);
+                                }
+                            },
+                            {
+                                targets: 10, data: "haircut",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal2(data);
+                                    }
+                                    return FormatDecimal2(0);
+                                }
+                            },
+                            {
+                                targets: 11, data: "unit",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal0(data);
+                                    }
+                                    return FormatDecimal0(0);
+                                }
+                            },
+                            {
+                                targets: 12, data: "par",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal2(data);
+                                    }
+                                    return FormatDecimal2(0);
+                                }
+                            },
+                            {
+                                targets: 13, data: "market_value",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal2(data);
+                                    }
+                                    return FormatDecimal2(0);
+                                }
+                            },
+                            {
+                                targets: 14, data: "cash_amount",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal2(data);
+                                    }
+                                    return FormatDecimal2(0);
+                                }
+                            },
+                            {
+                                targets: 15, data: "dirty_price_after_hc", orderable: false,
+                                render: function (data, type, row, meta) {
+                                    var html = '';
+                                    var currentname = 'ColateralList[' + meta.row + '].dirty_price_after_hc';
+                                    if (data != null) {
+                                        var valuedata = data;
+                                        html = '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;" type="text" value="' + FormatDecimal2(valuedata) + '">';
+                                    }
+                                    else {
+                                        html = '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;" type="text" value="0.00000000">';
+                                    }
+                                    return html;
+                                }
+                            },
+                            {
+                                targets: 16, data: "interest_amount", orderable: false,
+                                render: function (data, type, row, meta) {
+                                    var html = '';
+                                    var currentname = 'ColateralList[' + meta.row + '].interest_amount';
+                                    if (data != null) {
+                                        var valuedata = data;
+                                        html = '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;" type="text" value="' + FormatDecimal2(valuedata) + '">';
+                                    }
+                                    else {
+                                        html = '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;" type="text" value="">';
+                                    }
+                                    return html;
+                                }
+                            },
+                            {
+                                targets: 17, data: "wht_amount", orderable: false,
+                                render: function (data, type, row, meta) {
+                                    var html = '';
+                                    var currentname = 'ColateralList[' + meta.row + '].wht_amount';
+                                    if (data != null) {
+                                        var valuedata = data;
+                                        html = '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;" type="text" value="' + FormatDecimal2(valuedata) + '">';
+                                    }
+                                    else {
+                                        html = '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;" type="text" value="">';
+                                    }
+                                    return html;
+                                }
+                            },
+                            {
+                                targets: 18, data: "temination_value", orderable: false,
+                                render: function (data, type, row, meta) {
+                                    var html = '';
+                                    var currentname = 'ColateralList[' + meta.row + '].temination_value';
+                                    html = '<input name="ColateralList[' + meta.row + '].colateral_id" Isdropdown="false"  type="hidden" value="' + row.colateral_id + '">';
+
+                                    if (data != null) {
+                                        var valuedata = data;
+                                        html += '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;"  type="text" value="' + FormatDecimal2(valuedata) + '">';
+                                    }
+                                    else {
+                                        html += '<input oninput="return numberOnlyAnd2Dot(this);" onfocusout="return auto2digit(this);" name="' + currentname + '" style="width:180px;"  type="text" value="">';
+                                    }
+                                    return html;
+                                }
+                            },
+                            {
+                                targets: 19, data: "maturity_date",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return moment(data).format('DD/MM/YYYY');
+                                    }
+                                    return data;
+                                }
+                            },
+                            {
+                                targets: 20, data: "coupon_rate",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal6(data);
+                                    }
+                                    return FormatDecimal6(0);
+                                }
+                            },
+                            {
+                                targets: 21, data: "par_unit",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal2(data);
+                                    }
+                                    return FormatDecimal2(0);
+                                }
+                            },
+                            {
+                                targets: 22, data: "variation",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal2(data);
+                                    }
+                                    return FormatDecimal2(0);
+                                }
+                            },
+                            {
+                                targets: 23, data: "dm",
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return FormatDecimal16(data);
+                                    }
+                                    return '';
+                                }
+                            },
+                            {
+                                targets: 24, data: "trade_date", visible: false,
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return moment(data).format('DD/MM/YYYY');
+                                    }
+                                    return data;
+                                }
+                            },
+                            {
+                                targets: 25, data: "settlement_date", visible: false,
+                                render: function (data, type, row, meta) {
+                                    if (data != null) {
+                                        return moment(data).format('DD/MM/YYYY');
+                                    }
+                                    return data;
+                                }
+                            }
+                        ],
+                    footerCallback: function (row, data, start, end, display) {
+                        var api = this.api();
+                        //Remove the formatting to get integer data for summation
+                        var intVal = function (i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                    i : 0;
+                        };
+
+                        //Total over all pages
+                        Sum_cash_amount = api
+                            .column(14)
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        $("#Sum_cash_amount").html(FormatDecimal2(parseFloat(Sum_cash_amount).toFixed(2)));
+
+                        Sum_interest_amount = api
+                            .column(16)
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        $("#Sum_interest_amount").html(FormatDecimal2(parseFloat(Sum_interest_amount).toFixed(2)));
+
+                        Sum_wht_amount = api
+                            .column(17)
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        $("#Sum_wht_amount").html(FormatDecimal2(parseFloat(Sum_wht_amount).toFixed(2)));
+
+                        Sum_temination_value = api
+                            .column(18)
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        $("#Sum_temination_value").html(FormatDecimal2(parseFloat(Sum_temination_value).toFixed(2)));
+                    }, fixedColumns: {
+                        leftColumns: 0,
+                        rightColumns: 1
+                    }
+                });
+            });
+
+            function Focus(input) {
+                var center = $(window).height() / 2;
+                var top = $(input).offset().top;
+                if (top > center) {
+                    $(window).scrollTop(top - center);
+                }
+                input.focus();
+                input.click();
+            }
+
+            function roundTo8(num) {
+                return +(Math.round(parseFloat(num).toFixed(9) + "e+8") + "e-8");
+            }
+
+            function roundTo2(num) {
+                return +(Math.round(parseFloat(num).toFixed(3) + "e+2") + "e-2");
+            }
+
+            function roundTo16(num) {
+                return +(Math.round(parseFloat(num).toFixed(17) + "e+16") + "e-16");
+            }
+
+            function FormatDecimal(Num) {
+                var format = Number(parseFloat(roundTo8(Num)).toFixed(8)).toLocaleString('en', {
+                    minimumFractionDigits: 8
+                });
+                return format;
+            }
+
+            function FormatDecimal2(Num) {
+                var format = Number(parseFloat(roundTo2(Num)).toFixed(2)).toLocaleString('en', {
+                    minimumFractionDigits: 2
+                });
+                return format;
+            }
+
+            function roundTo6(num) {
+                return +(Math.round(parseFloat(num).toFixed(7) + "e+6") + "e-6");
+            }
+            function FormatDecimal6(Num) {
+                var format = Number(parseFloat(roundTo6(Num)).toFixed(6)).toLocaleString('en', {
+                    minimumFractionDigits: 6
+                });
+                return format;
+            }
+
+            function FormatDecimal16(num) {
+                var format = Number(parseFloat(roundTo6(num)).toFixed(6)).toLocaleString('en', {
+                    minimumFractionDigits: 8
+                });
+                return format;
+            }
+
+            function FormatDecimal0(Num) {
+                var format = Number(parseFloat(Num).toFixed(0)).toLocaleString('en', {
+                    minimumFractionDigits: 0
+                });
+                return format;
+            }
+
+            function numberOnlyAnd2Dot(obj) {
+                if (obj.value !== "") {
+                    obj.value = obj.value
+                        .replace(/[^\d.]/g, '')             // numbers and decimals only
+                        .replace(/(^[\d]{12})[\d]/g, '$1')   // not more than 12 digits at the beginning
+                        .replace(/(\..*)\./g, '$1')         // decimal can't exist more than once
+                        .replace(/(\.[\d]{2})./g, '$1');    // not more than 2 digits after decimal
+                }
+            }
+
+            function numberOnlyAnd8Dot(obj) {
+                obj.value = obj.value
+                    .replace(/[^\d.]/g, '')             // numbers and decimals only
+                    .replace(/(^[\d]{12})[\d]/g, '$1')   // not more than 12 digits at the beginning
+                    .replace(/(\..*)\./g, '$1')         // decimal can't exist more than once
+                    .replace(/(\.[\d]{8})./g, '$1');    // not more than 8 digits after decimal
+            }
+
+            function auto2digit(obj) {
+                if (obj.value !== "" && obj.value.length) {
+                    var nStr = obj.value;
+                    var x = nStr.split('.');
+                    var x1 = x[0];
+                    var x2 = '00';
+
+                    if (x.length > 1) {
+                        x2 = x[1];
+
+                        var currentDigit = x[1].length;
+                        if (currentDigit < 2) {
+                            for (var i = currentDigit; i < 2; i++) {
+                                x2 += '0';
+                            }
+                        }
+                    }
+
+                    x1 = x1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    return obj.value = x1 + '.' + x2;
+                }
+
+                if ($('#Txt_cur').val() === "THB" || ( obj.name !== "" && obj.name.indexOf("dirty_price_after_hc") !== -1))
+                    return obj.value = '0.00';
+                 else
+                    return obj.value = '';
+            }
+
+
+        function auto8digit(obj) {
+            if (obj.value.length) {
+                var nStr = obj.value;
+                var x = nStr.split('.');
+                var x1 = x[0];
+                var x2 = '00000000';
+
+                if (x.length > 1) {
+                    x2 = x[1];
+
+                    var currentDigit = x[1].length;
+                    if (currentDigit < 8) {
+                        for (var i = currentDigit; i < 8; i++) {
+                            x2 += '0';
+                        }
+                    }
+                }
+
+                x1 = x1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return obj.value = x1 + '.' + x2;
+            }
+            return obj.value = '0.00000000';
+        }
+
+        function ValidateInput() {
+
+            var IsValid = true;
+            var payment_method = $('#payment_method');
+            if (payment_method.val() === '') {
+                $("#payment_method_error").text("The Payment Method field is required.");
+                if (IsValid) {
+                    Focus(payment_method);
+                }
+                IsValid = false;
+            }
+            else {
+                $("#payment_method_error").text("");
+            }
+
+            var trans_mt_code = $('#trans_mt_code');
+            if (payment_method.val() != 'CASH' && $('#trans_deal_type').val() === 'LD' && trans_mt_code.val() === '') {
+                $("#trans_mt_code_error").text("The MT Code field is required.");
+                if (IsValid) {
+                    Focus($('#ddl_trans_mt_code'));
+                }
+                IsValid = false;
+            }
+            else {
+                $("#trans_mt_code_error").text("");
+            }
+
+
+            if (!IsValid) {
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+    @*@Scripts.Render("~/module/rpdealapproveapprove")*@
+    @Scripts.Render("~/module/validation")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/rpdealapproveapprove")
+}
