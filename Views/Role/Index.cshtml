@@ -1,0 +1,543 @@
+﻿@model GM.Data.View.UserAndScreen.RoleViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Role Set Up Master
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(mode => Model.FormSearch.role_name, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.role_name, new { htmlAttributes = new { @class = "form-control " } })
+                                        </div>
+
+                                        @Html.LabelFor(model => model.FormSearch.active_flag, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            <div class="radio-form">
+                                                <div class="radio">
+                                                    <label class="radio-inline c-radio">
+                                                        @Html.RadioButtonFor(m => m.FormSearch.active_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+
+                                                    </label>
+                                                    <label class="radio-inline c-radio">
+                                                        @Html.RadioButtonFor(m => m.FormSearch.active_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.role_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorFor(model => model.FormSearch.role_code, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+
+                                            @Html.LabelFor(model => model.FormSearch.role_id, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorFor(model => model.FormSearch.role_id, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    }
+
+                </div>
+                <!-- Data Table(new) -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="add" @(!IsCreate ? "disabled" : "")>
+                                            + Add Role
+                                        </button>
+                                    </div>
+                                </div>
+                                @*<div class="option">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default btn-round dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <i class="feather-icon icon-settings"></i>Column
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu checkbox-menu">
+                                                <li class="dropdown-header">Showing Column</li>
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" value="">Column 1
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" value="">Column 2
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" value="">Column 3
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>*@
+                            </div>
+                        </div>
+                        <div class="box-header delete-item hide">
+                            <div class="left-item">
+                                <div class="static-text">
+                                    <span>1 item(s) selected</span>
+                                </div>
+                                <div class="option">
+
+                                    <button class="btn btn-delete btn-round" type="button" data-toggle="modal" data-target="#confirm-delete">
+                                        Delete
+                                    </button>
+                                </div>
+                                <div class="option">
+                                    <button class="btn btn-link btn-link-secondary" type="button">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.role_id)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.role_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.role_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.active_flag)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Add Form Right Modal -->
+<div class="modal right fade" id="action-form-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h4>
+            </div>
+
+            <div class="modal-body group">
+
+                @using (Html.BeginForm("CreateRole", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))
+                {
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    @Html.HiddenFor(model => model.FormAction.role_id)
+                                    @Html.LabelFor(model => model.FormAction.role_code, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-xs-9">
+                                        @Html.EditorFor(model => model.FormAction.role_code, new { htmlAttributes = new { @class = "form-control" } })
+                                        @*@Html.EditorFor(model => model.FormAction.role_id, new { htmlAttributes = new { @class = "form-control hidden" } })*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FormAction.role_name, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-xs-9">
+                                        @Html.EditorFor(model => model.FormAction.role_name, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FormAction.active_flag, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="radio-form">
+                                            <div class="radio">
+                                                <label class="radio-inline c-radio">
+                                                    @Html.RadioButtonFor(m => m.FormAction.active_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+
+                                                </label>
+                                                <label class="radio-inline c-radio">
+                                                    @Html.RadioButtonFor(m => m.FormAction.active_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary btn-round btn-main btn-form-save">+ Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</button>
+                            <button type="reset" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+</div>
+
+@section Styles {
+    @Styles.Render("~/content/datatable")
+    @Styles.Render("~/bundles/SweetAlertCss")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+
+        var isUpdate = "@IsUpdate";
+
+        function Delete(role_id) {
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel it!",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $('.spinner').css('display', 'block');
+                    var data = { role_id: role_id };
+                    //console.log("Show form delete -> local");
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("DeleteRole", (string)this.ViewContext.RouteData.Values["controller"])",
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        success: function (d) {
+                            $('.spinner').css('display', 'none');
+                            if (d.success) {
+                                setTimeout(function () {
+                                    swal("Deleted!", "Delete Success.", "success");
+                                }, 100);
+                                $('#action-form-modal').modal('hide');
+                                GM.Message.Clear();
+                                GM.Role.Form.Search();
+                                GM.Role.Table.draw();
+                            } else {
+                                // DoSomethingElse()
+                                swal("Deleted!", "Error : " + d.responseText, "error");
+                            }
+                        },
+                        error: function (d) {
+                            $('.spinner').css('display', 'none');
+                            // TODO: Show error
+                            GM.Message.Clear();
+                        }
+                    });
+                } else {
+                    GM.Message.Clear();
+                    swal("Cancelled", "Your data is safe :)", "error");
+                }
+            });
+    }
+
+        $(document).ready(function () {
+
+            GM.Role = {};
+            GM.Role.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                select: false,
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                order: [
+                    [1, "desc"]
+                ],
+                buttons:
+                    [
+                        //{
+                        //    text: 'Refresh',
+                        //    action: function (e, dt, node, config) {
+                        //        dt.ajax.reload();
+                        //    }
+                        //}
+                    ],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                select: true,
+                columnDefs:
+                    [
+
+                        { targets: 0, orderable: false, data: "RowNumber", width: 30, },
+                        { targets: 1, data: "role_id" },
+                        { targets: 2, data: "role_code" },
+                        { targets: 3, data: "role_name" },
+                        {
+                            targets: 4,
+                            data: "active_flag",
+                            render: function (data, type, row, meta) {
+                                if (data == true) {
+                                    return 'Yes';
+                                }
+                                else {
+                                    return 'No';
+                                }
+                            }
+                        },
+
+                        {
+                            targets: 5,
+                            data: "role_id",
+                            className: "dt-body-center",
+                            width: 60,
+                            render: function (data, type, row, meta) {
+                                var html = '';
+                                html += '<button class="btn btn-default btn-round btn-add-screen" data-toggle="tooltip" title="Add Screen" form-mode="save"  @(!IsCreate ? "disabled" : "") ><i class="feather-icon icon-file-plus"></i></button>';
+                                html += '<button class="btn btn-default btn-round" data-toggle="tooltip" title="Edit Role"   key="' + row.role_id + '" form-mode="edit"   onclick="GM.Role.Form(this)" onmouseover="Edit" @(!IsView? "disabled":"") ><i class="feather-icon icon-edit"></i></button>';
+                                html += '<button class="btn btn-delete  btn-round" data-toggle="tooltip" title="Delete Role" key="' + row.role_id + '" form-mode="delete" onclick="GM.Role.Form(this)" @(!IsDelete? "disabled":"") ><i class="feather-icon icon-trash-2"></i></button>';
+                                return html;
+                            }
+                        }
+                    ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                },
+                drawCallback: function (settings) {
+                    //alert('DataTables has redrawn the table');
+
+                }
+
+            });
+
+            $('#x-table-data').on('click', 'button.btn-add-screen', function () {
+                var data = GM.Role.Table.row(this).data();
+                console.log(data);
+                var url = '@Url.Action("Add", (string)this.ViewContext.RouteData.Values["controller"], new {role_id = "p_role_id", role_name = "p_role_name" })';
+                url = url.replace("amp;", '');
+                url = url.replace("p_role_id", data.role_id);
+                url = url.replace("p_role_name", data.role_name);
+                window.location = url;
+            });
+
+            GM.Role.Form = function (btn) {
+                var mode = $(btn).attr("form-mode");
+
+                GM.Message.Clear();
+                GM.Role.Form.Initial();
+                var radioyes = $("[id=FormAction_active_flag][value=true]");
+                var radiono = $("[id=FormAction_active_flag][value=false]");
+                if (mode)
+                {
+                    var key = $(btn).attr("key");
+
+                    switch (mode)
+                    {
+                        case "add":
+
+                                $(".modal-title").text("Create @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                $('#FormAction_role_code').removeAttr('readonly');
+                                $('#FormAction_role_name').removeAttr('readonly');
+                                radioyes.removeAttr('disabled');
+                                radiono.removeAttr('disabled');
+                                $('#action-form-modal').modal('show');
+                                $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Create');
+                                $("#action-form :submit").removeAttr("onclick");
+                                $("#action-form").attr("action", "@Url.Action("CreateRole", "Role")");
+                                radioyes.attr('ischeck', 'true');
+                                radioyes.attr('checked', 'checked');
+                                radioyes.prop('checked', true);
+                                radiono.removeAttr('checked');
+                                radiono.attr('ischeck', 'false');
+
+                            break;
+
+                        case "edit":
+
+                            GM.Role.Get({
+                                    id: key,
+                                    form: 'action-form',
+                                    handler: function (response, status, jqxhr) {
+                                        //GM.Unmask();
+                                    }
+                            });
+                                $('#FormAction_role_code').attr('readonly', true);
+                                $('#FormAction_role_name').removeAttr('readonly');
+                                radioyes.removeAttr('disabled');
+                                radiono.removeAttr('disabled');
+                                $('#action-form-modal').modal('show');
+                                $(".modal-title").text("Edit @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                $("#action-form :submit").removeAttr("onclick");
+                                $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Update');
+
+                            if (isUpdate == "False") {
+                                $('#action-form :submit').attr('disabled', "disabled");
+                            }
+
+                            $("#action-form").attr("action", "@Url.Action("EditRole", "Role")");
+
+                            break;
+
+                        case "delete":
+
+                            $(".modal-title").text("Are you sure you want to delete this?");
+                            GM.Role.Get({
+                                id: key,
+                                form: 'action-form',
+                                handler: function (response, status, jqxhr) {
+                                }
+                            });
+                            $('#FormAction_role_code').attr('readonly', true);
+                            $('#FormAction_role_name').attr('readonly', true);
+                            radioyes.attr('disabled', 'disabled');
+                            radiono.attr('disabled', 'disable');
+
+                            $('#action-form-modal').modal('show');
+                            $("#action-form :submit").removeClass('btn-primary').addClass('btn-delete').text('Delete');
+                            $("#action-form :submit").attr("onclick", "Delete('" + key + "')");
+                            $("#action-form").attr("action", "notpost");
+
+                            break;
+                    }
+                }
+        };
+
+            GM.Role.Get = function (op) {
+                $.get("@Url.Action("GetRoleEdit", (string)this.ViewContext.RouteData.Values["controller"])", { id: op.id, t: GM.Time })
+                    .done(function (response, status, jqxhr) {
+                        // this is the "success" callback
+                        GM.Role.Form.DataBinding({ form: op.form, data: response });
+                        op.handler(response)
+                    })
+                    .fail(function (jqxhr, status, error) {
+                    });
+            };
+            $("#NavBar").html($('#NavRole').val());
+    });
+    </script>
+    @Scripts.Render("~/module/role")
+}
