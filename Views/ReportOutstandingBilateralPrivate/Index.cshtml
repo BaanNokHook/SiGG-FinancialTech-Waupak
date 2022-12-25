@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                            @*<li>
+                                <a href="Home\Index">Home</a>
+                            </li>
+                            <li class="active">Static Process</li>
+                            <li class="active">Static</li>
+                            <li class="active">OutstandingBilateralPrivate Report</li>*@
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Outstanding Bilateral Private
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <iframe src='@System.Configuration.ConfigurationManager.AppSettings["Reportpath"]/OutstandingBilateralPrivate?controllername=@this.ViewContext.RouteData.Values["controller"].ToString()' style="border:0;width:100%;height: auto;min-height: 750px;overflow: hidden!important;"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+@section Styles {
+    <style>
+        body {
+        }
+    </style>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavReportOutstandingBilateralPrivate').val());
+        });
+    </script>
+}
