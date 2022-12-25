@@ -1,0 +1,698 @@
+﻿@model GM.Data.Model.PaymentProcess.RPCouponModel
+@{
+    ViewBag.Title = "Edit";
+
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    bool isUpdate = IsUpdate;
+}
+
+@using (Html.BeginForm("Edit", "RPCoupon", FormMethod.Post, new { @class = "one-col-form", id = "action-form", }))
+{
+    <section class="working-content">
+        <div class="container-fluid container-fixed">
+            <!-- PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title">
+                        <div class="breadcrumb-wrap">
+                            <ol class="breadcrumb" id="NavBar"></ol>
+                        </div>
+                        <div class="title">
+                            <h1>
+                                Repo Coupon Detail
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+                    <div class="box-content">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Repo Coupon Detail</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-container form-horizontal form-compact">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper mb-0">
+                                        @Html.HiddenFor(model => model.trans_deal_type)
+                                        @Html.HiddenFor(model => model.counter_party_id)
+                                        @Html.HiddenFor(model => model.counter_party_fund_id)
+                                        @Html.HiddenFor(model => model.instrument_id)
+                                        @Html.HiddenFor(model => model.ending_par)
+                                        @Html.HiddenFor(model => model.unit)
+                                        @Html.HiddenFor(model => model.trans_no)
+
+                                        <div class="form-group">
+                                            @Html.HiddenFor(model => model.instrument_code)
+                                            @Html.LabelFor(model => model.instrument_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-10">
+                                                <p class="form-control-static">
+                                                    @Model.instrument_code ( @Model.instrument_desc )
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.HiddenFor(model => model.counter_party_code)
+                                            @Html.LabelFor(model => model.counter_party_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-10">
+                                                @if (Model.counter_party_code != null)
+                                                {
+                                                    <p class="form-control-static">@Model.counter_party_code ( @Model.counter_party_name )</p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="form-control-static">-</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.HiddenFor(model => model.event_date)
+                                            @Html.LabelFor(model => model.event_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @if (Model.event_date != null)
+                                                {
+                                                    <p class="form-control-static">@Model.event_date.Value.ToString("dd/MM/yyyy")</p>
+                                                }
+                                            </div>
+                                            @Html.HiddenFor(model => model.payment_date)
+                                            @Html.LabelFor(model => model.payment_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @if (Model.payment_date != null)
+                                                {
+                                                    <p class="form-control-static">@Model.payment_date.Value.ToString("dd/MM/yyyy")</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            @Html.HiddenFor(model => model.cur)
+                                            @Html.LabelFor(model => model.cur, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <p class="form-control-static">@Model.cur</p>
+                                            </div>
+
+                                            @Html.HiddenFor(model => model.coupon_rate)
+                                            @Html.LabelFor(model => model.coupon_rate, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <p class="form-control-static">@Model.coupon_rate.Value.ToString() %</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            @Html.LabelFor(model => model.payment_method, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @if (Model.MODE == "")
+                                                {
+                                                    <div class="input-group" style="width:100%;">
+                                                        <div class="input-group-btn dropdown" style="width:50%;">
+                                                            <button class="btn btn-default dropdown-toggle" style="width:100%" id="ddl_counterparty_payment" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.payment_method, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input style="display:none" type="text" data-action="@Url.Action("FillPaymentMethod", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty_payment" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                                @*<hr>*@
+                                                                <ul id="ul_counterparty_payment"></ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group-btn dropdown" style="width:50%;">
+                                                            <button class="btn btn-default dropdown-toggle" style="width:100%" id="ddl_trans_mt_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.mt_code, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.mt_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.mt_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input style="display:none" type="text" data-action="@Url.Action("FillMTCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_trans_mt_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                                @*<hr>*@
+                                                                <ul id="ul_trans_mt_code"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <span id="payment_method_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <div class="input-group" style="width:100%;">
+                                                        <div class="input-group-btn dropdown" style="width:50%;">
+                                                            <button class="btn btn-default dropdown-toggle" style="width:100%" id="ddl_counterparty_payment" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" disabled="disabled">
+                                                                @Html.SpanFor(model => model.payment_method, "Select...", new { @class = "selected-data", disabled = "disabled", @readonly = "readonly" })
+                                                                @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="input-group-btn dropdown" style="width:50%;">
+                                                            <button class="btn btn-default dropdown-toggle" style="width:100%" id="ddl_trans_mt_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" disabled="disabled">
+                                                                @Html.SpanFor(model => model.mt_code, "Select...", new { @class = "selected-data", disabled = "disabled", @readonly = "readonly" })
+                                                                @Html.TextBoxFor(model => model.mt_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.mt_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper mb-0">
+                                        <div class="form-group mb-0">
+                                            <label class="control-label col-xs-2">Total Unit</label>
+                                            <div class="col-xs-2">
+                                                <p class="form-control-static important-text">
+                                                    @Model.unit.Value.ToString("N2") Unit
+                                                </p>
+                                            </div>
+                                            <label class="control-label col-xs-2">Total AI Amount</label>
+                                            <div class="col-xs-2">
+                                                <p class="form-control-static important-text" id="lbl_interest_amount" name="interest_amount">@Model.interest_amount.Value.ToString("N2") Baht</p>
+                                            </div>
+                                            <label class="control-label col-xs-2">Total AI Amount ADJ</label>
+                                            <div class="col-xs-2">
+                                                @Html.PForUint(model => model.interest_amount_adj, "0.00", new { @id = "lbl_interest_amount_adj", @class = "form-control-static important-text" }, "Baht")
+                                                @Html.EditorFor(model => model.interest_amount_adj, new { htmlAttributes = new { @class = "form-control hidden" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rp-portfolio-content">
+                        <div class="box-content no-padding">
+                            <div class="box-header big-head">
+                                <div class="left-item">
+                                    <div class="title">
+                                        <h3>Portfolio</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-container no-padding have-head">
+                                <div class="column-fluid-wrapper">
+                                    <div class="row row-fluid">
+
+
+                                        <div class="col-xs-12 col-md-4 column-fluid have-line">
+                                            <div class="content-sub-title">
+                                                <h4>Portfolio : AFS</h4>
+                                            </div>
+
+                                            <div class="form-container form-horizontal form-compact">
+                                                <div class="form-wrapper-500">
+                                                    <div class="form-group-wrapper mb-0">
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_AFS.unit)
+                                                            @Html.LabelFor(model => model.Port_AFS.unit, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_AFS.unit.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_AFS.interest_amount)
+                                                            @Html.LabelFor(model => model.Port_AFS.interest_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_AFS.interest_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_AFS.interest_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_AFS.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_AFS.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_AFS.interest_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_AFS.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_AFS.wht_int_amount)
+                                                            @Html.LabelFor(model => model.Port_AFS.wht_int_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_AFS.wht_int_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_AFS.wht_int_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_AFS.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_AFS.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_AFS.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_AFS.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4 column-fluid have-line">
+                                            <div class="content-sub-title">
+                                                <h4>Portfolio : HTM</h4>
+                                            </div>
+
+                                            <div class="form-container form-horizontal form-compact">
+                                                <div class="form-wrapper-500">
+                                                    <div class="form-group-wrapper mb-0">
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_HTM.unit)
+                                                            @Html.LabelFor(model => model.Port_HTM.unit, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_HTM.unit.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_HTM.interest_amount)
+                                                            @Html.LabelFor(model => model.Port_HTM.interest_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_HTM.interest_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_HTM.interest_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_HTM.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_HTM.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_HTM.interest_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_HTM.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_HTM.wht_int_amount)
+                                                            @Html.LabelFor(model => model.Port_HTM.wht_int_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_HTM.wht_int_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_HTM.wht_int_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_HTM.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_HTM.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_HTM.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_HTM.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4 column-fluid have-line">
+                                            <div class="content-sub-title">
+                                                <h4>Portfolio : TRD</h4>
+                                            </div>
+
+                                            <div class="form-container form-horizontal form-compact">
+                                                <div class="form-wrapper-500">
+                                                    <div class="form-group-wrapper mb-0">
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_TRD.unit)
+                                                            @Html.LabelFor(model => model.Port_TRD.unit, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_TRD.unit.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_TRD.interest_amount)
+                                                            @Html.LabelFor(model => model.Port_TRD.interest_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_TRD.interest_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_TRD.interest_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_TRD.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_TRD.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_TRD.interest_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_TRD.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_TRD.wht_int_amount)
+                                                            @Html.LabelFor(model => model.Port_TRD.wht_int_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_TRD.wht_int_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_TRD.wht_int_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_TRD.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_TRD.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_TRD.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_TRD.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-fluid">
+                                        <div class="col-xs-12 col-md-4 column-fluid have-line" style="border-top: 1px solid #cfdae7;">
+                                            <div class="content-sub-title">
+                                                <h4>Portfolio : MEMO-BNK</h4>
+                                            </div>
+                                            <div class="form-container form-horizontal form-compact">
+                                                <div class="form-wrapper-500">
+                                                    <div class="form-group-wrapper mb-0">
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_MEMO_BNK.unit)
+                                                            @Html.LabelFor(model => model.Port_MEMO_BNK.unit, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_MEMO_BNK.unit.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_MEMO_BNK.interest_amount)
+                                                            @Html.LabelFor(model => model.Port_MEMO_BNK.interest_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_MEMO_BNK.interest_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_MEMO_BNK.interest_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_MEMO_BNK.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_BNK.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_BNK.interest_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_MEMO_BNK.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_MEMO_BNK.wht_int_amount)
+                                                            @Html.LabelFor(model => model.Port_MEMO_BNK.wht_int_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_MEMO_BNK.wht_int_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_MEMO_BNK.wht_int_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_MEMO_BNK.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_BNK.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_BNK.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_MEMO_BNK.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4 column-fluid have-line" style="border-top: 1px solid #cfdae7;">
+                                            <div class="content-sub-title">
+                                                <h4>Portfolio : MEMO-TRD</h4>
+                                            </div>
+
+                                            <div class="form-container form-horizontal form-compact">
+                                                <div class="form-wrapper-500">
+                                                    <div class="form-group-wrapper mb-0">
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_MEMO_TRD.unit)
+                                                            @Html.LabelFor(model => model.Port_MEMO_TRD.unit, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_MEMO_TRD.unit.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_MEMO_TRD.interest_amount)
+                                                            @Html.LabelFor(model => model.Port_MEMO_TRD.interest_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_MEMO_TRD.interest_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_MEMO_TRD.interest_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_MEMO_TRD.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_TRD.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_TRD.interest_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_MEMO_TRD.interest_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.Port_MEMO_TRD.wht_int_amount)
+                                                            @Html.LabelFor(model => model.Port_MEMO_TRD.wht_int_amount, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                <p class="form-control-static">@Model.Port_MEMO_TRD.wht_int_amount.ToString("N2")</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Port_MEMO_TRD.wht_int_amount_adj, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                                            <div class="col-xs-8">
+                                                                @if (Model.MODE == "")
+                                                                {
+                                                                    if (Model.Port_MEMO_TRD.unit == 0)
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_TRD.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.EditorForValidate(model => model.Port_MEMO_TRD.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control" } })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.EditorForValidate(model => model.Port_MEMO_TRD.wht_int_amount_adj, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4 column-fluid have-line" style="border-top: 1px solid #cfdae7;">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box-content">
+                        <div class="form-container form-horizontal form-compact">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper mb-0">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.remark, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-10">
+                                                @if (Model.MODE == "")
+                                                {
+                                                    @Html.TextAreaFor(model => model.remark, new { @class = "form-control", rows = "5" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.TextAreaFor(model => model.remark, new { @class = "form-control", rows = "5", disabled = "disabled", @readonly = "readonly" })
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="rpcoupon-submit" class="page-button-submit text-center">
+                        @if (Model.MODE == "")
+                        {
+                            <button type="button" id="btnSave" class="btn btn-primary btn-round btn-big" @(!isUpdate ? "disabled" : "")>Submit</button>
+                        }
+                        <button type="button" id="btnClear" class="btn btn-link">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+
+    <style>
+        hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #cfdae7;
+            margin: 1em 0;
+            padding: 0;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+
+        document.getElementById("Port_AFS_interest_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_HTM_interest_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_TRD_interest_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_MEMO_BNK_interest_amount_adj").addEventListener("blur", myFocusFunction, true);;
+        document.getElementById("Port_MEMO_TRD_interest_amount_adj").addEventListener("blur", myFocusFunction, true);;
+
+        document.getElementById("Port_AFS_wht_int_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_HTM_wht_int_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_TRD_wht_int_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_MEMO_BNK_wht_int_amount_adj").addEventListener("blur", myFocusFunction, true);
+        document.getElementById("Port_MEMO_TRD_wht_int_amount_adj").addEventListener("blur", myFocusFunction, true);
+
+        function myFocusFunction() {
+
+           var interest = parseFloat(
+                parseFloat($("#Port_AFS_interest_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_HTM_interest_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_TRD_interest_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_MEMO_BNK_interest_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_MEMO_TRD_interest_amount_adj").val().replace(/,/g, '')));
+
+            var frontInterest = interest.toString().split(".");
+
+            $('#lbl_interest_amount_adj').val(frontInterest[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (frontInterest[1] ? "." + frontInterest[1] : ".00"));
+            $('#lbl_interest_amount_adj').text(frontInterest[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (frontInterest[1] ? "." + frontInterest[1] : ".00") + " Baht");
+
+            var wht_int = parseFloat(
+                parseFloat($("#Port_AFS_wht_int_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_HTM_wht_int_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_TRD_wht_int_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_MEMO_BNK_wht_int_amount_adj").val().replace(/,/g, '')) +
+                parseFloat($("#Port_MEMO_TRD_wht_int_amount_adj").val().replace(/,/g, '')));
+
+            var frontwht_int = wht_int.toString().split(".");
+
+            $('#lbl_wht_int_amount_adj').val(frontwht_int[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (frontwht_int[1] ? "." + frontwht_int[1] : ".00"));
+            $('#lbl_wht_int_amount_adj').text(frontwht_int[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (frontwht_int[1] ? "." + frontwht_int[1] : ".00") + " Baht");
+
+        }
+
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavRPCoupon').val());
+        });
+
+    </script>
+    @*@Scripts.Render("~/module/rpcouponadd")*@
+    @Scripts.Render("~/module/validation")
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/rpcouponadd")
+}
