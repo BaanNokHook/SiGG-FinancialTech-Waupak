@@ -1,0 +1,399 @@
+﻿@model GM.Data.View.PaymentProcess.RPCallMarginViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+
+    bool isView = IsView;
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar"></ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Repo Margins Cal.
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content table-content">
+
+                    <div class="row row-fix-d1">
+                        <div class="col-xs-12">
+                            <div class="group box-header-wrapper">
+                                <div class="box-header">
+                                    <div class="left-item">
+                                        <div class="title">
+                                            <h3>Margin / Interest</h3>
+                                        </div>
+                                    </div>
+                                    <div class="right-item">
+                                        <div class="add-data">
+                                            <div class="dropdown">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-fix-d1">
+                        <div class="col-xs-12">
+                            <div class="form-container form-horizontal">
+                                <div class="row">
+                                    <div class="col-xs-12 form-wrapper">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Process date</label>
+                                            <div class="col-md-2">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.asof_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <label class="control-label col-md-2">Settlement date</label>
+                                            <div class="col-md-2">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.call_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <label class="control-label col-md-2">Int. Rate</label>
+                                            <div class="col-md-2" style="max-width:175px">
+                                                <div id="intratetext" class="input-group no-btn">
+                                                    @Html.EditorForValidate(model => model.FormSearch.interes_rate, new { htmlAttributes = new { @class = "form-control" } })
+                                                    <span disabled class="input-group-addon">
+                                                        <span class="text">%</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Cur</label>
+                                            <div class="col-md-2">
+                                                <div class="dropdown" style="max-width:70px">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_cur" style="max-width:70px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.cur, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" style="padding-right:0px;padding-left:5px;" id="txt_cur" class="form-control" placeholder="CCY" aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_cur"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class="control-label col-md-2">Counter Party</label>
+                                            <div class="col-md-2">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.counter_party_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCounterParty", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_counterparty"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="divHoliday" style="display:none">
+                                                @Html.HiddenFor(model => model.FormSearch.flag_holiday);
+                                                <label class="control-label col-md-2">Holiday Int. Rate</label>
+                                                <div class="col-md-2" style="max-width:175px">
+                                                    <div id="intratetext" class="input-group no-btn">
+                                                        @Html.EditorForValidate(model => model.FormSearch.margin_int_rate_holiday, new { htmlAttributes = new { @class = "form-control" } })
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-5">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-default btn-main btn-round" type="button" id="btnSearch" @(!isView ? "disabled" : "")>
+                                                    <i class="feather-icon icon-search"></i> Search
+                                                </button>
+                                                <button class="btn btn-primary btn-main btn-round" type="button" id="btnProcess" onclick="GM.RPCallMargin.Submit(this)" @(!isView ? "disabled" : "")>
+                                                    <i class="feather-icon icon-settings"></i> Process
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;"><input id="CheckAll" name="checkbox" type="checkbox" value="true"></th>
+                                    <th style="text-align:center;">Pay / Receive</th>
+                                    <th style="text-align:center;">Counter Party Name</th>
+                                    <th style="text-align:center;">Fund Name</th>
+                                    <th style="text-align:center;">Margin Amt</th>
+                                    <th style="text-align:center;">Int on Cash Margin</th>
+                                    <th style="text-align:center;">Today Exposure</th>
+                                    @*<th style="text-align:center;">Status</th>
+                                        <th style="text-align:center;">Payment Method</th>*@
+                                    <th class="action" style="text-align:center;width:30px;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;width:30px;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div class="row row-fix-d1">
+                        <div class="col-xs-12">
+                            <div class="form-container form-horizontal">
+                                <div class="row">
+                                    <div class="col-xs-12 form-wrapper">
+                                        <div class="form-group">
+                                            <div class="col-xs-3">
+
+                                            </div>
+                                            <div class="col-xs-9">
+                                                <button class="btn btn-primary btn-round btn-big" style="width:150px;" disabled type="button" id="btnPrint" form-mode="Edit" onclick="GM.RPCallMargin.PrintAnnexII(this)" @(!isView ? "disabled" : "")>
+                                                    Print AnnexII
+                                                </button>
+                                                <button class="btn btn-danger btn-round btn-big" style="width:150px;" disabled type="button" id="btnPDF" form-mode="Edit" onclick="GM.RPCallMargin.GenPDF(this)" @(!isView ? "disabled" : "")>
+                                                    PDF
+                                                </button>
+                                                <button class="btn btn-success btn-round btn-big" style="width:150px;" disabled type="button" id="btnExcel" form-mode="Edit" onclick="GM.RPCallMargin.GenExcel(this)" @(!isView ? "disabled" : "")>
+                                                    Excel
+                                                </button>
+                                                <button class="btn btn-primary btn-round btn-big" style="width:150px;" type="button" id="btnReleaseSwift" form-mode="Edit" onclick="window.location.href='/RPReleaseMessage/IndexCallMargin'" @(!isView ? "disabled" : "")>
+                                                    Release Swift
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Center Modal -->
+<div class="modal center fade" id="adjust-prp" tabindex="-1" role="dialog">
+    <div class="modal-dialog-popup modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title"><p class="form-control-static">Adjust Call Margin</p></h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="modal-sub-title inner-padding">
+                    <h4> <p class="form-control-static">Instrument : PRP</p> </h4>
+                    <div class="row row-fix-d1">
+                        <div class="col-xs-12">
+                            <div class="form-container form-horizontal">
+                                <div class="row">
+                                    <div class="col-xs-12 form-wrapper">
+                                        <div class="form-group" id="from-adjust-fcy">
+                                            <label class="control-label col-md-2">Client Margin</label>
+                                            <div class="col-md-2">
+                                                <input class="form-control text-box single-line" id="client_margin" name="client_margin" type="text" value="" oninput="return numberOnlyAndDotAndMinute(this);">
+                                            </div>
+                                            <label class="control-label col-md-1" style="width: 9%;">KTB Trigger</label>
+                                            <div class="col-md-1">
+                                                <p id="textTrigger" class="form-control-static"></p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a id="btnProcessAdjust" class="btn btn-primary btn-round btn-big" style="padding: 7px 20px;" onclick="GM.RPCallMargin.Detail.Process(this);">
+                                                    Process
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Int Receive/Paid EOM</label>
+                                            <div class="col-xs-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(model => model.FormAction.eom_int_flag, "true", htmlAttributes: new { @ischeck = "false" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(model => model.FormAction.eom_int_flag, "false", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-detail-prp" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th><br /><br />Counter <br /> Party</th>
+                                <th>Threshold</th>
+                                <th>CCY</th>
+                                <th>Exposure</th>
+                                <th>ORG<br />Exposure</th>
+                                <th>Interest<br />Receive</th>
+                                <th>ORG<br />Interest<br />Receive</th>
+                                <th>WH<br />Tax<br />1%</th>
+                                <th>ORG<br />WH<br />Tax<br />1%</th>
+                                <th>Interest<br />Paid</th>
+                                <th>ORG<br />Interest<br />Paid</th>
+                                <th>Position<br />Yesterday</th>
+                                <th>Margin</th>
+                                <th>Accrue<br />Int.<br />Yesterday</th>
+                                <th>Margin<br />Call<br />Rec=+,<br />Pay=-</th>
+                                <th>Close<br />Margin</th>
+                                <th>Minimum<br />Transer</th>
+                                <th>Margin<br />Balance</th>
+                                <th>Int.<br />Rate</th>
+                                <th>Int.Per<br />Day</th>
+                                <th>Net<br />Accrue<br />Int.Today</th>
+                                <th>Net<br />Accrue<br />Int.Yesterday</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button id="btnSubmitAdjust" type="button" class="btn btn-primary btn-round btn-big" data-dismiss="modal" onclick="GM.RPCallMargin.Detail.Submit(this)">Submit</button>
+                    <button type="button" class="btn btn-default btn-round btn-big" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal center fade" id="adjust-brp" tabindex="-1" role="dialog">
+    <div class="modal-dialog-popup modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="modal-sub-title inner-padding">
+                    <h4><p class="form-control-static">Instrument : BRP &nbsp;&nbsp;&nbsp;&nbsp; Threshold : <label id="lbl_threshold"></label></p> </h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-detail-brp" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Contract<br />No.</th>
+                                <th>CCY</th>
+                                <th>Exposure</th>
+                                <th>ORG<br />Exposure</th>
+                                <th>Interest<br />Receive</th>
+                                <th>ORG<br />Interest<br />Receive</th>
+                                <th>WH<br />Tax<br />1%</th>
+                                <th>ORG<br />WH<br />Tax<br />1%</th>
+                                <th>Interest<br />Paid</th>
+                                <th>ORG<br />Interest<br />Paid</th>
+                                <th>Position<br />Yesterday</th>
+                                <th>Margin<br />Call</th>
+                                <th>Close<br />Margin</th>
+                                <th>Margin</th>
+                                <th>Margin<br />Balance</th>
+                                <th>Int.<br />Rate</th>
+                                <th>Int.Per<br />Day</th>
+                                <th>Int.<br />Recv<br />Today</th>
+                                <th>Int.<br />Recv<br />Yesterday</th>
+                                <th>Int.<br />Pay<br />Today</th>
+                                <th>Int.<br />Pay<br />Yesterday</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button id="btnSubmitAdjustBrp" type="button" class="btn btn-primary btn-round btn-big" data-dismiss="modal" onclick="GM.RPCallMargin.DetailBRP.Submit(this)">Submit</button>
+                    <button type="button" class="btn btn-default btn-round btn-big" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavRPCallMargin').val());
+        });
+    </script>
+
+    @*@Scripts.Render("~/module/rpcallmargin")*@
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/validation")
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/rpcallmargin")
+}
