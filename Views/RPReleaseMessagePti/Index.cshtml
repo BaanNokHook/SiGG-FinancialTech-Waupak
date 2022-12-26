@@ -1,0 +1,603 @@
+﻿@model GM.Data.View.RPTransaction.RPDealEntryViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Repo Release Message PTI
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search Repo Release Message PTI</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="show-more-less" class="btn btn-link less-more-option">
+                                Show less option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.from_trans_no, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.from_trans_no, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.to_trans_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.to_trans_no, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="advance-form">
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2">AsofDate From</label>
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.from_settlement_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <label class="control-label col-xs-2">AsofDate To</label>
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.to_settlement_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.counter_party_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.counter_party_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCounterparty", "CounterPartyFund")" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_counterparty"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.trans_deal_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_trans_deal_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.trans_deal_type_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_deal_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_deal_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" style="display:none" data-action="@Url.Action("FillTransDealType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_trans_deal_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_trans_deal_type"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(mode => Model.FormSearch.event_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_event_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.event_type, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.event_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.event_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" style="display:none" data-action="@Url.Action("FillEventType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_event_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <ul id="ul_event_type"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.payment_method, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_payment_method" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.payment_method, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.payment_method, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.payment_method, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" style="display:none" data-action="@Url.Action("FillPaymentMethod", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_payment_method" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_payment_method"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(mode => Model.FormSearch.trans_mt_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_trans_mt_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.trans_mt_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_mt_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_mt_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" style="display:none" data-action="@Url.Action("FillTransMtCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_trans_mt_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_trans_mt_code"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="Edit" onclick="GM.RPReleaseMessagePti.ReleaseMessage(this)">
+                                        RP Release Message PTI
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><input id="CheckAll" name="checkbox" type="checkbox" value="true"></th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.repo_deal_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_deal_type_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.event_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.port)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.counter_party_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.cur)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.payment_method)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_mt_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trade_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.settlement_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.maturity_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.from_trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.to_trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.from_trade_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.to_trade_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.from_settlement_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.to_settlement_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.from_maturity_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.to_maturity_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_deal_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.counter_party_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_deal_type_name)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal center fade" id="check_releasemt" tabindex="-1" role="dialog" aria-labelledby="check_releasemt">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Release PTI</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="clearfix">
+                    <div class="data-list col-xs-12">
+                        @*<table id="modal_release_mt" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                                <thead>
+                                <th>Release PTI</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>*@
+                    </div>
+                    <textarea id="txtarea_release_pti" class="form-control" rows="25" readonly=""> </textarea>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-warning btn-round btn-long" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success btn-round btn-long" data-dismiss="modal" onclick="PopUpDownload()">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="download"></div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #search-form .text-box {
+            width: 235px !important;
+        }
+
+        #search-form .dropdown {
+            width: 235px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script src="~/Content/vendors/download/download.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#NavBar").html($('#NavRPReleaseMessage').val());
+
+            $('#show-more-less').click(function () {
+                $(this).parents(".box-content").find('.advance-form').slideToggle(0);
+                //$table.floatThead("reflow");
+                if ($('#show-more-less i').hasClass('icon-chevron-up')) {
+                    $(this).html('Show less option <i class="feather-icon icon-chevron-down"></i>');
+                } else {
+                    $(this).html('Show more option <i class="feather-icon icon-chevron-up"></i>');
+                }
+            });
+
+            GM.RPReleaseMessagePti = {};
+            GM.RPReleaseMessagePti.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                order: [
+                    [2, "asc"]
+                ],
+                buttons: [],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columnDefs:
+                [
+                    {
+                        targets: 0,
+                        data: "trans_no",
+                        searchable: false,
+                        orderable: false,
+                        className: 'dt-body-center',
+                        render: function (data, type, row) {
+                            console.log(data);
+                            return '<input type="checkbox"' + ' id="chk_' + data + '" class="filter-ck" />';
+                        }
+                    },
+                    { targets: 1, data: "RowNumber", orderable: false },
+                    { targets: 2, data: "trans_no" },
+                    { targets: 3, data: "repo_deal_type" },
+                    { targets: 4, data: "trans_deal_type_name" },
+                    { targets: 5, data: "event_type" },
+                    { targets: 6, data: "port" },
+                    { targets: 7, data: "counter_party_code" },
+                    { targets: 8, data: "cur" },
+                    { targets: 9, data: "payment_method" },
+                    { targets: 10, data: "trans_mt_code" },
+                    {
+                        targets: 11, data: "trade_date",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 12, data: "settlement_date",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 13, data: "maturity_date",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    { targets: 14, data: "from_trans_no", visible: false },
+                    { targets: 15, data: "to_trans_no", visible: false },
+                    { targets: 16, data: "from_trade_date", visible: false },
+                    { targets: 17, data: "to_trade_date", visible: false },
+                    { targets: 18, data: "from_settlement_date", visible: false },
+                    { targets: 19, data: "to_settlement_date", visible: false },
+                    { targets: 20, data: "from_maturity_date", visible: false },
+                    { targets: 21, data: "to_maturity_date", visible: false },
+                    { targets: 22, data: "trans_deal_type", visible: false },
+                    { targets: 23, data: "counter_party_name", visible: false },
+                    { targets: 24, data: "trans_deal_type_name", visible: false },
+                    {
+                        targets: 25,
+                        orderable: false,
+                        data: "trans_no",
+                        className: "dt-body-center",
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<button class="btn btn-default btn-round" form-mode="edit" onclick="location.href=\'@Url.Action("Select", (string)this.ViewContext.RouteData.Values["controller"])?id=[' + row.trans_no + ']\'" ><i class="feather-icon icon-edit"></i></button>';
+                            html += '<button class="btn btn-default btn-round" form-mode="viewmt" onclick="GetReleaseMT(' + "'" + row.trans_no + "'" + ',' + "'" + row.event_type + "'" + ',' + "'" + row.trans_deal_type_name + "'" + ',' + "'" + row.payment_method + "'" + ',' + "'" + row.trans_mt_code + "'" + ',' + "'" + row.cur + "'" + ')" ><i class="feather-icon icon-message-square"></i></button>';
+                            return html;
+                        }
+                    }
+                ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                },
+                fnPreDrawCallback: function () {
+                    $('#x-table-data').DataTable().columns(5).search($('#FormSearch_event_type').val());
+                    $('#x-table-data').DataTable().columns(18).search($('#FormSearch_from_settlement_date').val());
+                    $('#x-table-data').DataTable().columns(19).search($('#FormSearch_to_settlement_date').val());
+                },
+                createdRow: function(row, data, dataIndex){
+                    if (data.release_printed == "Y"){
+                        $('td', row).css('color', '#00B0FF');
+                    }
+                }
+            });
+
+            //Function : Checkbox
+            $('#x-table-data').on('click', 'tr', function () {
+
+                GM.RPReleaseMessagePti.Table = $('#x-table-data').DataTable();
+                var data = GM.RPReleaseMessagePti.Table.row(this).data();
+
+                if (typeof data != 'undefined') {
+                    if ($(this).find('.filter-ck').prop('checked') == true) {  //update the cell data with the checkbox state
+                        var id = 'chk_' + data.trans_no;
+                        var inputyes = $("[id=" + id + "]");
+                        inputyes.removeAttr('checked');
+                        inputyes.attr('checked', 'checked');
+                        inputyes.prop('checked', true);
+                    } else {
+                        var id = 'chk_' + data.trans_no;
+                        var inputno = $("[id=" + id + "]");
+                        inputno.removeAttr('checked');
+                        inputno.prop('checked', false);
+                    }
+                }
+            });
+
+            //Function : Checkbox All
+            $('#x-table-data_wrapper').on("click", '#CheckAll', function () {
+                if ($(this).prop('checked') == true) {
+                    $('.filter-ck').prop('checked', true);
+                }
+                else {
+                    $('.filter-ck').prop('checked', false);
+                }
+            });
+            //Function : Btn ReleaseMessage
+            GM.RPReleaseMessagePti.ReleaseMessage = function (btn) {
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                ReleaseMessage();
+            };
+            //Function : DDl Event Type
+            $("#ul_event_type").on("click", function (event) {
+                var EventType = $("#ddl_event_type").find(".selected-value").val();
+                    GM.RPReleaseMessagePti.Form.Search();
+            });
+        });
+        //End document.ready
+
+        //Function : ReleaseMessage
+        function ReleaseMessage() {
+            var rowData = $('#x-table-data').DataTable().rows($('#x-table-data .filter-ck:checked').closest('tr')).data();
+            var transNoList = [];
+            var countReleasePrinted = 0;
+
+            for (var i = 0; i < rowData.length; i++) {
+                console.log(rowData[i].trans_no);
+                transNoList.push({
+                    trans_no: rowData[i].trans_no,
+                    payment_method: rowData[i].payment_method,
+                    trans_mt_code: rowData[i].trans_mt_code,
+                    event_type: rowData[i].event_type,
+                    cur: rowData[i].cur
+                });
+
+                if (rowData[i].release_printed == 'Y') {
+                    countReleasePrinted++;
+                }
+
+            }
+
+            if (transNoList.length > 0) {
+
+                var msg = "Comfirm ReleaseMessage?";
+                if (countReleasePrinted > 0) {
+                    msg = "Message already released, do you want to release again?";
+                }
+
+                setTimeout(function() {
+                    swal({
+                            title: msg,
+                            text: "",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "No",
+                            closeOnConfirm: true,
+                            closeOnCancel: true
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: "@Url.Action("ReleaseMessagePti", (string)this.ViewContext.RouteData.Values["controller"])",
+                                    type: 'POST',
+                                    contentType: 'application/json; charset=utf-8',
+                                    cache: false,
+                                    dataType: 'JSON',
+                                    traditional: true,
+                                    data: JSON.stringify(transNoList),
+                                    success: function (response) {
+                                        $('.spinner').css('display', 'none');
+
+                                        if (response[0].Success == true) {
+                                            download(response[0].file_content, response[0].file_name, "text/xml");
+                                        }
+                                        else {
+                                            setTimeout(function () {
+                                                swal("Fail", response[0].Message, "error");
+                                            }, 100);
+                                        }
+                                        GM.RPReleaseMessagePti.Form.Search();
+                                    },
+                                    error: function(jqXhr, textStatus) {
+                                        $('.spinner').css('display', 'none');
+
+                                        if (textStatus === "error") {
+                                            var objJson = jQuery.parseJSON(jqXhr.responseText);
+
+                                            if (Object.prototype.toString.call(objJson) === '[object Array]' &&
+                                                objJson.length == 0) {
+                                                // Array is empty
+                                                // Do Something
+                                            } else {
+                                                var errorMsg = jqXhr.statusText + " " + objJson.Message;
+                                                alert("An error occurred, " + errorMsg,
+                                                    function (e) {
+                                                    },
+                                                    {
+                                                        ok: "OK",
+                                                        classname: "custom-class"
+                                                    });
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                }, 100);
+            }
+            else {
+                swal("Warning", "Please Select [Trans No] To RPReleaseMessage", "error");
+            }
+        }
+
+        function PopUpDownload() {
+
+            var strDatetime = moment().format('DDMMYYhhmmss');
+            var file_content = $('#txtarea_release_pti').val();
+            var file_name = 'DVP_RVPREPO' + strDatetime +'.xml';
+
+            download(file_content, file_name, "text/xml");
+
+        }
+
+
+    </script>
+    @*@Scripts.Render("~/module/rpreleasemsgindex")*@
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/RPReleaseMsgPtiIndex")
+}
+

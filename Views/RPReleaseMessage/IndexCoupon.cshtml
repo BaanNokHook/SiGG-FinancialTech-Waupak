@@ -1,0 +1,270 @@
+﻿@model GM.Data.View.PaymentProcess.RPCouponViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Repo Release Message
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search Repo Release Message Coupon</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("SearchCoupon", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        @Html.HiddenFor(model => model.FormSearch.BusinessDate)
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.instrument_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            <div class="dropdown" style="max-width:250px">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_instrument" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.instrument_code, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.instrument_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.instrument_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillInstrument", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrument" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_instrument"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.payment_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.payment_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormLabel.counter_party_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown" style="max-width:250px">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.counter_party_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCounterParty", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_counterparty"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.FormLabel.fund_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown" style="max-width:250px">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_counterparty_fund" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.fund_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_fund_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.fund_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCounterPartyFund", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty_fund" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_counterparty_fund"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                            </div>
+                                            <div class="col-xs-4">
+                                            </div>
+                                            @Html.LabelFor(mode => Model.FormSearch.event_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown" style="max-width:250px">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_event_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.event_type, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.event_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.event_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" style="display:none" data-action="@Url.Action("FillEventType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_event_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <ul id="ul_event_type"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- Div Detail -->
+            <div class="box-content table-content">
+                <div class="group box-header-wrapper">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Details</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <div class="add-data">
+                                <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="Edit" onclick="GM.RPCoupon.ReleaseMessage(this)">
+                                    @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="outer-table-wrapper">
+                    <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th><input id="CheckAll" name="checkbox" type="checkbox" value="true"></th>
+                                <th>@Html.LabelFor(mode => mode.TableList.RowNumber)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.trans_cno)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.instrument_code)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.payment_date)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.event_date)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.counter_party_code)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.fund_code)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.cur)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.ending_par)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.coupon_rate)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.unit)</th>
+                                <th>@Html.LabelFor(mode => mode.TableList.face_value)</th>
+                                <th class="action" style="text-align:center;">
+                                    <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal center fade" id="check_releasemt" tabindex="-1" role="dialog" aria-labelledby="check_releasemt">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Release MT</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="clearfix">
+                    <div class="data-list col-xs-12">
+                        <table id="modal_release_mt" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                            <th>ReleaseMT</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-default btn-round btn-long" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        $(document).ready(function () {
+            $("#NavBar").html($('#NavRPReleaseMessage').val());
+        });
+       
+    </script>
+    @*@Scripts.Render("~/module/rpreleasemsgcouponindex")*@
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/rpreleasemsgcouponindex")
+}

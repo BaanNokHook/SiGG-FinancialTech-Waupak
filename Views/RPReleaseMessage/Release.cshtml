@@ -1,0 +1,1018 @@
+﻿@model GM.Data.Model.RPTransaction.RPTransModel
+@{
+    ViewBag.Title = "Release";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    bool isUpdate = IsUpdate;
+    string eventType = ViewBag.eventType;
+}
+
+<section class="working-content working-content-d1" data-spy="scroll" data-target="#security-scrollspy" data-offset="120">
+    <div class="container-fluid container-fixed">
+        @using (Html.BeginForm("ReleaseMessage", "RPReleaseMessage", FormMethod.Post, new { @class = "one-col-form", id = "action-form", }))
+        {@Html.HiddenFor(model => model.release_printed)
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title-wrapper">
+                    <div class="left-content">
+                        <div class="page-title">
+                            <div class="title">
+                                <h1>
+                                    Repo Release Message
+                                </h1>
+                            </div>
+                            <div class="breadcrumb-wrap">
+                                <ol class="breadcrumb" id="NavBar"></ol>
+                            </div>
+                            <div class="vertical-line d1"></div>
+                            <div class="dropdown page-action">
+                                <button class="btn btn-primary dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Release Option
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a onclick="GM.RPReleaseMessage.Release(this)">GEN RELEASE</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="vertical-line d1"></div>
+                            <div class="dropdown page-action">
+                                <button class="btn btn-primary dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onclick="location.href='@Url.Action("Index", "RPReleaseMessage", new{search=ViewBag.eventType})'">
+                                    Back
+                                    <span class="caret"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Box Outside -->
+                <div class="box-outside box-outside-d1 no-padding">
+                    <div class="header-row">
+                        <div class="form-container form-container-d1 form-inline">
+                            <div class="row">
+                                <div class="col-xs-12 no-padding">
+                                    <div class="form-group-wrapper">
+                                        <div class="deal-status">
+                                            <span class="title">Deal Status :</span>
+                                            <span class="label label-new">@Model.trans_status</span>
+                                            @Html.HiddenFor(model => model.trans_status)
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="deal-status">
+                                            <span class="title">Deal State :</span>
+                                            <span class="label label-accept">@Model.trans_state</span>
+                                            <input id="Hid_trans_state" type="hidden" name="trans_state" value="@Model.trans_state">
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="deal-status">
+                                            <label class="title">Trans No :</label>
+                                            <span id="Lab_trans_no" class="label label-danger">@Model.trans_no</span>
+                                            <input id="Txt_trans_no" type="hidden" name="trans_no" value="@Model.trans_no">
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="form-group">
+                                            <label class="control-label">User</label>
+                                            <p class="form-control-static">@Model.user_id</p>
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="form-group">
+                                            <label class="control-label">Username</label>
+                                            <p class="form-control-static">@Model.username</p>
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="form-group">
+                                            <label class="control-label">Portfolio</label>
+                                            <div class="dropdown">
+                                                <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span class="selected-data">@Model.port_name</span>
+                                                    <span class="caret"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="form-group">
+                                            <label class="control-label">Deskbook</label>
+                                            <p class="form-control-static">@Model.desk_group_name</p>
+                                        </div>
+                                        <div class="vertical-line d1"></div>
+                                        <div class="form-group">
+                                            <label class="control-label">Dealer Code</label>
+                                            <div class="dropdown">
+                                                <button disabled class="btn btn-default dropdown-toggle" style="min-width:250px;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span class="selected-data">@Model.trader_name</span>
+                                                    <span class="caret"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <div class="box-content-wrapper-d1 d-table">
+                        <!-- Deal -->
+                        <div id="deal" class="box-content box-content-d1 first col-30 no-padding d-table-cell">
+                            <div class="form-container form-horizontal form-container-d1">
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Deal Detail</h4>
+                                        </div>
+                                        <div class="form-group-wrapper">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.repo_deal_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="radio-form no-padding">
+                                                        <div class="radio select-btn-radio">
+                                                            <input id="Txt_repo_deal_type" type="hidden" name="repo_deal_type" value="@Model.repo_deal_type">
+                                                            <label id="Lab_repo_deal_type_Pri" class="radio-inline checked">
+                                                                <input id="repo_deal_type_Pri" disabled class="btn-radio" type="radio" name="inst">Private Repo
+                                                            </label>
+                                                            <label id="Lab_repo_deal_type_Bil" class="radio-inline">
+                                                                <input id="repo_deal_type_Bil" disabled class="btn-radio" type="radio" name="inst">Bilateral Repo
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.trans_deal_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <input id="Txt_trans_deal_type_name" type="hidden" name="trans_deal_type_name" value="@Model.trans_deal_type_name">
+                                                        <input id="Txt_trans_deal_type" type="hidden" name="trans_deal_type" value="@Model.trans_deal_type">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span id="Sp_trans_deal_type_name" class="selected-data"></span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.purchase_price, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group" style="width:100%;max-width:250px;">
+                                                        <input type="text" readonly class="form-control" aria-label="..." value="@(Model.purchase_price != null ? Model.purchase_price.Value.ToString("N2"):"")" />
+                                                        <div class="input-group-btn dropdown">
+                                                            <button type="button" disabled class="btn btn-default dropdown-toggle" style="width: 70px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <span class="selected-data">@Model.cur</span>
+                                                                @Html.TextBoxFor(model => model.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                        <!-- /btn-group -->
+                                                    </div>
+                                                    <!-- /input-group -->
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.deal_period, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5">
+                                                    <div class="input-group amount-choose" style="max-width: 250px;">
+                                                        <span class="input-group-btn">
+                                                            <button disabled class="btn btn-default" type="button">
+                                                                <i class="feather-icon icon-minus"></i>
+                                                            </button>
+                                                        </span>
+                                                        <input type="text" readonly class="form-control text-center" placeholder="@Model.deal_period">
+                                                        <span class="input-group-btn">
+                                                            <button disabled class="btn btn-default" type="button">
+                                                                <i class="feather-icon icon-plus"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                    <!-- /input-group -->
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.trade_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                        @Html.EditDateFor(model => Model.trade_date, new { id = "Txt_trade_date", @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.settlement_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                        @Html.EditDateFor(model => Model.settlement_date, new { id = "Txt_settlement_date", @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.maturity_date, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                        @Html.EditDateFor(model => Model.maturity_date, new { @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.trans_in_term_id, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span class="selected-data">@Model.trans_in_term_id_name</span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.bilateral_contract_no, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group" style="width: 100%;max-width: 250px;">
+                                                        <input type="text" readonly class="form-control" aria-describedby="basic-addon1" value="@Model.bilateral_contract_no">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.purpose, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span class="selected-data">@Model.purpose</span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.trans_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span class="selected-data">@Model.trans_type</span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.basis_code, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <input id="Txt_basis_code_name" type="hidden" name="basis_code_name" value="@Model.basis_code_name">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span id="Sp_basis_code_name" class="selected-data"></span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-fix-d1">
+                                    <hr>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Special Case</h4>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-4 col-md-4 col-lg-4" style="padding-left: 3px;">
+                                                Case
+                                            </label>
+                                            <div class="col-xs-8 col-md-8 col-lg-8">
+                                                <div class="dropdown" style="max-width: 250px;">
+                                                    <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        <span class="selected-data"><span class="selected-data">@(Model.special_case_name == "" ? "None" : Model.special_case_name)</span></span>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Amount -->
+                        <div id="amount" class="box-content box-content-d1 second col-30 no-padding d-table-cell">
+                            <div class="form-container form-horizontal form-container-d1">
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Interest</h4>
+                                        </div>
+                                        <div class="form-group-wrapper no-mb">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.interest_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="radio-form">
+                                                        <div class="radio select-btn-radio">
+                                                            <input id="Txt_interest_type" type="hidden" name="interest_type" value="@Model.interest_type">
+                                                            <label id="Lab_interest_type_Fixed" class="radio-inline checked">
+                                                                <input id="Radio_interest_type_Fixed" disabled class="btn-radio" type="radio" name="int">Fixed Rate
+                                                            </label>
+                                                            <label id="Lab_interest_type_Float" class="radio-inline">
+                                                                <input id="Radio_interest_type_Float" disabled class="btn-radio" type="radio" name="int">Float Rate
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.interest_rate, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                        <input id="Txt_interest_rate" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.interest_rate != null ? Model.interest_rate.Value.ToString("N8"):"")">
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.interest_spread, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                        <input id="Txt_interest_spread" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.interest_spread != null ? Model.interest_spread.Value.ToString("N8"):"")">
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-4 col-md-5 col-lg-4">Total Int.</label>
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                        <input id="Txt_interest_total_int" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.interest_rate != null && Model.interest_spread != null ? (Model.interest_rate + Model.interest_spread).Value.ToString("N8") : "")">
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-link link-w-icon hidden" type="button" data-toggle="modal" id="btn_checkinterest">
+                                                @*data-target="#check-interest"*@
+                                                <i class="feather-icon icon-search"></i>
+                                                <span>Check interest Period</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <hr>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Cost</h4>
+                                        </div>
+                                        <div class="form-group-wrapper no-mb">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.cost_type, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="radio-form">
+                                                        <div class="radio select-btn-radio">
+                                                            <input id="Txt_cost_type" type="hidden" name="cost_type" value="@Model.cost_type">
+                                                            <label id="Lab_cost_type_Fixed" class="radio-inline">
+                                                                <input id="Radio_cost_type_Fixed" disabled class="btn-radio" type="radio" name="int">Fixed Rate
+                                                            </label>
+                                                            <label id="Lab_cost_type_Float" class="radio-inline">
+                                                                <input id="Radio_cost_type_Float" disabled class="btn-radio" type="radio" name="int">Float Rate
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.cost_of_fund, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                        <input id="Txt_cost_of_fund" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.cost_of_fund != null ? Model.cost_of_fund.Value.ToString("N8"):"")">
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.cost_spread, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                        <input id="Txt_cost_spread" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.cost_spread != null ? Model.cost_spread.Value.ToString("N8"):"")">
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-4 col-md-5 col-lg-4">Total Cost.</label>
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="input-group no-btn" style="max-width: 250px;width: 100%;">
+                                                        <input id="Txt_cost_total_int" readonly type="sub-desk" class="form-control" placeholder="Input numbers only" value="@(Model.cost_total != null ? Model.cost_total.Value.ToString("N8"):"")">
+                                                        <span disabled class="input-group-addon">
+                                                            <span class="text">%</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <hr>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>EXTEND DEAL</h4>
+                                        </div>
+                                        <div class="form-group-wrapper no-mb">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.extend, htmlAttributes: new { @class = "control-label col-xs-4 col-md-5 col-lg-4" })
+                                                <div class="col-xs-5 col-md-7 col-lg-8">
+                                                    <div class="dropdown" style="max-width: 250px;width: 100%;">
+                                                        <input id="txt_append_name" type="hidden" name="append_name" value="@Model.extend_name">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span id="Sp_append_name" class="selected-data"></span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <hr>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Roll Over</h4>
+                                        </div>
+                                        <div class="form-group-wrapper no-mb">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-4 col-md-4 col-lg-4">Net Settlement</label>
+                                                <div class="col-xs-8 col-md-8 col-lg-8">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            @if (Model.net_settement_flag.Value)
+                                                            {
+                                                                <input data-val="true" id="net_settement_flag" type="checkbox" disabled checked="checked">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input data-val="true" id="net_settement_flag" type="checkbox" disabled>
+                                                            }
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-wrapper no-mb">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-4 col-md-4 col-lg-4">Reference No.</label>
+                                                <div class="col-xs-8 col-md-8 col-lg-8">
+                                                    <div class="input-group" style="min-width: 250px;">
+                                                        @Html.EditorFor(model => model.ref_trans_no, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                        <div class="pointer"></div>
+                                                        <span class="input-group-addon btnPopupRefNo">
+                                                            <span class="feather-icon icon-search"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Counter Party -->
+                        <div id="counter-party-deal" class="box-content box-content-d1 third col-40 no-padding d-table-cell">
+                            <div class="form-container form-horizontal form-container-d1">
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Total Amount</h4>
+                                        </div>
+                                        <div class="form-group-wrapper">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.repurchase_price, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <p class="form-control-static">@(Model.repurchase_price != null ? Model.repurchase_price.Value.ToString("N2") : "")</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.interest_amount, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <p class="form-control-static">@(Model.interest_amount != null ? Model.interest_amount.Value.ToString("N2") : "")</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.withholding_amount, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <p class="form-control-static">@(Model.withholding_amount != null ? Model.withholding_amount.Value.ToString("N2") : "")</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.exch_rate, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="input-group" style="width: 100%;max-width: 250px;">
+                                                        <input type="text" readonly class="form-control" aria-describedby="basic-addon1" value="@(Model.exch_rate != null ? Model.exch_rate.Value.ToString("N8"):"")">
+                                                        <div class="input-group-btn dropdown">
+                                                            <input id="Txt_cur_pair1" type="hidden" name="cur_pair1" value="@Model.cur_pair1">
+                                                            <button type="button" disabled class="btn btn-default dropdown-toggle" style="width:70px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <span id="Sp_cur_pair1" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="input-group-btn dropdown">
+                                                            <input id="Txt_cur_pair2" type="hidden" name="cur_pair2" value="@Model.cur_pair2">
+                                                            <button type="button" disabled class="btn btn-default dropdown-toggle" style="width:70px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <span id="Sp_cur_pair2" class="selected-data"></span>
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <hr>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Counter Party Detail</h4>
+                                        </div>
+                                        <div class="form-group-wrapper">
+                                            <div class="form-group">
+                                                <input id="Hid_counter_party_id" type="hidden" name="counter_party_id" value="@Model.counter_party_id">
+                                                @Html.LabelFor(model => model.counter_party_id, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span class="selected-data">@Model.counter_party_name</span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.swift_code, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <p class="form-control-static">@Model.swift_code</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.counter_party_fund_id, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <input id="Txt_counter_party_fun" type="hidden" name="counter_party_fun" value="@Model.counter_party_fund_name">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span id="Sp_counter_party_fun" class="selected-data"></span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.wht_tax, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    @*<p class="form-control-static">@(Model.wht_tax != null ? Model.wht_tax.Value.ToString("N8") : "")</p>*@
+                                                    <p class="form-control-static">@Model.absorb</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.payment_method, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="input-group" style="max-width:250px;width:100%">
+                                                        <div class="input-group-btn dropdown" style="max-width:125px;width:50%">
+                                                            <button disabled class="btn btn-default dropdown-toggle" style="width:100%;max-width:125px;" id="ddl_counterparty_payment" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.payment_method, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.payment_method, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input style="display:none" type="text" data-action="@Url.Action("FillCounterPartyPayment", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty_payment" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_counterparty_payment"></ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group-btn dropdown" style="max-width:125px;width:50%">
+                                                            <button class="btn btn-default dropdown-toggle" style="width:100%;max-width:125px;" id="ddl_trans_mt_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                @Html.SpanFor(model => model.trans_mt_code, "Select...", new { @class = "selected-data" })
+                                                                @Html.TextBoxFor(model => model.trans_mt_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                                @Html.TextBoxFor(model => model.trans_mt_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="search-dropdown-menu">
+                                                                    <input style="display:none" type="text" data-action="@Url.Action("FillTransMtCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_trans_mt_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                                <hr>
+                                                                <ul id="ul_trans_mt_code"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <span id="payment_method_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="divSwiftChannel">
+                                                <label class="control-label col-xs-5 col-md-5 col-lg-5">Swift Channel</label>
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="input-group-btn dropdown" style="max-width:250px;">
+                                                        <button class="btn btn-default dropdown-toggle" style="width: 100%;max-width: 250px;" id="ddl_channel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.swift_channel_desc, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.swift_channel, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.swift_channel_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" style="display:none" data-action="@Url.Action("FillSwiftChannel", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_channel" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            </div>
+                                                            <ul id="ul_channel"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.formula, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="dropdown" style="max-width: 250px;">
+                                                        <input id="txt_formula_name" type="hidden" name="formula" value="@Model.formula">
+                                                        <button disabled class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            <span id="Sp_formula_name" class="selected-data"></span>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.threshold, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <p class="form-control-static">@Model.threshold</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <hr>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Early Termination</h4>
+                                        </div>
+                                        <div class="form-group-wrapper">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.terminate_date, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                                <div class="col-xs-7 col-md-7 col-lg-7">
+                                                    <div class="input-group date" style="max-width: 250px;width: 100%;">
+                                                        @Html.EditDateFor(model => model.terminate_date, new { @class = "form-control date-time-picker-weekend", @readonly = "" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.fee_amount, htmlAttributes: new { @class = "control-label col-xs-5 col-md-5 col-lg-5" })
+                                            <div class="col-xs-7 col-md-7 col-lg-7">
+                                                <div class="input-group" style="width: 100%; max-width: 250px;">
+                                                    @Html.EditorFor(model => model.fee_amount, new { htmlAttributes = new { @maxlength = 10, @class = "form-control", @readonly = "" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Security -->
+                    <div class="box-content-wrapper-d1">
+                        <div id="security-deal" class="box-content box-content-d1 no-padding">
+                            <div class="form-container form-container-d1 form-inline">
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12">
+                                        <div class="left-content">
+                                            <div class="form-sub-title w-btn">
+                                                <h4>Security</h4>
+                                            </div>
+                                        </div>
+                                        <div class="right-content">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="outer-table-wrapper outer-table-d1 clearfix">
+                                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.RowNumber)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.trans_no)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.instrument_code)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.isin_code)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.port_for_label)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.repo_deal_type)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.cur)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.ytm)</th>
+
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.clean_price)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dirty_price)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.haircut)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.unit)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.par)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.market_value)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.cash_amount)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dirty_price_after_hc)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.interest_amount)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.wht_amount)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.temination_value)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.maturity_date)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.coupon_rate)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.par_unit)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.variation)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.dm)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.trade_date)</th>
+                                                    <th>@Html.LabelFor(mode => mode.RPTransColateralModel.settlement_date)</th>
+
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row row-fix-d1">
+                                    <div class="col-xs-12">
+                                        <div class="form-group-wrapper">
+                                            <div class="form-group">
+                                                <label class="control-label">Sum Repo Int Amt</label>
+                                                <p id="Sum_interest_amount" class="form-control-static"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Sum With Holding Tax Amt</label>
+                                                <p id="Sum_wht_amount" class="form-control-static"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Sum Termination Value</label>
+                                                <p id="Sum_temination_value" class="form-control-static"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Sum Cash Amount</label>
+                                                <p id="Sum_cash_amount" class="form-control-static"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Summary -->
+                    <div id="remark-deal" class="box-content no-padding">
+                        <div id="remark-deal-icon" class="box-header big-head expand-able collapsed" aria-expanded="false" data-toggle="collapse" data-target="#remark-deal-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-plus"></i><h3>Remark</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="remark-deal-form" class="form-container form-horizontal have-head collapse">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper">
+                                        <input id="Txt_event_type" type="hidden" name="event_type" value="@Model.event_type">
+                                        @Html.HiddenFor(model => model.event_type)
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.remark_id, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-3">
+                                                <div class="dropdown">
+                                                    <button disabled class="btn btn-default dropdown-toggle" id="ddl_remark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        <span class="selected-data">@((Model.remark_desc == null) || (Model.remark_desc == "") ? "None" : Model.remark_desc)</span>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.deal_remark, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-7">
+                                                <textarea disabled class="form-control" rows="5" name="deal_remark">@Model.deal_remark</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.commentaries, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-7">
+                                                <textarea disabled class="form-control" rows="5" name="commentaries">@Model.commentaries</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="deal-submit" class="page-button-submit page-submit-d1">
+                        <input id="Hid_Previous" type="hidden" name="Previous" value="@Model.btn_Previous">
+                        <button class="btn btn-primary btn-round btn-big" type="button" id="Btn_Previous" form-mode="previous" onclick="GM.RPReleaseMessage.Previous(this)">
+                            previous
+                        </button>
+                        <button class="btn btn-success btn-round btn-big" type="button" id="Btn_Approve" form-mode="release" onclick="GM.RPReleaseMessage.Release(this)" @(!isUpdate ? "disabled" : "")>
+                            gen release
+                        </button>
+                        <input id="Hid_Next" type="hidden" name="Next" value="@Model.btn_Next">
+                        <button class="btn btn-primary btn-round btn-big" type="button" id="Btn_Next" form-mode="next" onclick="GM.RPReleaseMessage.Next(this)">
+                            Next
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    </div>
+</section>
+
+<!-- Check Interest -->
+<div class="modal center fade" id="check-interest" tabindex="-1" role="dialog" aria-labelledby="check-interest">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Checking Interest Period</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="clearfix">
+                    <div class="data-list col-xs-7">
+                        <table id="tbl_detailheader">
+                            <tbody>
+                                <tr>
+                                    <th>Settlement Date</th>
+                                    <td><label id="lbl_selltementdate_check"></label></td>
+                                    <th>Maturity Date</th>
+                                    <td><label id="lbl_matdate_check"></label></td>
+                                </tr>
+                                <tr>
+                                    <th>Purchase Price</th>
+                                    <td><label id="lbl_purchase_check"></label></td>
+                                    <th>Repurchase Price</th>
+                                    <td><label id="lbl_repurchase_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Interest</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-interest" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Interest Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Interest Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalinterest_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Cost of Fund</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-cost-fund" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Cost Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Cost Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalcostoffund_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-default btn-round btn-long" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="download"></div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        .table-summary {
+            text-align: right;
+            margin-top: -20px;
+            margin-bottom: 20px;
+        }
+
+            .table-summary table {
+                float: right;
+            }
+
+                .table-summary table tr th {
+                    text-align: right;
+                    padding: 6px 8px;
+                }
+
+                    .table-summary table tr th:after {
+                        content: ':';
+                        margin-left: 5px;
+                    }
+
+                .table-summary table tr td {
+                    padding: 6px 8px;
+                }
+    </style>
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script src="~/Content/vendors/download/download.js"></script>
+    <script>
+        $(document).ready(function () {
+            var isUpdate = "@IsUpdate";
+            console.log("isUpdate : " + isUpdate);
+            if (isUpdate == "False") {
+                $('#ddl_counterparty_payment').attr('disabled', 'disabled');
+                $('#ddl_trans_mt_code').attr('disabled', 'disabled');
+            }
+        });
+
+    </script>
+    @*@Scripts.Render("~/module/rpreleasemsgrelease")*@
+    @Scripts.Render("~/module/validation")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/Constant")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/rpreleasemsgrelease")
+}
+
