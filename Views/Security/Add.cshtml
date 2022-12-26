@@ -1,0 +1,1912 @@
+﻿@model GM.Data.Model.Security.SecurityModel
+@{
+    ViewBag.Title = "Add";
+
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    bool isUpdate = IsUpdate;
+
+    var ErrorMessage = ViewBag.Message;
+}
+@using (Html.BeginForm())
+{
+    <section class="working-content two-nav-padding" data-spy="scroll" data-target="#counterparty-scrollspy" data-offset="200">
+        <div class="container-fluid container-fixed">
+
+            <!--Second Navbar-->
+            <nav id="counterparty-scrollspy" class="navbar navbar-defult top-navbar section-nav-wrapper">
+                <div class="navbar-wrapper sub-topnav section-nav">
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="detail-li">
+                            <a href="#security-detail" onclick="expandpanel('detail')">Detail</a>
+                        </li>
+                        <li id="definition-li">
+                            <a href="#security-definition" onclick="expandpanel('definition')">Definition</a>
+                        </li>
+                        <li id="event-li">
+                            <a href="#security-event" onclick="expandpanel('event')">Event</a>
+                        </li>
+                        @*<li id="taxandother-li">
+                                <a href="#counterparty-taxandother" onclick="expandpanel('taxandother')">Tax And Others</a>
+                            </li>
+                            <li id="banklist-li">
+                                <a href="#counterparty-banklist" onclick="expandpanel('banklist')">Bank List</a>
+                            </li>
+                            <li id="identify-li">
+                                <a href="#counterparty-identify" onclick="expandpanel('identify')">Identify</a>
+                            </li>
+                            <li id="rating-li">
+                                <a href="#counterparty-rating" onclick="expandpanel('rating')">Rating</a>
+                            </li>
+                            <li id="margin-li">
+                                <a href="#counterparty-margin" onclick="expandpanel('margin')">Margin</a>
+                            </li>*@
+                        <li>
+                            <div class="vertical-line"></div>
+                        </li>
+                        <li class="submit-nav">
+                            @if (Model.statusdata == "New")
+                            {
+                                <button type="submit" class="btn btn-link">Submit</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-link" @(!isUpdate ? "disabled" : "")>Submit</button>
+                            }
+                            <button type="button" class="btn btn-link" onclick="location.href='@Url.Action("Index", "Security")'">Back</button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- PageTitle -->
+            <div class="row row-fixed">
+                <div class="col-lg-12 col-fixed">
+                    <div class="page-title">
+                        <div class="breadcrumb-wrap">
+                            <ol class="breadcrumb" id="NavBar">
+                                @*<li>
+                                        <a href="..\Home\Index">Home</a>
+                                    </li>
+                                    <li class="active">Static Process</li>
+                                    <li class="active">Security</li>
+                                    <li class="active">Security Def</li>*@
+                            </ol>
+                        </div>
+                        <div class="title">
+                            <h1>
+                                Security Def Detail
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Zone -->
+            <div class="row row-fixed">
+                <div class="col-xs-12 col-fixed">
+                    @*@Html.ValidationSummary()*@
+                    <div class="box-outside no-padding">
+                        <div class="header-row">
+                            <div class="deal-status left-content">
+                                <span>Security Status :</span>
+                                @if (Model.statusdata == "New")
+                                {
+                                    <span id="newdata" class="label label-new">New</span>
+                                    <span id="approve" class="label label-accept" style="display:none">Approve</span>
+                                    <span id="unapprove" class="label label-unaccept" style="display:none">UnApprove</span>
+                                    <span id="unactivedata" class="label label-unaccept" style="display:none">UnActive</span>
+                                }
+                                else
+                                {
+                                    if (Model.active_flag == true && Model.verify_flag_bo == true)
+                                    {
+                                        <span id="newdata" class="label label-new" style="display:none">New</span>
+                                        <span id="approve" class="label label-accept">Approve</span>
+                                        <span id="unapprove" class="label label-unaccept" style="display:none">UnApprove</span>
+                                        <span id="unactivedata" class="label label-unaccept" style="display:none">UnActive</span>
+                                    }
+                                    else if (Model.active_flag == true && Model.verify_flag_bo == false)
+                                    {
+                                        <span id="newdata" class="label label-new" style="display:none">New</span>
+                                        <span id="approve" class="label label-accept" style="display:none">Approve</span>
+                                        <span id="unapprove" class="label label-unaccept">UnApprove</span>
+                                        <span id="unactivedata" class="label label-unaccept" style="display:none">UnActive</span>
+                                    }
+                                    else if (Model.active_flag == false)
+                                    {
+                                        <span id="newdata" class="label label-new" style="display:none">New</span>
+                                        <span id="approve" class="label label-accept" style="display:none">Approve</span>
+                                        <span id="unapprove" class="label label-unaccept" style="display:none">UnApprove</span>
+                                        <span id="unactivedata" class="label label-unaccept">UnActive</span>
+                                    }
+                                }
+                                <div class="vertical-line"></div>
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <span class="selected-data">Change</span>
+                                        @Html.TextBoxFor(model => model.statusdata, htmlAttributes: new { @class = "selected-value hidden" })
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="statuscounterparty">
+                                        <li>
+                                            <a onclick="Setstatus('Approve')">Approve</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Setstatus('UnApprove')">UnApprove</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="Setstatus('UnActive')">UnActive</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Detail -->
+                    <div id="security-detail" class="box-content no-padding">
+                        <div id="security-detail-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#security-detail-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-minus"></i><h3>Security Detail</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="security-detail-form" class="form-container form-horizontal have-head collapse in">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper">
+                                        @Html.HiddenFor(model => model.instrument_id)
+                                        @Html.HiddenFor(model => model.page_name)
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.instrument_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.instrument_code, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.instrument_code, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.instrument_desc, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-10">
+                                                @Html.TextAreaFor(model => model.instrument_desc, new { @class = "form-control", rows = "3", @maxlength = "255" })
+                                                @Html.ValidationMessageFor(model => model.instrument_desc, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.ISIN_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.ISIN_code, new { htmlAttributes = new { @class = "form-control", @maxlength = "25" } })
+                                                @Html.ValidationMessageFor(model => model.ISIN_code, "", new { @class = "text-danger" })
+                                            </div>
+                                            @Html.LabelFor(model => model.ISIN_code_Thai, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.ISIN_code_Thai, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.ISIN_code_Thai, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.product_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_product_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.product_code_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.product_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.product_code_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillProduct", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_product_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_product_code"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.product_code, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.sub_product_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_sub_product_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.sub_product_code_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.sub_product_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.sub_product_code_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillSubProduct", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_sub_product_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_sub_product_code"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.instrumenttype, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_instrumenttype" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.instrumenttype_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.instrumenttype, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.instrumenttype_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillBondType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrumenttype" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_instrumenttype"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.instrumenttype, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.second_instrumenttype, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_second_instrumenttype" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.second_instrumenttypee_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.second_instrumenttype, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.second_instrumenttypee_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillBondSubType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_second_instrumenttype" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_second_instrumenttype"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if ((Model.instrument_code != null && Model.instrument_code.IndexOf("BOTN") == 0)
+                                                        || (Model.instrumenttype != null && Model.instrumenttype == "BPN"))
+                                        {
+                                            <div class="form-group" style="display: none">
+                                                @Html.LabelForRequired(model => model.issue_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-xs-4">
+                                                    <div class="input-group date">
+                                                        @Html.EditDateFor(model => model.issue_date, new { @class = "form-control date-time-picker-weekend" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.issue_date, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelForRequired(model => model.maturity_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-xs-4">
+                                                    <div class="input-group date">
+                                                        @Html.EditDateFor(model => model.maturity_date, new { @class = "form-control date-time-picker-weekend" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.maturity_date, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group">
+                                                @Html.LabelForRequired(model => model.issue_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-xs-4">
+                                                    <div class="input-group date">
+                                                        @Html.EditDateFor(model => model.issue_date, new { @class = "form-control date-time-picker-weekend" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.issue_date, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelForRequired(model => model.maturity_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-xs-4">
+                                                    <div class="input-group date">
+                                                        @Html.EditDateFor(model => model.maturity_date, new { @class = "form-control date-time-picker-weekend" })
+                                                        <span class="input-group-addon">
+                                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                                        </span>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.maturity_date, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.xa_day, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group amount-choose">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button" id="xa_minus">
+                                                            <i class="feather-icon icon-minus"></i>
+                                                        </button>
+                                                    </span>
+                                                    @Html.EditorForValidate(model => model.xa_day, new { htmlAttributes = new { @class = "form-control text-center" } })
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button" id="xa_plus">
+                                                            <i class="feather-icon icon-plus"></i>
+                                                        </button>
+                                                    </span>
+                                                    <div class="dropdown" style="min-width: 150px;">
+                                                        <button class="btn btn-default dropdown-toggle" id="ddl_xadayunit" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.xa_day_unit_text, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.xa_day_unit_value, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.xa_day_unit_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" style="display: none" data-action="@Url.Action("DDLDayMonthText", (string) this.ViewContext.RouteData.Values["controller"])" id="txt_xadayunit" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            </div>
+                                                            <ul id="ul_xadayunit"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.xa_day, "", new { @class = "text-danger" })
+                                            </div>
+                                            @Html.LabelForRequired(model => model.xi_day, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group amount-choose">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button" id="xi_minus">
+                                                            <i class="feather-icon icon-minus"></i>
+                                                        </button>
+                                                    </span>
+                                                    @Html.EditorForValidate(model => model.xi_day, new { htmlAttributes = new { @class = "form-control text-center" } })
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button" id="xi_plus">
+                                                            <i class="feather-icon icon-plus"></i>
+                                                        </button>
+                                                    </span>
+                                                    <div class="dropdown" style="min-width: 150px;">
+                                                        <button class="btn btn-default dropdown-toggle" id="ddl_xidayunit" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                            @Html.SpanFor(model => model.xi_day_unit_text, "Select...", new { @class = "selected-data" })
+                                                            @Html.TextBoxFor(model => model.xi_day_unit_value, htmlAttributes: new { @class = "selected-value hidden" })
+                                                            @Html.TextBoxFor(model => model.xi_day_unit_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <div class="search-dropdown-menu">
+                                                                <input type="text" style="display: none" data-action="@Url.Action("DDLDayMonthText", (string) this.ViewContext.RouteData.Values["controller"])" id="txt_xidayunit" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            </div>
+                                                            <ul id="ul_xidayunit"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.xi_day, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.issuer_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_issuer" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.issuer_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.issuer_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.issuer_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillIssuer", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_issuer" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_issuer"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.issuer_id, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            @Html.LabelForRequired(model => model.register_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_register" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.register_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.register_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.register_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillRegister", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_register" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_register"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.register_id, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.option_type_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_optiontype" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.option_type_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.option_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.option_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillOptionType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_optiontype" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_optiontype"></ul>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.seniority_type_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_seniority" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.seniority_type_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.seniority_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.seniority_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillSeniorityType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_seniority" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_seniority"></ul>
+                                                    </div>
+                                                    @*@Html.ValidationMessageFor(model => model.seniority_type, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.instrument_owner, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_owner" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.instrument_owner, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.instrument_owner, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.instrument_owner, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" style="display:none" data-action="@Url.Action("DDLOwner", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_owner" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_owner"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.instrument_owner, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.market_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_market" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.market_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.market_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.market_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillMarketCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_market" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_market"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.tax_on_coupon_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.tax_on_coupon_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.tax_on_coupon_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.coupon_freq, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button disabled class="btn btn-default dropdown-toggle" id="ddl_coupon_freq" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.coupon_freq_desc, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.coupon_freq, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.coupon_freq_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ex_coupon_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.ex_coupon_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.ex_coupon_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.coupon_type, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_coupon_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.coupon_type, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.coupon_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.coupon_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCouponType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_coupon_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_coupon_type"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.default_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.default_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.default_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.floating_index_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button disabled class="btn btn-default dropdown-toggle" id="ddl_floating_index_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.floating_index_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.floating_index_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.floating_index_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <div class="col-sm-4"></div>
+                                            @Html.LabelFor(model => model.compound_type, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button disabled class="btn btn-default dropdown-toggle" id="ddl_compound_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.compound_type_desc, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.compound_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.compound_type_desc, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Definition -->
+                    <div id="security-definition" class="box-content no-padding">
+                        <div id="security-definition-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#security-definition-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-minus"></i><h3>Security Definition</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="security-definition-form" class="form-container form-horizontal have-head collapse in">
+                            <!-- Guarantor -->
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="col-xs-12 form-sub-title col-form-fix">
+                                        <h4>Guarantor</h4>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 item-panel-table-wrapper">
+                                    <table class="item-panel-table" id="tbGuarantors">
+                                        <thead>
+                                        <th>Guarantor</th>
+                                        <th>Percentage</th>
+                                        <th class="action"></th>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.Guarantors != null && Model.Guarantors.Count > 0)
+                                            {
+                                                var rowindex = 0;
+                                                foreach (var guarantors in Model.Guarantors)
+                                                {
+                                                    if (@guarantors.guarantor_name != null)
+                                                    {
+                                                        @Html.HiddenFor(model => guarantors.instrument_id);
+                                                        if (guarantors.rowstatus == "delete")
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase" style="display: none">
+                                                                <td class="long-data" style="width: 300px;">
+                                                                    @guarantors.guarantor_name
+                                                                    <input name="Guarantors[@rowindex].guarantor_code" type="hidden" value="@guarantors.guarantor_code" valuefield="GuarantorsRightModal.guarantor_code" textvalue="@guarantors.guarantor_name" textfield="GuarantorsRightModal.guarantor_name" isdropdown="true">
+                                                                    <input name="Guarantors[@rowindex].guarantor_name" type="hidden" value="@guarantors.guarantor_name" valuefield="GuarantorsRightModal.guarantor_code" textvalue="@guarantors.guarantor_name" textfield="GuarantorsRightModal.guarantor_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @guarantors.guarantor_percent.ToString("N2")
+                                                                    <input name="Guarantors[@rowindex].guarantor_percent" type="hidden" value="@guarantors.guarantor_percent " isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="Guarantors[@rowindex].rowstatus" type="hidden" value="@guarantors.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    @if (Model.statusdata == "New")
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="update" onclick="GM.Security.Guarantor.Form.Show(this)">
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="delete" onclick="GM.Security.Guarantor.Form.Show(this)">
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="update" onclick="GM.Security.Guarantor.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="delete" onclick="GM.Security.Guarantor.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase">
+                                                                <td class="long-data" style="width: 300px;">
+                                                                    @guarantors.guarantor_name
+                                                                    <input name="Guarantors[@rowindex].guarantor_code" type="hidden" value="@guarantors.guarantor_code" valuefield="GuarantorsRightModal.guarantor_code" textvalue="@guarantors.guarantor_name" textfield="GuarantorsRightModal.guarantor_name" isdropdown="true">
+                                                                    <input name="Guarantors[@rowindex].guarantor_name" type="hidden" value="@guarantors.guarantor_name" valuefield="GuarantorsRightModal.guarantor_code" textvalue="@guarantors.guarantor_name" textfield="GuarantorsRightModal.guarantor_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @guarantors.guarantor_percent.ToString("N2")
+                                                                    <input name="Guarantors[@rowindex].guarantor_percent" type="hidden" value="@guarantors.guarantor_percent " isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="Guarantors[@rowindex].rowstatus" type="hidden" value="@guarantors.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    @if (Model.statusdata == "New")
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="update" onclick="GM.Security.Guarantor.Form.Show(this)">
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="delete" onclick="GM.Security.Guarantor.Form.Show(this)">
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="update" onclick="GM.Security.Guarantor.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@guarantors.guarantor_code" data-action="delete" onclick="GM.Security.Guarantor.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+
+                                                        rowindex++;
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                        </tr>
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <div class="col-xs-12 form-button">
+                                    @if (Model.statusdata == "New")
+                                    {
+                                        <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnGuarantorsCreate">
+                                            <i class="feather-icon icon-plus"></i>Add Guarantors
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnGuarantorsCreate" @(!isUpdate ? "disabled" : "")>
+                                            <i class="feather-icon icon-plus"></i>Add Guarantors
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                            <!--End Guarantor -->
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group-wrapper">
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.cur, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_cur" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.cur_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.cur_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_cur" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_cur"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.cur, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </div>
+                                            @Html.LabelForRequired(model => model.issue_size, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.issue_size, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.issue_size, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ending_par, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.ending_par, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelForRequired(model => model.begining_par, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.begining_par, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.begining_par, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-wrapper">
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.min_unit, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.min_unit, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.min_unit, "", new { @class = "text-danger" })
+                                            </div>
+                                            @Html.LabelForRequired(model => model.max_unit, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.max_unit, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.max_unit, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelForRequired(model => model.incremental_unit, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.incremental_unit, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.incremental_unit, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            @Html.LabelFor(model => model.secured_bond_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-sm-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.secured_bond_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.secured_bond_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-wrapper">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.holiday_rule_cur, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_holidaycur" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.holiday_rule_cur_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.holiday_rule_cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.holiday_rule_cur_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillHolidayCur", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_holidaycur" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_holidaycur"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelForRequired(model => model.year_basis_text, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_yearbasis" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.year_basis_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.year_basis, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.year_basis_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillYearBasis", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_yearbasis" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_yearbasis"></ul>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(model => model.year_basis, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.TBMA_listed_reference, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_tbmalisted" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.TBMA_listed_reference_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.TBMA_listed_reference, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.TBMA_listed_reference_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillTBMAListed", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_tbmalisted" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_tbmalisted"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            @Html.LabelFor(model => model.include_issue_date_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-10">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.include_issue_date_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.include_issue_date_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <!-- Bond Rating -->
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="col-xs-12 form-sub-title col-form-fix">
+                                        <h4>Bond Rating</h4>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 item-panel-table-wrapper">
+                                    <table class="item-panel-table" id="tbBondRating">
+                                        <thead>
+                                        <th>Agency</th>
+                                        <th>Term</th>
+                                        <th>Local Rating</th>
+                                        <th>Foreign Rating</th>
+                                        <th>Assess Date</th>
+                                        <th></th>
+                                        <th class="action"></th>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.BondRating != null && Model.BondRating.Count > 0)
+                                            {
+                                                var rowindex = 0;
+                                                foreach (var BondRating in Model.BondRating)
+                                                {
+                                                    if (@BondRating.agency_code != null)
+                                                    {
+                                                        @Html.HiddenFor(model => BondRating.instrument_id);
+                                                        if (BondRating.rowstatus == "delete")
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase" style="display: none">
+                                                                <td class="long-data">
+                                                                    @BondRating.agency_name
+                                                                    <input name="BondRating[@rowindex].agency_code" type="hidden" value="@BondRating.agency_code" valuefield="BondRatingRightModal.agency_code" textvalue="@BondRating.agency_name" textfield="BondRatingRightModal.agency_name" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].agency_name" type="hidden" value="@BondRating.agency_code" valuefield="BondRatingRightModal.agency_code" textvalue="@BondRating.agency_name" textfield="BondRatingRightModal.agency_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @BondRating.short_long_term_text
+                                                                    <input name="BondRating[@rowindex].short_long_term" type="hidden" value="@BondRating.short_long_term" valuefield="BondRatingRightModal.short_long_term" textvalue="@BondRating.short_long_term_text" textfield="BondRatingRightModal.short_long_term_text" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].short_long_term_text" type="hidden" value="@BondRating.short_long_term" valuefield="BondRatingRightModal.short_long_term" textvalue="@BondRating.short_long_term_text" textfield="BondRatingRightModal.short_long_term_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @BondRating.local_rating_text
+                                                                    <input name="BondRating[@rowindex].local_rating" type="hidden" value="@BondRating.local_rating" valuefield="BondRatingRightModal.local_rating" textvalue="@BondRating.local_rating_text" textfield="BondRatingRightModal.local_rating_text" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].local_rating_text" type="hidden" value="@BondRating.local_rating" valuefield="BondRatingRightModal.local_rating" textvalue="@BondRating.local_rating_text" textfield="BondRatingRightModal.local_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @BondRating.foreign_rating_text
+                                                                    <input name="BondRating[@rowindex].foreign_rating" type="hidden" value="@BondRating.foreign_rating" valuefield="BondRatingRightModal.foreign_rating" textvalue="@BondRating.foreign_rating_text" textfield="BondRatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].foreign_rating_text" type="hidden" value="@BondRating.foreign_rating_text" valuefield="BondRatingRightModal.foreign_rating" textvalue="@BondRating.foreign_rating_text" textfield="BondRatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @(BondRating.assess_date != null ? BondRating.assess_date.Value.ToString("dd/MM/yyyy") : "")
+                                                                    <input name="BondRating[@rowindex].assess_date" type="hidden" value="@(BondRating.assess_date != null ? BondRating.assess_date.Value.ToString("dd/MM/yyyy") : "")" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="BondRating[@rowindex].rowstatus" type="hidden" value="@BondRating.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    @if (Model.statusdata == "New")
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="update" onclick="GM.Security.BondRating.Form.Show(this)">
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="delete" onclick="GM.Security.BondRating.Form.Show(this)">
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="update" onclick="GM.Security.BondRating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="delete" onclick="GM.Security.BondRating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr data-id="@rowindex" data-action="fromdatabase">
+                                                                <td class="long-data">
+                                                                    @BondRating.agency_name
+                                                                    <input name="BondRating[@rowindex].agency_code" type="hidden" value="@BondRating.agency_code" valuefield="BondRatingRightModal.agency_code" textvalue="@BondRating.agency_code" textfield="BondRatingRightModal.agency_code" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].agency_name" type="hidden" value="@BondRating.agency_name" valuefield="BondRatingRightModal.agency_name" textvalue="@BondRating.agency_name" textfield="BondRatingRightModal.agency_name" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @BondRating.short_long_term_text
+                                                                    <input name="BondRating[@rowindex].short_long_term" type="hidden" value="@BondRating.short_long_term" valuefield="BondRatingRightModal.short_long_term" textvalue="@BondRating.short_long_term" textfield="BondRatingRightModal.short_long_term" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].short_long_term_text" type="hidden" value="@BondRating.short_long_term_text" valuefield="BondRatingRightModal.short_long_term_text" textvalue="@BondRating.short_long_term_text" textfield="BondRatingRightModal.short_long_term_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @BondRating.local_rating_text
+                                                                    <input name="BondRating[@rowindex].local_rating" type="hidden" value="@BondRating.local_rating" valuefield="BondRatingRightModal.local_rating" textvalue="@BondRating.local_rating_text" textfield="BondRatingRightModal.local_rating_text" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].local_rating_text" type="hidden" value="@BondRating.local_rating_text" valuefield="BondRatingRightModal.local_rating" textvalue="@BondRating.local_rating_text" textfield="BondRatingRightModal.local_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @BondRating.foreign_rating_text
+                                                                    <input name="BondRating[@rowindex].foreign_rating" type="hidden" value="@BondRating.foreign_rating" valuefield="BondRatingRightModal.foreign_rating" textvalue="@BondRating.foreign_rating_text" textfield="BondRatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                    <input name="BondRating[@rowindex].foreign_rating_text" type="hidden" value="@BondRating.foreign_rating_text" valuefield="BondRatingRightModal.foreign_rating" textvalue="@BondRating.foreign_rating_text" textfield="BondRatingRightModal.foreign_rating_text" isdropdown="true">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    @(BondRating.assess_date != null ? BondRating.assess_date.Value.ToString("dd/MM/yyyy") : "")
+                                                                    <input name="BondRating[@rowindex].assess_date" type="hidden" value="@(BondRating.assess_date != null ? BondRating.assess_date.Value.ToString("dd/MM/yyyy") : "")" isdropdown="false">
+                                                                </td>
+                                                                <td class="long-data">
+                                                                    <input name="BondRating[@rowindex].rowstatus" type="hidden" value="@BondRating.rowstatus" isdropdown="false">
+                                                                </td>
+                                                                <td class="action">
+                                                                    @if (Model.statusdata == "New")
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="update" onclick="GM.Security.BondRating.Form.Show(this)">
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="delete" onclick="GM.Security.BondRating.Form.Show(this)">
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button class="btn btn-default btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="update" onclick="GM.Security.BondRating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-edit"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-delete btn-round icon-only" type="button" data-id="@BondRating.agency_code" data-action="delete" onclick="GM.Security.BondRating.Form.Show(this)" @(!isUpdate ? "disabled" : "")>
+                                                                            <i class="feather-icon icon-trash-2"></i>
+                                                                        </button>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+
+                                                        rowindex++;
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td class="long-data text-center empty-data" style="height:50px;" colspan="7"> No data.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-xs-12 form-button">
+                                    @if (Model.statusdata == "New")
+                                    {
+                                        <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnBondRatingCreate">
+                                            <i class="feather-icon icon-plus"></i>Add Bond Rating
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnBondRatingCreate" @(!isUpdate ? "disabled" : "")>
+                                            <i class="feather-icon icon-plus"></i>Add Bond Rating
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                            <!-- End Bond Rating -->
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <!-- Issuer Rating -->
+                            @*<div class="row">
+                                    <div class="col-xs-12 form-wrapper-1100">
+                                        <div class="col-xs-12 form-sub-title col-form-fix">
+                                            <h4>Issuer Rating</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <div id="issuer_nodata" class="col-xs-12 nodata-box">
+                                            <span>No Data</span>
+                                        </div>
+                                    </div>
+                                    <div class="outer-table-wrapper clearfix margin-bottom-15">
+                                            <table id="x-table-data-issuerrating" class="table table-striped display nowrap"  cellspacing="0" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@Html.LabelFor(mode => mode.IssuerRating.agency_name)</th>
+                                                        <th>@Html.LabelFor(mode => mode.IssuerRating.short_long_term_text)</th>
+                                                        <th>@Html.LabelFor(mode => mode.IssuerRating.local_rating_text)</th>
+                                                        <th>@Html.LabelFor(mode => mode.IssuerRating.foreign_rating_text)</th>
+                                                        <th>@Html.LabelFor(mode => mode.IssuerRating.issuer_id)</th>
+                                                    </tr>
+                                                </thead>
+
+                                            </table>
+                                        </div>
+                                    <div class="outer-table-wrapper clearfix margin-bottom-15">
+                                        <table id="x-table-data-issuerrating2" class="table table-striped display nowrap" style="display:none" cellspacing="0" width="100%">
+                                            <thead>
+                                            <th>Agency</th>
+                                            <th>Term</th>
+                                            <th>Local Rating</th>
+                                            <th>Foreign Rating</th>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>*@
+                            <!--End Issuer Rating -->
+                        </div>
+                    </div>
+                    <!-- Security Event -->
+                    <div id="security-event" class="box-content no-padding">
+                        <div id="security-event-icon" class="box-header big-head expand-able" aria-expanded="true" data-toggle="collapse" data-target="#security-event-form">
+                            <div class="left-item">
+                                <div class="title">
+                                    <i class="feather-icon icon-minus"></i><h3>Security Event</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="security-event-form" class="form-container form-horizontal have-head collapse in">
+                            <!-- Cash Flow -->
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="col-xs-12 form-sub-title col-form-fix">
+                                        <h4>Cash Flow</h4>
+                                    </div>
+                                </div>
+                                @*<div class="col-xs-12 form-button">
+                                        @if (Model.statusdata == "New")
+                                        {
+                                            <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnCashFlowCreate">
+                                                <i class="feather-icon icon-plus"></i>Add Cash Flow
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-default btn-round btn-big" type="button" data-action="create" id="btnCashFlowCreate" @(!isUpdate ? "disabled" : "")>
+                                                <i class="feather-icon icon-plus"></i>Add Cash Flow
+                                            </button>
+                                        }
+                                    </div>*@
+                                <div class="outer-table-wrapper clearfix margin-bottom-15">
+                                    <table id="x-table-data-cashflow" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.round_no)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.event_date)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.payment_date)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.xi_date)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.start_date)</th> @*coupondate*@
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.end_date)</th>
+                                                @*next_coupondate*@
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.begining_par)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.ending_par)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.coupon_rate)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.interest)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.principal)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.total_payment)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.event_type)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.coupon_type)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.coupon_floating_index_code)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.coupon_spread)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.ai_amount)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.redemption_percent)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.complete_flag)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.datafrom)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.rowno)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.action)</th>
+                                                <th>@Html.LabelFor(mode => mode.SecurityEventRightModal.instrument_id)</th>
+                                                @*<th class="action" style="text-align:center;">
+                                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                                    </th>*@
+                                            </tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <!--End Cash Flow -->
+                        </div>
+                    </div>
+                    <div id="security-submit" class="page-button-submit">
+                        @if (Model.statusdata == "New")
+                        {
+                            <button type="submit" class="btn btn-primary btn-round btn-big">Submit</button>
+                            <a class="btn btn-link" onclick="location.href='@Url.Action("Add", "Security")'">Clear Data</a>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary btn-round btn-big" @(!isUpdate ? "disabled" : "")>Submit</button>
+                            <button type="button" onclick="location.href='@Url.Action("Add", "Security", new {instrument=Model.instrument_id})'" class="btn btn-link" @(!isUpdate ? "disabled" : "")>Clear Data</button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Add Guarantor - Right Modal -->
+    <div class="modal right fade" id="modal-form-guarantor" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            <i class="feather-icon icon-x"></i>
+                        </span>
+                    </button>
+                    <h4 class="modal-title">Add Guarantor</h4>
+                </div>
+                <div class="modal-body group">
+                    <form id="GuarantorForm">
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-max">
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.GuarantorsRightModal.guarantor_code, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-xs-6">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_guarantor" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.GuarantorsRightModal.guarantor_name, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.GuarantorsRightModal.guarantor_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.GuarantorsRightModal.guarantor_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillGuarantor", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_guarantor" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_guarantor"></ul>
+                                                </div>
+                                                <span id="guarantor_name_text_error" class="field-validation-error text-danger" data-valmsg-for="guarantor_name" data-valmsg-replace="true">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.GuarantorsRightModal.guarantor_percent, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.GuarantorsRightModal.guarantor_percent, new { htmlAttributes = new { @class = "form-control" } })
+                                            <span id="guarantor_percent_text_error" class="field-validation-error text-danger" data-valmsg-for="GuarantorsRightModal.guarantor_percent" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-xs-offset-3 col-xs-9">
+                                            <button class="btn btn-primary btn-round btn-main" id="btnGuarantorSave" type="button">+ Add Guarantor</button>
+                                            <button class="btn btn-default btn-round btn-main" id="btnGuarantorCancel" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+    </div>
+
+    <!-- Add Bond Rating - Right Modal -->
+    <div class="modal right fade" id="modal-form-rating" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            <i class="feather-icon icon-x"></i>
+                        </span>
+                    </button>
+                    <h4 class="modal-title">Add Bond Rating</h4>
+                </div>
+                <div class="modal-body group">
+                    <form id="BondRatingForm">
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-max">
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.BondRatingRightModal.agency_code, htmlAttributes: new { @class = "control-label col-xs-3" })
+
+                                        <div class="col-xs-6">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_agency" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.BondRatingRightModal.agency_name, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.agency_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.agency_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillAgency", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_agency" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_agency"></ul>
+                                                </div>
+                                                <span id="agency_code_error" class="field-validation-error text-danger" data-valmsg-for="BondRatingRightModal.agency_code" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.BondRatingRightModal.short_long_term, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_term" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.BondRatingRightModal.short_long_term_text, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.short_long_term, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.short_long_term_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" id="txt_term" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_term">
+                                                        <li class='searchterm'>
+                                                            <a onclick='AddTextForDDL("Short","txt_term","S",null,null)'>Short</a>
+                                                            <a onclick='AddTextForDDL("Long","txt_term","L",null,null)'>Long</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <span id="short_long_term_error" class="field-validation-error text-danger" data-valmsg-for="BondRatingRightModal.short_long_term" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.BondRatingRightModal.local_rating, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_localrating" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.BondRatingRightModal.local_rating_text, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.local_rating, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.local_rating_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillLocalRating", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_localrating" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_localrating"></ul>
+                                                </div>
+                                                <span id="local_rating_error" class="field-validation-error text-danger" data-valmsg-for="BondRatingRightModal.local_rating" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.BondRatingRightModal.foreign_rating, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_foreignrating" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.BondRatingRightModal.foreign_rating_text, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.foreign_rating, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.BondRatingRightModal.foreign_rating_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillForeignRating", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_foreignrating" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_foreignrating"></ul>
+                                                </div>
+                                                <span id="foreign_rating_error" class="field-validation-valid text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.BondRatingRightModal.assess_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+
+                                        <div class="col-xs-6">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.BondRatingRightModal.assess_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                            <span id="assess_date_error" class="field-validation-error text-danger" data-valmsg-for="BondRatingRightModal.assess_date" data-valmsg-replace="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-xs-offset-3 col-xs-9">
+                                            <button class="btn btn-primary btn-round btn-main" type="button" id="btnBondRatingSave">+ Add Bond Rating</button>
+                                            <button class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+    </div>
+
+    <!-- Add Cash Flow - Right Modal -->
+    <div class="modal right fade" id="modal-form-cashflow" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            <i class="feather-icon icon-x"></i>
+                        </span>
+                    </button>
+                    <h4 class="modal-title">Add Cash Flow</h4>
+                </div>
+                <div class="modal-body group">
+                    <form id="CashFlowForm">
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-max">
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.round_no, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.round_no, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                            <span id="round_no_text_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.round_no" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.event_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.SecurityEventRightModal.event_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                            <span id="event_date_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.begining_par" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.payment_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.SecurityEventRightModal.payment_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                            <span id="payment_date_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.begining_par" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.xi_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.SecurityEventRightModal.xi_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.start_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.SecurityEventRightModal.start_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                            <span id="start_date_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.begining_par" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.end_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.SecurityEventRightModal.end_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                            <span id="end_date_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.begining_par" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.begining_par, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.begining_par, new { htmlAttributes = new { @class = "form-control" } })
+                                            <span id="begining_par_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.begining_par" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.ending_par, htmlAttributes: new { @class = "control-label col-xs-3" })
+
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.ending_par, new { htmlAttributes = new { @class = "form-control" } })
+                                            <span id="ending_par_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.ending_par" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.coupon_rate, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.coupon_rate, new { htmlAttributes = new { @class = "form-control" } })
+                                            <span id="coupon_rate_text_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.coupon_rate" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.interest, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.interest, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.principal, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.principal, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.total_payment, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.total_payment, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(model => model.SecurityEventRightModal.event_type, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.event_type, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                            <span id="event_type_text_error" class="field-validation-error text-danger" data-valmsg-for="SecurityEventRightModal.event_type" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.coupon_type, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.coupon_type, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.coupon_floating_index_code, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.coupon_floating_index_code, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.coupon_spread, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.coupon_spread, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.ai_amount, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.ai_amount, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.redemption_percent, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-xs-6">
+                                            @Html.EditorForValidate(model => model.SecurityEventRightModal.redemption_percent, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SecurityEventRightModal.complete_flag, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                        <div class="col-sm-4">
+                                            <div class="radio-form">
+                                                <div class="radio">
+                                                    <label class="radio-inline c-radio">
+                                                        @Html.RadioButtonFor(model => model.SecurityEventRightModal.complete_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                    </label>
+                                                    <label class="radio-inline c-radio">
+                                                        @Html.RadioButtonFor(model => model.SecurityEventRightModal.complete_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @Html.HiddenFor(model => model.SecurityEventRightModal.action)
+                                    @Html.HiddenFor(model => model.SecurityEventRightModal.datafrom)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-xs-offset-3 col-xs-9">
+                                            <button class="btn btn-primary btn-round btn-main" type="button" id="btnCashFlowSave">+ Add Cash Flow</button>
+                                            <button class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+    </div>
+}
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    @*@Styles.Render("~/Content/cssapp")*@
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        /*.required {
+            color: red;
+            font-weight: bold;
+        }*/
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        window.onload = function() {
+            var ErrorMessage = "@ErrorMessage";
+            if (ErrorMessage != "") {
+                swal("Error", ErrorMessage, "error");
+                ErrorMessage = "";
+            }
+        };
+
+        var isUpdate = "@isUpdate";
+
+        function GetIssuerRating(issuerid) {
+            //console.log("Show form delete -> local");
+            if (issuerid == null) {
+                issuerid = $('#issuer_id').val();
+            }
+            var data = { issuer_id: issuerid };
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("SearchIssuerRating", (string)this.ViewContext.RouteData.Values["controller"])",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                success: function (d) {
+                    if (d.success) {
+                        //swal("Deleted!", "Delete Success.", "success");
+                        GenarateIssuerRatingTable(d.data);
+                        //$('#action-form-modal').modal('hide');
+                        //GM.Message.Clear();
+                       // GM.CounterParty.Search();
+                    }
+                },
+                error: function (d) {
+                    // TODO: Show error
+                    GM.Message.Clear();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            $("#NavBar").html($('#NavSecurity').val());
+
+            var state = "@Model.statusdata";
+            var isUpdate = "@isUpdate";
+
+            if (state != "New" && isUpdate == "False") {
+                $('#instrument_code').attr('disabled', 'disabled');
+                $('#instrument_desc').attr('disabled', 'disabled');
+                $('#ISIN_code').attr('disabled', 'disabled');
+                $('#ISIN_code_Thai').attr('disabled', 'disabled');
+                $('#ddl_product_code').attr('disabled', 'disabled');
+                $('#ddl_sub_product_code').attr('disabled', 'disabled');
+                $('#ddl_instrumenttype').attr('disabled', 'disabled');
+                $('#ddl_second_instrumenttype').attr('disabled', 'disabled');
+                $('#issue_date').attr('disabled', 'disabled');
+                $('#maturity_date').attr('disabled', 'disabled');
+                $('#xa_minus').attr('disabled', 'disabled');
+                $('#xa_day').attr('disabled', 'disabled');
+                $('#xa_plus').attr('disabled', 'disabled');
+                $('#ddl_xadayunit').attr('disabled', 'disabled');
+                $('#xi_minus').attr('disabled', 'disabled');
+                $('#xi_day').attr('disabled', 'disabled');
+                $('#xi_plus').attr('disabled', 'disabled');
+                $('#ddl_xidayunit').attr('disabled', 'disabled');
+                $('#ddl_issuer').attr('disabled', 'disabled');
+                $('#ddl_register').attr('disabled', 'disabled');
+                $('#ddl_optiontype').attr('disabled', 'disabled');
+                $('#ddl_seniority').attr('disabled', 'disabled');
+                $('#ddl_owner').attr('disabled', 'disabled');
+                $('#ddl_market').attr('disabled', 'disabled');
+                $('[name=tax_on_coupon_flag]').attr('disabled', 'disabled');
+                $('[name=ex_coupon_flag]').attr('disabled', 'disabled');
+                $('[name=default_flag]').attr('disabled', 'disabled');
+                $('#ddl_cur').attr('disabled', 'disabled');
+                $('#issue_size').attr('disabled', 'disabled');
+                $('#ending_par').attr('disabled', 'disabled');
+                $('#begining_par').attr('disabled', 'disabled');
+                $('#min_unit').attr('disabled', 'disabled');
+                $('#max_unit').attr('disabled', 'disabled');
+                $('#incremental_unit').attr('disabled', 'disabled');
+                $('[name=secured_bond_flag]').attr('disabled', 'disabled');
+                $('#ddl_holidaycur').attr('disabled', 'disabled');
+                $('#ddl_yearbasis').attr('disabled', 'disabled');
+                $('#ddl_tbmalisted').attr('disabled', 'disabled');
+                $('[name=include_issue_date_flag]').attr('disabled', 'disabled');
+                $('#min_unit').attr('disabled', 'disabled');
+                $('#max_unit').attr('disabled', 'disabled');
+                $('#incremental_unit').attr('disabled', 'disabled');
+            }
+
+            $("#btnGuarantorSave").click(function () {
+                var guarantorpercent = $('#GuarantorsRightModal_guarantor_percent').val();
+                var input = $('#GuarantorsRightModal_guarantor_percent');
+                if (guarantorpercent == "") {
+                    $("#guarantor_percent_text_error").text("The Guarantor Percent field is required.");
+                    input.addClass("input-validation-error");
+                }
+            });
+
+            $("#btnBondRatingSave").click(function () {
+                var assess_date_val = $("#BondRatingRightModal_assess_date").val();
+                var input = $('#BondRatingRightModal_assess_date');
+                if (assess_date_val == "") {
+                    $("#assess_date_error").text("The Assess Date field is required.");
+                    input.addClass("input-validation-error");
+                }
+            });
+
+            $("#btnCashFlowSave").click(function () {
+                var coupon_rate = $("#SecurityEventRightModal_coupon_rate");
+                var begining_par = $('#SecurityEventRightModal_begining_par');
+                var ending_par = $('#SecurityEventRightModal_ending_par');
+
+                var event_date = $("#SecurityEventRightModal_event_date");
+                var payment_date = $("#SecurityEventRightModal_payment_date");
+                var start_date = $("#SecurityEventRightModal_start_date");
+                var end_date = $("#SecurityEventRightModal_end_date");
+
+                var event_type = $("#SecurityEventRightModal_event_type");
+                var round_no = $("#SecurityEventRightModal_round_no");
+
+                if (coupon_rate.val().trim().trim() == "") {
+                    $("#coupon_rate_text_error").text("The Coupon Rate field is required.");
+                    coupon_rate.addClass("input-validation-error");
+                }
+
+                if (begining_par.val().trim() == "") {
+                    $("#begining_par_error").text("The Begining Par field is required.");
+                    begining_par.addClass("input-validation-error");
+                }
+
+                if (ending_par.val().trim() == "") {
+                    $("#ending_par_error").text("The Ending Par field is required.");
+                    ending_par.addClass("input-validation-error");
+                }
+
+                if (event_date.val().trim() == "") {
+                    $("#event_date_error").text("The Event Date field is required.");
+                    event_date.addClass("input-validation-error");
+                }
+                if (payment_date.val().trim() == "") {
+                    $("#payment_date_error").text("The Payment Date field is required.");
+                    payment_date.addClass("input-validation-error");
+                }
+                if (start_date.val().trim() == "") {
+                    $("#start_date_error").text("The Start Date field is required.");
+                    start_date.addClass("input-validation-error");
+                }
+                if (end_date.val().trim() == "") {
+                    $("#end_date_error").text("The End Date field is required.");
+                    end_date.addClass("input-validation-error");
+                }
+
+                if (event_type.val().trim() == "") {
+                    $("#event_type_text_error").text("The Event Type field is required.");
+                    event_type.addClass("input-validation-error");
+                }
+
+                if (round_no.val().trim() == "") {
+                    $("#round_no_text_error").text("The Round No field is required.");
+                    round_no.addClass("input-validation-error");
+                }
+            });
+
+            $("#xa_plus").click(function () {
+                var value = $("#xa_day").val();
+                if (value == "") {
+                    value = 1;
+                }
+                else {
+                   value = parseInt(value) + 1;
+                }
+                $("#xa_day").val(value);
+            });
+
+            $("#xa_minus").click(function () {
+                var value = $("#xa_day").val();
+                if (value == 1 || value == "") {
+                    value = "";
+                }
+                else {
+                    value = parseInt(value) - 1;
+                }
+                $("#xa_day").val(value);
+            });
+
+            $("#xi_plus").click(function () {
+                var value = $("#xi_day").val();
+                if (value == "") {
+                    value = 1;
+                }
+                else {
+                    value = parseInt(value) + 1;
+                }
+                $("#xi_day").val(value);
+            });
+
+            $("#xi_minus").click(function () {
+                var value = $("#xi_day").val();
+                if (value == 1 || value == "") {
+                    value = "";
+                }
+                else {
+                    value = parseInt(value) - 1;
+                }
+                $("#xi_day").val(value);
+            });
+    });
+    </script>
+    @*@Scripts.Render("~/module/securityadd")*@
+    @Scripts.Render("~/module/validation")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/securityadd")
+}

@@ -1,0 +1,241 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    @*<meta http-equiv="cache-control" content="no-cache" />*@
+    <link rel="icon" href="~/Content/resources/img/favicon_2.png" sizes="32x32" type="image/png">
+    <title>Private REPO System</title>
+
+    @*@Styles.Render("~/content/layout2")*@
+    @Styles.RenderFormat("<link href=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\" rel=\"stylesheet\">", "~/content/layout2")
+    @Styles.Render("~/bundles/SweetAlertCss")
+    <!-- =============== PAGE VENDOR STYLES =============== -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+    <!-- DO NOT DELETE!! : HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/Content/vendors/html5shiv/html5shiv.min.js"></script>
+      <script src="/Content/vendors/respond/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="body-d1">
+    <aside id="main_sidebar" class="main-sidebar hide-sidebar">
+        <header>
+            <div class="top-header group">
+                <div class="brand-logo">
+                    <img src="~/Content/resources/img/ktb_logo_white_new@2x.png">
+
+                </div>
+            </div>
+            <div class="search-bar group">
+                <div class="input-group-no-button">
+                    <input type="text" class="form-control" id="menu-search" placeholder="Search Menu">
+                    <span class="input-btn-inside" style="margin-top: 5px;">
+                        <button class="btn btn-icon search-button" type="button">
+                            <i class="feather-icon icon-search"></i>
+                        </button>
+                        <button class="btn btn-icon clear-button hide" type="button">
+                            <i class="feather-icon icon-x"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </header>
+        <nav>
+            @Html.RenderMenu()
+
+            <div class="footer-version">
+                <hr>
+            </div>
+        </nav>
+    </aside>
+    <section id="working_section" class="working-section outer-responsive-fixed hide-sidebar">
+        <header class="inner-responsive-fixed top-bar header-d1">
+            <nav class="navbar navbar-default top-navbar">
+                <div id="main-navbar-wrapper" class="navbar navbar-default top-navbar full-width">
+                    <div class="sidebar-toggle-xs">
+                        <button id="menu_icon" class="btn btn-icon">
+                            <i class="feather-icon icon-menu"></i>
+                        </button>
+                    </div>
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="~/">
+                            <img src="~/Content/resources/img/repo_logo_2.png" />
+                        </a>
+                    </div>
+                    @*<div class="vertical-line"></div>*@
+                    <div class="time-date nav navbar-nav navbar-text">
+                        <i class="feather-icon icon-calendar"></i>
+                        @Html.RenderBusinessDate()
+                        @*<span>12/12/2017</span>*@
+                        <i class="feather-icon icon-clock"></i>
+                        <span id="time">@DateTime.Now.ToShortTimeString()</span>
+                    </div>
+                    <div class="nav navbar-nav navbar-right">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle btn-round" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="feather-icon icon-user"></i>@User.UserEngName
+                                <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="muted-text">
+                                    <p>Username : @User.UserEngName</p>
+                                    <p>Role : @User.RoleName</p>
+                                </div>
+                                <ul>
+                                    @*@{
+                                        if (User.RoleName == "Administrator")
+                                        {
+                                            <li class="link">
+                                                <a href="@Url.Action("Dashboard", "Admin", new { area = "" })">
+                                                    <i class="feather-icon icon-settings"></i>Admin settings
+                                                </a>
+                                            </li>
+                                        }
+                                    }*@
+
+                                    <li class="link">
+                                        <a href="@Url.Action("Logout", "Account", new { area = "" })">
+                                            <i class="feather-icon icon-log-out"></i>Logout
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="navbar-wrapper sub-topnav section-nav">
+                  <ul class="nav navbar-nav">
+                    <li class="active">
+                      <a href="#security-detail">Security Detail</a>
+                    </li>
+                    <li>
+                      <a href="#security-definition">Security Definition</a>
+                    </li>
+                    <li>
+                      <a href="#security-event">Security Event</a>
+                    </li>
+                    <li>
+                      <a href="#security-additional-code">Security Additional Code</a>
+                    </li>
+                    <li>
+                      <div class="vertical-line"></div>
+                    </li>
+                    <li class="submit-nav">
+                      <a href="#">Submit</a>
+                    </li>
+                  </ul>
+                </div> -->
+            </nav>
+        </header>
+        @*<section class="working-content">
+            <div class="container-fluid container-fixed">*@
+
+        <div class="spinner" style="display:none">
+            <div class="center-div">
+                <div class="inner-div">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>
+
+        @RenderBody()
+
+        @*</div>
+            </section>*@
+        <footer>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="footer-message group">
+                        <hr>
+                        <p>© Copyright 2017 Krung Thai Bank. All Rights Reserved</p>
+                        <!-- <p><i class="feather-icon icon-phone"></i>02-111-1111</p> -->
+                        @Html.Partial("_Version")
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/treefilter")
+    @*@Scripts.Render("~/bundles/application")*@
+    @Scripts.RenderFormat("<script src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/bundles/application")
+    @Scripts.Render("~/bundles/SweetAlert")
+    @*@Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/bundles/application")*@
+
+    <script>
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            // add a zero in front of numbers<10
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+            t = setTimeout(function () {
+                startTime()
+            }, 500);
+        }
+        startTime();
+
+        //#region SessionTimeout
+        var sessionTimeout = @Html.GetFormsTimeOut();
+        setTimeout('SessionWarning()', sessionTimeout * 60 * 1000);
+        function SessionWarning() {
+            swal({
+                title: "Session Timeout",
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: '#00B0FF',
+                confirmButtonText: 'Log Off',
+                //cancelButtonText: "Log Off",
+                closeOnConfirm: false,
+                //closeOnCancel: true
+            },function (isConfirm) {
+                if (isConfirm) {
+                    window.location.href = '@Url.Action("Index", "Login",new { area = "" })';
+                } else {
+
+                }
+            });
+        }
+        
+        //#endregion
+
+
+    </script>
+
+    @RenderSection("Scripts", required: false)
+    @if (@ViewBag.ErrorMessage != null && @ViewBag.ErrorMessage != "")
+    {
+        <script>
+        $(document).ready(function () {
+             @{
+                  var message = @ViewBag.ErrorMessage
+                      .Replace("\\", "\\\\")
+                      .Replace("'", "\\'");
+              }
+            var textmessage = '@(message)';
+            swal("Warning", textmessage, "error");
+        });
+        </script>
+    }
+
+</body>
+</html>
