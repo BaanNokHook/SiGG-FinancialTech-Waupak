@@ -1,0 +1,187 @@
+﻿@model GM.Data.View.ExternalInterface.ThorIndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- Div Page Title -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Thor Index Cal.
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Div Content -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Div Search -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search</h3>
+                            </div>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", "ThorIndex", FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2">Instrument Code</label>
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_instrument_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.instrument_code, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.instrument_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.instrument_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillInstrument", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrument_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_instrument_code"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2">Coupon Payment Date From</label>
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.asof_date_from, new { @class = "form-control date-time-picker" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-xs-2">To</label>
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.asof_date_to, new { @class = "form-control date-time-picker" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-excel btn-round btn-main mr-4" id="btnExport" onclick="GM.ThorIndex.Export(this)">
+                                            Export in Excel
+                                            <i class="feather-icon icon-download"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnSync" form-mode="add" @(!IsCreate ? "disabled" : "")>
+                                            Sync ThorIndex (FITS)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><label>No.</label></th>
+                                    <th><label>Instrument Code</label></th>
+                                    <th><label>Coupon Payment Date</label></th>
+                                    <th><label>Event Date</label></th>
+                                    <th><label>Thor Date</label></th>
+                                    <th><label>Thor Rate (BOT)</label></th>
+                                    <th><label>Thor Index (AI)</label></th>
+                                    <th><label>Compound Type</label></th>
+                                    <th><label>Day Count</label></th>
+                                    <th><label>Is Holiday</label></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #search-form .text-box {
+            width: 235px !important;
+        }
+
+        #search-form .dropdown {
+            width: 235px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        var isUpdate = "@IsUpdate";
+        var isDelete = "@IsDelete";
+    </script>
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/ThorIndex")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/validation")
+}

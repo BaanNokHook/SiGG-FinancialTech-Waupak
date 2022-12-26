@@ -1,0 +1,307 @@
+﻿@model GM.Data.View.ExternalInterface.ThorRateViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- Div Page Title -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Thor Rate
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Div Content -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Div Search -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", "ThorRate", FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2">As Of Date From</label>
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.asof_date_from, new { @class = "form-control date-time-picker" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-xs-2">To</label>
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.asof_date_to, new { @class = "form-control date-time-picker" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2">Cur</label>
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_cur" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.ccy, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.ccy, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.ccy, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_cur" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_cur"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-excel btn-round btn-main mr-4" id="btnExport" onclick="GM.ThorRate.Export(this)">
+                                            Export in Excel
+                                            <i class="feather-icon icon-download"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="add" @(!IsCreate ? "disabled" : "")>
+                                            + Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><label>No.</label></th>
+                                    <th><label>As Of Date</label></th>
+                                    <th><label>Curve</label></th>
+                                    <th><label>Cur</label></th>
+                                    <th><label>Index</label></th>
+                                    <th><label>Tenor</label></th>
+                                    <th><label>Rate</label></th>
+                                    <th><label>Spread</label></th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Add Form Right Modal -->
+<div class="modal right fade" id="action-form-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h4>
+            </div>
+            <div class="modal-body group">
+                @using (Html.BeginForm("Create", "ThorRate", FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))
+                {
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">As Of Date <span class="required"> *</span></label>
+                                    <div class="col-xs-6">
+                                        <div class="input-group date">
+                                            @Html.EditDateFor(model => model.FormAction.asof_date, new { @class = "form-control date-time-picker", @typefield = "date" })
+                                            <span class="input-group-addon">
+                                                <span class="feather-icon icon-calendar"></span>
+                                            </span>
+                                        </div>
+                                        <span id="asof_date_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Curve<span class="required"> *</span></label>
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.curve_id, new { htmlAttributes = new { @class = "form-control" } })
+                                        <span id="curve_id_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Cur<span class="required"> *</span></label>
+                                    <div class="col-xs-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="ddl_cur_action" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @Html.SpanFor(model => model.FormAction.ccy, "Select...", new { @class = "selected-data" })
+                                                @Html.TextBoxFor(model => model.FormAction.ccy, htmlAttributes: new { @class = "selected-value hidden" })
+                                                @Html.TextBoxFor(model => model.FormAction.ccy, htmlAttributes: new { @class = "selected-data hidden" })
+                                                <span class="caret"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="search-dropdown-menu">
+                                                    <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_cur_action" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                    <i class="feather-icon icon-search"></i>
+                                                </div>
+                                                <hr>
+                                                <ul id="ul_cur_action"></ul>
+                                            </div>
+                                        </div>
+                                        <span id="cur_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Index<span class="required"> *</span></label>
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.index_type, new { htmlAttributes = new { @class = "form-control" } })
+                                        <span id="index_type_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Tenor</label>
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.tenor, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Rate<span class="required"> *</span></label>
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.rate, new { htmlAttributes = new { @maxlength = 31, @class = "form-control", @oninput = "return numberOnlyAndDot(this);", @onfocusout = "return auto8digit(this);" } })
+                                        <span id="rate_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Spread</label>
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.spread, new { htmlAttributes = new { @maxlength = 31, @class = "form-control", @oninput = "return numberOnlyAndDot(this);", @onfocusout = "return auto8digit(this);" } })
+                                        <span id="spread_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary btn-round btn-main btn-form-save">+ Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</button>
+                            <button type="reset" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #search-form .text-box {
+            width: 235px !important;
+        }
+
+        #search-form .dropdown {
+            width: 235px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        var isUpdate = "@IsUpdate";
+        var isDelete = "@IsDelete";
+    </script>
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/ThorRate")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/validation")
+}

@@ -1,0 +1,288 @@
+﻿@{
+    Layout = "";
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    @*<meta http-equiv="cache-control" content="no-cache" />*@
+    <link rel="icon" href="~/Content/resources/img/favicon_2.png" sizes="32x32" type="image/png">
+    <title>Private REPO System</title>
+    @Styles.RenderFormat("<link href=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\" rel=\"stylesheet\">", "~/content/layout2")
+
+    <!-- =============== PAGE VENDOR STYLES =============== -->
+    <!-- DO NOT DELETE!! : HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="/Content/vendors/html5shiv/html5shiv.min.js"></script>
+        <script src="/Content/vendors/respond/respond.min.js"></script>
+    <![endif]-->
+
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/datatable")
+</head>
+<body class="body-d1">
+    <section id="working_section" class="working-section outer-responsive-fixed hide-sidebar">
+        <header class="inner-responsive-fixed top-bar header-d1">
+            <nav class="navbar navbar-default top-navbar">
+                <div id="main-navbar-wrapper" class="navbar navbar-default top-navbar full-width">
+                    <div class="sidebar-toggle-xs">
+                    </div>
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                            <img src="~/Content/resources/img/repo_logo_2.png" />
+                        </a>
+                    </div>
+                    <div class="time-date nav navbar-nav navbar-text">
+                    </div>
+                    <div class="nav navbar-nav navbar-right">
+
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="spinner" style="display:none">
+            <div class="center-div">
+                <div class="inner-div">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="working-content">
+            <div class="container-fluid container-fixed">
+                <!-- Content Zone -->
+                <div class="row row-fixed">
+                    <div class="col-xs-12 col-fixed">
+
+                        <div id="alert-msg"></div>
+
+                        <!-- Div Detail -->
+                        <div class="box-content table-content">
+                            <div class="col-xs-12 form-center-fix">
+                                <div class="box-header">
+                                    <div class="left-item">
+                                        <div class="title">
+                                            <h3>Connection</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-container">
+                                    <div class="col-xs-6 form-center-fix">
+                                        <div class="row">
+                                            <b>Application Server :</b> <span style="color: green;">Online</span>
+                                        </div>
+                                        <div class="row">
+                                            <b>Host Name :</b> @Dns.GetHostName()
+                                        </div>
+                                        <div class="row">
+                                            <b>IP Address :</b> @HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"]
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 form-center-fix">
+                                        <div class="row">
+                                            <b>Database Server :</b> <span id="dbStatus"></span>
+                                        </div>
+                                        <div class="row">
+                                            <b>Server Name :</b> <span id="dbServerName"></span>
+                                        </div>
+                                        <div class="row">
+                                            <b>Machine Name :</b> <span id="dbMachineName"></span>
+                                        </div>
+                                        <div class="row">
+                                            <b>Instance Name :</b> <span id="dbInstanceName"></span>
+                                        </div>
+                                        <div class="row">
+                                            <b>DB Name :</b> <span id="dbName"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-content">
+                            <div class="col-xs-12 form-center-fix">
+                                <div class="box-header">
+                                    <div class="left-item">
+                                        <div class="title">
+                                            <h3>Internal Service</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="tableInternalService" class="table table-striped display">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Site</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="box-content">
+                            <div class="col-xs-12 form-center-fix">
+                                <div class="box-header">
+                                    <div class="left-item">
+                                        <div class="title">
+                                            <h3>External Service</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="tableExternalService" class="table table-striped display">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Site</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="footer-message group">
+                        <hr>
+                        <p>© Copyright 2017 Krung Thai Bank. All Rights Reserved</p>
+                        <p>v.1.0.1</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <script src="~/Scripts/GM.TestConnect.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("DatabaseInfo", "TestConnect")',
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                cache: false,
+                dataType: 'JSON',
+                traditional: true,
+                success: function (data) {
+                    $('#dbStatus').text(data.Status);
+                    $('#dbServerName').text(data.ServerName);
+                    $('#dbMachineName').text(data.MachineName);
+                    $('#dbInstanceName').text(data.InstanceName);
+                    $('#dbName').text(data.DatabaseName);
+
+                    if (data.Status == 'Online') {
+                        $('#dbStatus').css('color', 'green');
+                    } else {
+                        $('#dbStatus').css('color', 'red');
+                    }
+                },
+                error: function (jqXhr, textStatus) {
+
+                    if (textStatus === "error") {
+                        var objJson = jQuery.parseJSON(jqXhr.responseText);
+
+                        if (Object.prototype.toString.call(objJson) === '[object Array]' &&
+                            objJson.length == 0) {
+                            // Array is empty
+                            // Do Something
+                        } else {
+                            var errorMsg = jqXhr.statusText + " " + objJson.Message;
+                            alert("An error occurred, " + errorMsg,
+                                function (e) {
+
+                                },
+                                {
+                                    ok: "OK",
+                                    classname: "custom-class"
+                                });
+                        }
+                    }
+                }
+            });
+
+            $('#tableInternalService').DataTable({
+                bInfo: false,
+                paging: false,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '@Url.Action("InternalService", "TestConnect")',
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columns: [
+                    { data: "name" },
+                    { data: "site" },
+                    { data: "status" }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if (data.status == "Online") {
+                        $('td', row).css('color', 'green');
+                    } else {
+                        $('td', row).css('color', 'red');
+                    }
+                }
+            });
+
+            $('#tableExternalService').DataTable({
+                bInfo: false,
+                paging: false,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '@Url.Action("ExternalService", "TestConnect")',
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columns: [
+                    { data: "name" },
+                    { data: "site" },
+                    { data: "status" }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if (data.status == "Online") {
+                        $('td', row).css('color', 'green');
+                    } else {
+                        $('td', row).css('color', 'red');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
