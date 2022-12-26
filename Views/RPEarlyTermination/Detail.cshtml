@@ -1,0 +1,718 @@
+﻿@model GM.Data.Model.RPTransaction.RPTransModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+
+    var ErrorMessage = ViewBag.Message;
+}
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        #ui-datepicker-div {
+            z-index: 999 !important;
+        }
+
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #maturity_date_search {
+            z-index: 1;
+        }
+
+        .table-summary {
+            text-align: right;
+            margin-top: -20px;
+            margin-bottom: 20px;
+        }
+
+            .table-summary table {
+                float: right;
+            }
+
+                .table-summary table tr th {
+                    text-align: right;
+                    padding: 6px 8px;
+                }
+
+                    .table-summary table tr th:after {
+                        content: ':';
+                        margin-left: 5px;
+                    }
+
+                .table-summary table tr td {
+                    padding: 6px 8px;
+                }
+    </style>
+}
+
+<section class="working-content working-content-d1" data-spy="scroll" data-target="#security-scrollspy" data-offset="120">
+    <div class="container-fluid container-fixed">
+        @using (Html.BeginForm("Submit", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+        {
+            @Html.Partial("_Form")
+
+        }
+    </div>
+</section>
+<!-- Check Interest -->
+<div class="modal center fade" id="check-interest" tabindex="-1" role="dialog" aria-labelledby="check-interest">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Checking Interest Period</h4>
+            </div>
+            <div class="modal-body clear">
+                <div class="clearfix">
+                    <div class="data-list col-xs-7">
+                        <table id="tbl_detailheader">
+                            <tbody>
+                                <tr>
+                                    <th>Settlement Date</th>
+                                    <td><label id="lbl_selltementdate_check"></label></td>
+                                    <th>Maturity Date</th>
+                                    <td><label id="lbl_matdate_check"></label></td>
+                                </tr>
+                                <tr>
+                                    <th>Purchase Price</th>
+                                    <td><label id="lbl_purchase_check"></label></td>
+                                    <th>Repurchase Price</th>
+                                    <td><label id="lbl_repurchase_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Interest</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-interest" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Interest Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Interest Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalinterest_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-sub-title inner-padding">
+                    <h4>Cost of Fund</h4>
+                </div>
+                <div class="modal-table no-bottom outer-table-wrapper clearfix">
+                    <table id="modal-cost-fund" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Period</th>
+                        <th>No. of Day</th>
+                        <th>Cost Rate</th>
+                        <th>Spread</th>
+                        <th>Total Rate</th>
+                        <th>Cost Amount</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="table-summary inner-padding group">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Total Amount</th>
+                                    <td><label id="lbl_totalcostoffund_check"></label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" class="btn btn-default btn-round btn-long" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Styles.Render("~/bundles/SweetAlertCss")
+    <script src="~/Content/jquery-ui/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+
+            $("#NavBar").html($('#NavRPEarlyTermination').val());
+
+            //Function : Btn Previous =====================================
+            var Hid_Previous = $('#Hid_Previous');
+            if (Hid_Previous.val() == false) {
+                $('#Btn_Previous').prop('disabled', true);
+            }
+            else {
+                $('#Btn_Previous').prop('disabled', false);
+            }
+
+            GM.RPEarlyTermination = {};
+            GM.RPEarlyTermination.Previous = function (btn) {
+                $('.spinner').css('display', 'block'); // Open Loading
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                window.location.href = "\@Url.Action("Previous", (string)this.ViewContext.RouteData.Values["controller"])" + "?id=" + $('#Lab_trans_no').html();
+            };
+
+            //Function : Btn Next =====================================
+            var Hid_Next = $('#Hid_Next');
+            if (Hid_Next.val() == false) {
+                $('#Btn_Next').prop('disabled', true);
+            }
+            else {
+                $('#Btn_Next').prop('disabled', false);
+            }
+
+            GM.RPEarlyTermination.Next = function (btn) {
+                $('.spinner').css('display', 'block'); // Open Loading
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                window.location.href = "\@Url.Action("Next", (string)this.ViewContext.RouteData.Values["controller"])" + "?id=" + $('#Lab_trans_no').html();
+            };
+
+            //Function : Btn Approve =====================================
+            var Hid_Approve = $('#Hid_Approve');
+            if (Hid_Approve.val() == false) {
+                $('#Btn_Approve').attr('disabled', 'disabled');
+                $('#linkBtnApprove').attr('disabled', 'disabled');
+
+            }
+            else {
+                $('#Btn_Approve').removeAttr('disabled');
+                $('#linkBtnApprove').removeAttr('disabled');
+            }
+
+            GM.RPEarlyTermination.Approve = function (btn) {
+                $('.spinner').css('display', 'block'); // Open Loading
+                var dataToPost = $("#action-form").serialize();
+                $.post("CheckLimit", dataToPost)
+                    .done(function (res) {
+                        $('.spinner').css('display', 'none'); // Close Loading
+                        if (res.RefCode === 0) {
+                            swal({
+                                title: "Comfirm Approve?",
+                                text: "",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Yes",
+                                cancelButtonText: "No",
+                                closeOnConfirm: true,
+                                closeOnCancel: true
+                            },
+                                function (isConfirm) {
+                                    if (isConfirm) {
+                                        $('.spinner').css('display', 'block'); // Open Loading
+                                        GM.Message.Clear();
+                                        var dataToPost = $("#action-form").serialize();
+                                        $.post("Approve_Trans", dataToPost)
+                                            .done(function (response) {
+                                                $('.spinner').css('display', 'none'); // Close Loading
+                                                GM.Unmask();
+                                                console.log(response);
+                                                if (response[0].Message == "") {
+                                                    if (response[0].trans_no != "") {
+                                                        setTimeout(function () {
+                                                            swal({
+                                                                title: "Complete",
+                                                                text: "Approve Successfully",
+                                                                type: "success",
+                                                                showCancelButton: false,
+                                                                confirmButtonClass: "btn-success",
+                                                                confirmButtonText: "Yes",
+                                                                cancelButtonText: "No",
+                                                                closeOnConfirm: true,
+                                                                closeOnCancel: true
+                                                            },
+                                                                function () {
+                                                                    window.location.href = "\@Url.Action("Approve", (string)this.ViewContext.RouteData.Values["controller"])" + "?trans_no=" + response[0].trans_no;
+                                                                }
+                                                            );
+                                                        }, 100);
+                                                    }
+                                                    else {
+                                                        setTimeout(function () {
+                                                        swal({
+                                                            title: "Complete",
+                                                            text: "Approve Successfully",
+                                                            type: "success",
+                                                            showCancelButton: false,
+                                                            confirmButtonClass: "btn-success",
+                                                            confirmButtonText: "Yes",
+                                                            cancelButtonText: "No",
+                                                            closeOnConfirm: true,
+                                                            closeOnCancel: true
+                                                        },
+                                                            function () {
+                                                                window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                            }
+                                                            );
+                                                        }, 100);
+                                                    }
+                                                }
+                                                else {
+                                                    setTimeout(function () {
+                                                    swal({
+                                                        title: "Fail",
+                                                        text: response[0].Message,
+                                                        type: "error",
+                                                        showCancelButton: false,
+                                                        confirmButtonClass: "btn-success",
+                                                        confirmButtonText: "Yes",
+                                                        closeOnConfirm: true },
+                                                        function () {
+                                                            window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                        });
+                                                    }, 100);
+                                                }
+                                            });
+                                    }
+                                });
+                        } else
+                        {
+                            setTimeout(function () {
+                                swal("Fail", res.Message, "error");
+                            }, 100);
+                        }
+                    });
+            };
+
+            //Function : Btn UnApprove =====================================
+            var Hid_UnApprove = $('#Hid_UnApprove');
+            if (Hid_UnApprove.val() == false) {
+                $('#Btn_UnApprove').attr('disabled', 'disabled');
+            }
+            else {
+                $('#Btn_UnApprove').removeAttr('disabled');
+            }
+
+            GM.RPEarlyTermination.UnApprove = function (btn) {
+                swal({
+                    title: "Comfirm UnApprove?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $('.spinner').css('display', 'block'); // Open Loading
+                            GM.Message.Clear();
+                            var dataToPost = $("#action-form").serialize();
+                            console.log(dataToPost);
+                            $.post("UnApprove_Trans", dataToPost)
+                                .done(function (response) {
+                                    $('.spinner').css('display', 'none'); // Close Loading
+                                    GM.Unmask();
+                                    console.log(response);
+                                    if (response[0].Message == "") {
+                                        if (response[0].trans_no != "") {
+                                            setTimeout(function () {
+                                                swal({
+                                                    title: "Complete",
+                                                    text: "UnApprove Successfully",
+                                                    type: "success",
+                                                    showCancelButton: false,
+                                                    confirmButtonClass: "btn-success",
+                                                    confirmButtonText: "Yes",
+                                                    cancelButtonText: "No",
+                                                    closeOnConfirm: true,
+                                                    closeOnCancel: true
+                                                },
+                                                    function () {
+                                                        window.location.href = "\@Url.Action("Approve", (string)this.ViewContext.RouteData.Values["controller"])" + "?trans_no=" + response[0].trans_no;
+                                                    }
+                                                );
+                                            }, 100);
+                                        }
+                                        else {
+                                            setTimeout(function () {
+                                            swal({
+                                                title: "Complete",
+                                                text: "UnApprove Successfully",
+                                                type: "success",
+                                                showCancelButton: false,
+                                                confirmButtonClass: "btn-success",
+                                                confirmButtonText: "Yes",
+                                                cancelButtonText: "No",
+                                                closeOnConfirm: true,
+                                                closeOnCancel: true
+                                            },
+                                                function () {
+                                                    window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                }
+                                                );
+                                            }, 100);
+                                        }
+                                    }
+                                    else {
+                                        setTimeout(function () {
+                                          swal({
+                                            title: "Fail",
+                                            text: response[0].Message,
+                                            type: "error",
+                                                showCancelButton: false,
+                                                confirmButtonClass: "btn-success",
+                                                confirmButtonText: "Yes",
+                                                closeOnConfirm: true
+                                            },
+                                                function () {
+                                                    window.location.href = "\@Url.Action("Index", (string)this.ViewContext.RouteData.Values["controller"])";
+                                                }
+                                            );
+                                        }, 100);
+                                    }
+                                });
+                        }
+                    });
+            };
+
+            //Function : Binding Table =====================================
+            GM.RPEarlyTermination.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                searching: true,
+                scrollY: '17vh',
+                scrollX: true,
+                bInfo: false,
+                bPaginate: false,
+                order: [
+                    [1, "desc"]
+                ],
+                buttons:
+                    [
+                    ],
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                //data: [],
+                ajax: {
+                    "url": "@Url.Action("Search_Colateral", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "data": {
+                        "trans_no": $('#Lab_trans_no').html()
+                    }
+                },
+                columnDefs:
+                [
+                        { targets: 0, data: "RowNumber", orderable: false,
+                            render: function(data, type, row, meta) {
+                                return parseInt(meta.row) + 1;
+                            } },
+                        { targets: 1, data: "trans_no", visible: false },
+                        { targets: 2, data: "instrument_code" },
+                        { targets: 3, data: "isin_code" },
+                        { targets: 4, data: "port" },
+                        { targets: 5, data: "repo_deal_type", visible: false },
+                        { targets: 6, data: "cur" },
+                        {
+                            targets: 7, data: "ytm",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal(data);
+                                }
+                                return FormatDecimal(0);
+                            }
+                        },
+                        {
+                            targets: 8, data: "clean_price",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal(data);
+                                }
+                                return FormatDecimal(0);
+                            }
+                        },
+                        {
+                            targets: 9, data: "dirty_price",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal(data);
+                                }
+                                return FormatDecimal(0);
+                            }
+                        },
+                        {
+                            targets: 10, data: "haircut",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 11, data: "unit",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal0(data);
+                                }
+                                return FormatDecimal0(0);
+                            }
+                        },
+                        {
+                            targets: 12, data: "par",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 13, data: "market_value",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 14, data: "cash_amount",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 15, data: "dirty_price_after_hc",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 16, data: "interest_amount",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return '';
+                            }
+                        },
+                        {
+                            targets: 17, data: "wht_amount",
+                            render: function (data, type, row, meta) {
+                                console.log("wht_amount : " + (data));
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return '';
+                            }
+                        },
+                        {
+                            targets: 18, data: "temination_value",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return '';
+                            }
+                        },
+                        {
+                            targets: 19, data: "maturity_date",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return moment(data).format('DD/MM/YYYY');
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            targets: 20, data: "coupon_rate",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal6(data);
+                                }
+                                return FormatDecimal6(0);
+                            }
+                        },
+                        {
+                            targets: 21, data: "par_unit",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 22, data: "variation",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal2(data);
+                                }
+                                return FormatDecimal2(0);
+                            }
+                        },
+                        {
+                            targets: 23, data: "dm",
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return FormatDecimal16(data);
+                                }
+                                return '';
+                            }
+                        },
+                        {
+                            targets: 24, data: "trade_date", visible: false,
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return moment(data).format('DD/MM/YYYY');
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            targets: 25, data: "settlement_date", visible: false,
+                            render: function (data, type, row, meta) {
+                                if (data != null) {
+                                    return moment(data).format('DD/MM/YYYY');
+                                }
+                                return data;
+                            }
+                        }
+                ],
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api();
+                    //Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    //Total over all pages
+                    Sum_cash_amount = api
+                        .column(14)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    $("#Sum_cash_amount").html(FormatDecimal2(parseFloat(Sum_cash_amount).toFixed(2)));
+
+                    Sum_interest_amount = api
+                        .column(16)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    $("#Sum_interest_amount").html(FormatDecimal2(parseFloat(Sum_interest_amount).toFixed(2)));
+
+                    Sum_wht_amount = api
+                        .column(17)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    $("#Sum_wht_amount").html(FormatDecimal2(parseFloat(Sum_wht_amount).toFixed(2)));
+
+                    Sum_temination_value = api
+                        .column(18)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    $("#Sum_temination_value").html(FormatDecimal2(parseFloat(Sum_temination_value).toFixed(2)));
+                }
+            });
+        });
+
+        function roundTo8(num) {
+            return +(Math.round(parseFloat(num).toFixed(9) + "e+8") + "e-8");
+        }
+
+        function roundTo2(num) {
+            return +(Math.round(parseFloat(num).toFixed(3) + "e+2") + "e-2");
+        }
+
+        function roundTo16(num) {
+            return +(Math.round(parseFloat(num).toFixed(17) + "e+16") + "e-16");
+        }
+
+        function roundTo6(num) {
+            return +(Math.round(parseFloat(num).toFixed(7) + "e+6") + "e-6");
+        }
+        function FormatDecimal6(Num) {
+            var format = Number(parseFloat(roundTo6(Num)).toFixed(6)).toLocaleString('en', {
+                minimumFractionDigits: 6
+            });
+            return format;
+        }
+
+        function FormatDecimal(Num) {
+            var format = Number(parseFloat(roundTo8(Num)).toFixed(8)).toLocaleString('en', {
+                minimumFractionDigits: 8
+            });
+            return format;
+        }
+
+        function FormatDecimal2(Num) {
+            var format = Number(parseFloat(roundTo2(Num)).toFixed(2)).toLocaleString('en', {
+                minimumFractionDigits: 2
+            });
+            return format;
+        }
+
+        function FormatDecimal16(num) {
+            var format = Number(parseFloat(roundTo6(num)).toFixed(6)).toLocaleString('en', {
+                minimumFractionDigits: 8
+            });
+            return format;
+        }
+
+        function FormatDecimal0(Num) {
+            var format = Number(parseFloat(Num).toFixed(0)).toLocaleString('en', {
+                minimumFractionDigits: 0
+            });
+            return format;
+        }
+    </script>
+    @Scripts.Render("~/module/validation")
+    @Scripts.Render("~/bundles/SweetAlert")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/Constant")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/Scripts/GM.RPEarlyTerminationDetail.js")
+}
+

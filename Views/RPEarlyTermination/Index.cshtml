@@ -1,0 +1,713 @@
+﻿@model GM.Data.View.RPTransaction.RPDealEntryViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Early Termination
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>SEARCH EARLY TERMINATION</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.from_trans_no, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.from_trans_no, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.to_trans_no, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.to_trans_no, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.from_trade_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.from_trade_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.to_trade_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.to_trade_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.from_settlement_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.from_settlement_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.to_settlement_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.to_settlement_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.from_maturity_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.from_maturity_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(mode => Model.FormSearch.to_maturity_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.to_maturity_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.repo_deal_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_repo_deal_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.repo_deal_type, "Select...", new { @class = "selected-data" })
+                                                        @Html.Hidden("FormSearch.repo_deal_type_code", null, new { @class = "selected-value" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.repo_deal_type, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <input type="hidden" id="txt_repo_deal_type">
+                                                        <ul id="ul_repo_deal_type">
+                                                            <li class="searchterm">
+                                                                <a onclick='ClearDDL("txt_repo_deal_type", "Select...")'>Select...</a>
+                                                            </li>
+                                                            <li class="searchterm">
+                                                                <a data-toggle="tooltip" title="Private Repo" onclick='AddTextForDDL4Value("Private Repo", "txt_repo_deal_type", "PRP","null","null","null","null","null","null")'>Private Repo</a>
+                                                            </li>
+                                                            <li class="searchterm">
+                                                                <a data-toggle="tooltip" title="Bilateral Repo" onclick='AddTextForDDL4Value("Bilateral Repo", "txt_repo_deal_type", "BRP","null","null","null","null","null","null")'>Bilateral Repo</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(mode => Model.FormSearch.counter_party_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.counter_party_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.counter_party_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCounterparty", "CounterPartyFund")" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_counterparty"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.trans_deal_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_trans_deal_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.trans_deal_type_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_deal_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_deal_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillInstrument", "RPDealEntry")" id="txt_trans_deal_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_trans_deal_type"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.trans_type, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_trans_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.trans_type_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_type, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.trans_type_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillTransType", "RPDealEntry")" id="txt_trans_type" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_trans_type"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.port, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_port" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.port_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.port, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.port_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillPortUser", "RPDealEntry")" id="txt_port" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_port"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(mode => Model.FormSearch.purpose, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_purpose" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.purpose_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.purpose, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.purpose_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillPurpose", "RPDealEntry")" id="txt_purpose" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_purpose"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(mode => Model.FormSearch.cur, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-10">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_cur" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.cur, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCur", "RPDealEntry")" id="txt_cur" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_cur"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="Edit" onclick="GM.RPEarlyTermination.Review(this)">
+                                            Deal Early Termination
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><input id="CheckAll" name="checkbox" type="checkbox" value="true"></th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.repo_deal_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trans_deal_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trans_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.port)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.purpose)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.counter_party_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.counter_party_fund_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trade_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.settlement_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.maturity_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.deal_period)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.purchase_price)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.repurchase_price)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.cur)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trans_status)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trans_state)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.trader_id)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.from_trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.to_trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.from_trade_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.to_trade_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.from_settlement_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.to_settlement_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.from_maturity_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.TableList.to_maturity_date)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        .colorTextBlue {
+            color: #00B0FF;
+        }
+
+        #search-form .text-box {
+            width: 235px !important;
+        }
+
+        #search-form .dropdown {
+            width: 235px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        $(document).ready(function () {
+
+            $("#NavBar").html($('#NavRPEarlyTermination').val());
+
+            GM.RPEarlyTermination = {};
+            GM.RPEarlyTermination.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                order: [
+                    [2, "asc"]
+                ],
+                buttons: [],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+                columnDefs:
+                [{
+                        targets: 0,
+                        data: "trans_no",
+                        searchable: false,
+                        orderable: false,
+                        className: 'dt-body-center',
+                        render: function (data, type, row) {
+                            return '<input type="checkbox"' + ' id="chk_' + data + '" ' + (row.trans_state.toUpperCase() === "FO-APPROVE" ? 'disabled="disabled"' : '" class="filter-ck"' ) + ' /> ';
+                        }
+                    },
+                    {
+                        targets: 1,
+                        data: "RowNumber",
+                        orderable: false,
+                        className: "dt-body-center",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.RowNumber + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 2, data: "trans_no",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.trans_no + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 3, data: "repo_deal_type",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.repo_deal_type + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 4, data: "trans_deal_type_name",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.trans_deal_type_name + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 5, data: "trans_type",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.trans_type + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 6, data: "port",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.port + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 7, data: "purpose",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.purpose + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 8, data: "counter_party_name",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.counter_party_name + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 9, data: "counter_party_fund_name",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.counter_party_fund_name + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 10, data: "trade_date",
+                        className:"colorTextBlue",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                if (row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                    return '<label style="color:#00B0FF;font-weight:normal">' + moment(data).format('DD/MM/YYYY') + '</label>';
+                                }
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 11, data: "settlement_date",
+                        className:"colorTextBlue",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                if (row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                    return '<label style="color:#00B0FF;font-weight:normal">' + moment(data).format('DD/MM/YYYY') + '</label>';
+                                }
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 12, data: "maturity_date",
+                        className:"colorTextBlue",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                if (row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                    return '<label style="color:#00B0FF;font-weight:normal">' + moment(data).format('DD/MM/YYYY') + '</label>';
+                                }
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 13, data: "deal_period",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.deal_period + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 14, data: "purchase_price",
+                        className: 'dt-body-right',
+                        render: function (data, type, row) {
+                            var val;
+                            if (data != null) {
+                                val = FormatDecimal(data, 2);
+                                if (row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                    return '<label style="color:#00B0FF;font-weight:normal">' + val + '</label>';
+                                } else
+                                {
+                                    return val;
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 15, data: "repurchase_price",
+                        className: 'dt-body-right',
+                        render: function (data, type, row) {
+                            var val;
+                            if (data != null) {
+                                val = FormatDecimal(data, 2);
+                                if (row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                    return '<label style="color:#00B0FF;font-weight:normal">' + val + '</label>';
+                                } else {
+                                    return val;
+                                }
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 16, data: "cur",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.cur + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 17, data: "trans_status",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.trans_status + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 18, data: "trans_state",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.trans_state + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: 19, data: "trader_id",
+                        render: function (data, type, row) {
+                            if (data && row.trans_state.toUpperCase() === "FO-APPROVE") {
+                                return '<label style="color:#00B0FF;font-weight:normal">' + row.trader_id + '</label>';
+                            }
+                            return data;
+                        }
+                    },
+                    { targets: 20, data: "from_trans_no", visible: false },
+                    { targets: 21, data: "to_trans_no", visible: false },
+                    { targets: 22, data: "from_trade_date", visible: false },
+                    { targets: 23, data: "to_trade_date", visible: false },
+                    { targets: 24, data: "from_settlement_date", visible: false },
+                    { targets: 25, data: "to_settlement_date", visible: false },
+                    { targets: 26, data: "from_maturity_date", visible: false },
+                    { targets: 27, data: "to_maturity_date", visible: false },
+                    {
+                        targets: 28,
+                        orderable: false,
+                        data: "trans_no",
+                        className: "dt-body-center",
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<button class="btn btn-default btn-round" form-mode="edit" onclick="location.href=\'@Url.Action("Select", (string)this.ViewContext.RouteData.Values["controller"] )?id=[' + row.trans_no + ']\'"><i class="feather-icon icon-edit"></i></button>';
+                            return html;
+                        }
+                    }
+                ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                },
+            });
+
+            //Function : Checkbox
+            $('#x-table-data').on('click', 'tr', function () {
+
+                GM.RPEarlyTermination.Table = $('#x-table-data').DataTable();
+                var data = GM.RPEarlyTermination.Table.row(this).data();
+
+                if (typeof data != 'undefined') {
+                    if ($(this).find('.filter-ck').prop('checked') == true) {  //update the cell data with the checkbox state
+                        var id = 'chk_' + data.trans_no;
+                        var inputyes = $("[id=" + id + "]");
+                        inputyes.removeAttr('checked');
+                        inputyes.attr('checked', 'checked');
+                        inputyes.prop('checked', true);
+                    } else {
+                        var id = 'chk_' + data.trans_no;
+                        var inputno = $("[id=" + id + "]");
+                        inputno.removeAttr('checked');
+                        inputno.prop('checked', false);
+                    }
+                }
+            });
+            //Function : Checkbox All
+            $('#x-table-data_wrapper').on("click", '#CheckAll', function () {
+                if ($(this).prop('checked') == true) {
+                    $('.filter-ck').prop('checked', true);
+                }
+                else {
+                    $('.filter-ck').prop('checked', false);
+                }
+            });
+            //Function : Btn Review
+            GM.RPEarlyTermination.Review = function (btn) {
+                var mode = $(btn).attr("form-mode");
+                GM.Message.Clear();
+                Review();
+            };
+        });
+        //End document.ready
+
+        //Function : Review
+        function Review() {
+            var rowData = $('#x-table-data').DataTable().rows($('#x-table-data .filter-ck:checked').closest('tr')).data();
+            var transNoList = [];
+            for (var i = 0; i < rowData.length; i++) {
+                //console.log(rowData[i].trans_no);
+                transNoList.push(rowData[i].trans_no);
+            }
+
+            if (transNoList.length > 0) {
+                window.location.href = "\@Url.Action("Select", (string)this.ViewContext.RouteData.Values["controller"])" + "?id=" + JSON.stringify(transNoList);
+            }
+            else {
+                swal("Warning", "Please Select [Trans No] To Review", "error");
+            }
+        }
+
+        function FormatDecimal(Num, point) {
+            var format = Number(parseFloat(Num).toFixed(point)).toLocaleString('en', {
+                minimumFractionDigits: point
+            });
+            return format;
+        }
+
+    </script>
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/Scripts/GM.RPEarlyTerminationIndex.js")
+}
