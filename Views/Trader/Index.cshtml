@@ -1,0 +1,542 @@
+﻿@model GM.Data.View.UserAndScreen.TraderViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                            @*<li>
+                                    <a href="Home\Index">Home</a>
+                                </li>
+                                <li class="active">Admin Process</li>
+                                <li class="active">User</li>
+                                <li class="active">Trader Master</li>*@
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Trader Master
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("Search", "Trader", FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.trader_id, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.trader_id, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.trader_engname, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.trader_engname, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.trader_thainame, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorFor(model => model.FormSearch.trader_thainame, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.active_flag, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="radio-form">
+                                                    <div class="radio">
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.FormSearch.active_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+
+                                                        </label>
+                                                        <label class="radio-inline c-radio">
+                                                            @Html.RadioButtonFor(m => m.FormSearch.active_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Data Table(new) -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <!-- <button class="btn btn-primary btn-round" type="button" data-toggle="modal" data-target="#edit-modal">
+                                      + Add User
+                                    </button> -->
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAdd" form-mode="add" @(!IsCreate ? "disabled" : "")>
+                                            + Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trader_id)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trader_engname)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trader_thainame)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.active_flag)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Add Form Right Modal -->
+<div class="modal right fade" id="action-form-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h4>
+            </div>
+
+
+            <div class="modal-body group">
+
+
+                @using (Html.BeginForm("Create", "Trader", FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))
+                {
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    @Html.LabelForRequired(mode => Model.FormAction.trader_id, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorForValidate(model => model.FormAction.trader_id, new { htmlAttributes = new { @class = "form-control", @type = "money" } })
+                                        <span id="trader_id_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(mode => Model.FormAction.trader_engname, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorForValidate(model => model.FormAction.trader_engname, new { htmlAttributes = new { @class = "form-control " } })
+                                        <span id="trader_engname_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelForRequired(mode => Model.FormAction.trader_thainame, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorForValidate(model => model.FormAction.trader_thainame, new { htmlAttributes = new { @class = "form-control " } })
+                                        <span id="trader_thainame_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FormAction.active_flag, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-6">
+                                        <div class="radio-form">
+                                            <div class="radio">
+                                                <label class="radio-inline c-radio">
+                                                    @Html.RadioButtonFor(model => model.FormAction.active_flag, "true", htmlAttributes: new { @checked = "checked", @ischeck = "true" }) Yes
+                                                </label>
+                                                <label class="radio-inline c-radio">
+                                                    @Html.RadioButtonFor(model => model.FormAction.active_flag, "false", htmlAttributes: new { @ischeck = "false" }) No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary btn-round btn-main btn-form-save">+ Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</button>
+                            <button type="reset" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+        var isUpdate = "@IsUpdate";
+        var isDelete = "@IsDelete";
+
+        function Delete(trader_id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $('.spinner').css('display', 'block');
+                        var data = { traderid: trader_id };
+                        //console.log("Show form delete -> local");
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("Deletes", (string)this.ViewContext.RouteData.Values["controller"])",
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: data,
+                            success: function (d) {
+                                $('.spinner').css('display', 'none');
+                                if (d.success) {
+                                    setTimeout(function () {
+                                        swal("Deleted!", "Delete Success.", "success");
+                                    }, 100);
+                                    $('#action-form-modal').modal('hide');
+                                    GM.Message.Clear();
+                                    GM.Trader.Form.Search();
+                                    GM.Trader.Table.draw();
+                                } else {
+                                    // DoSomethingElse()
+                                    swal("Deleted!", "Error : " + d.responseText, "error");
+                                }
+                            },
+                            error: function (d) {
+                                $('.spinner').css('display', 'none');
+                                // TODO: Show error
+                                GM.Message.Clear();
+                            }
+                        });
+                    } else {
+                        GM.Message.Clear();
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                });
+        }
+
+        $(document).ready(function () {
+
+            $("#NavBar").html($('#NavTrader').val());
+
+            $("#FormAction_trader_id").keydown(function (evt) {
+                if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+                    evt.preventDefault();
+                }
+            });
+
+            $('.radio input[id=FormSearch_active_flag]').change(function () {
+                var current = $(this).val();
+                var radioyes = $("[id=FormSearch_active_flag][value=true]");
+                var radiono = $("[id=FormSearch_active_flag][value=false]");
+                if (current == "true") {
+                    radioyes.attr('ischeck', 'true');
+                    radiono.attr('ischeck', 'false');
+                    radioyes.attr("checked", "checked");
+                    radiono.removeAttr("checked");
+                }
+                else {
+                    radioyes.attr('ischeck', 'false');
+                    radiono.attr('ischeck', 'true');
+                    radiono.attr("checked", "checked");
+                    radioyes.removeAttr("checked");
+                }
+            })
+            $('.radio input[id=FormAction_active_flag]').change(function () {
+                var current = $(this).val();
+                var radioyes = $("[id=FormAction_active_flag][value=true]");
+                var radiono = $("[id=FormAction_active_flag][value=false]");
+                if (current == "true") {
+                    radioyes.attr('ischeck', 'true');
+                    radiono.attr('ischeck', 'false');
+                    radioyes.attr("checked", "checked");
+                    radiono.removeAttr("checked");
+                }
+                else {
+                    radioyes.attr('ischeck', 'false');
+                    radiono.attr('ischeck', 'true');
+                    radiono.attr("checked", "checked");
+                    radioyes.removeAttr("checked");
+                }
+            })
+
+            GM.Trader = {};
+            GM.Trader.Table = $('#x-table-data').DataTable({
+                dom: 'Bfrtip',
+                select: false,
+                searching: true,
+                scrollY: '80vh',
+                scrollX: true,
+                order: [
+                    [0, "asc"]
+                ],
+                buttons:
+                [
+                    //{
+                    //    text: 'Refresh',
+                    //    action: function (e, dt, node, config) {
+                    //        dt.ajax.reload();
+                    //    }
+                    //}
+                ],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                    "type": "POST",
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                },
+
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                select: true,
+                columnDefs:
+                [
+                    //{ targets: 0, orderable: false, data: "row_no", width: 30,},
+                    { targets: 0, data: "trader_id" },
+                    { targets: 1, data: "trader_engname" },
+                    { targets: 2, data: "trader_thainame" },
+                    {
+                        targets: 3,
+                        data: "active_flag",
+                        render: function (data, type, row, meta) {
+                            if (data == true) {
+                                return 'Yes';
+                            }
+                            else {
+                                return 'No';
+                            }
+                        }
+                    },
+
+                    {
+                        targets: 4,
+                        data: "trader_id",
+                        className: "dt-body-center",
+                        width: 60,
+                        render: function (data, type, row, meta) {
+                            var html = '';
+
+                            if (isUpdate == "True") {
+                                html += '<button class="btn btn-default btn-round" key="' + row.trader_id + '" form-mode="edit"   onclick="GM.Trader.Form(this)" ><i class="feather-icon icon-edit"></i></button>';
+                            }
+                            else {
+                                html += '<button class="btn btn-default btn-round" key="' + row.trader_id + '" form-mode="view"   onclick="GM.Trader.Form(this)" ><i class="feather-icon icon-edit"></i></button>';
+                            }
+
+                            if (isDelete == "True") {
+                                html += '<button class="btn btn-delete  btn-round" key="' + row.trader_id + '" form-mode="delete" onclick="GM.Trader.Form(this)"><i class="feather-icon icon-trash-2"></i></button>';
+                            }
+                            else {
+                                html += '<button class="btn btn-delete  btn-round" key="' + row.trader_id + '" form-mode="delete" onclick="GM.Trader.Form(this)" disabled ><i class="feather-icon icon-trash-2"></i></button>';
+                            }
+
+                            return html;
+                        }
+                    }
+                ],
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 1
+                },
+
+            })
+
+
+            GM.Trader.Form = function (btn) {
+                    var mode = $(btn).attr("form-mode");
+                    GM.Message.Clear();
+                    GM.Trader.Form.Initial();
+                    var radioyes = $("[id=FormAction_active_flag][value=true]");
+                    var radiono = $("[id=FormAction_active_flag][value=false]");
+                    if (mode){
+                        var key = $(btn).attr("key");
+                        switch (mode){
+                            case "add":
+
+                                    $(".modal-title").text("Create @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                    $('#FormAction_trader_id').attr('readonly', false);
+                                    $('#FormAction_trader_engname').attr('readonly', false);
+                                    $('#FormAction_trader_thainame').attr('readonly', false);
+                                    radioyes.removeAttr('disabled');
+                                    radiono.removeAttr('disabled');
+                                    $('#action-form-modal').modal('show');
+                                    $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Create');
+                                    $("#action-form :submit").removeAttr("onclick");
+                                    $("#action-form").attr("action", "@Url.Action("Create", "Trader")");
+                                break;
+                            case "edit":
+                                GM.Trader.Get({
+                                        id: key,
+                                        form: 'action-form',
+                                        handler: function (response, status, jqxhr) {
+                                            //console.log("response:", response);
+                                        }
+                                    });
+                                $('#FormAction_trader_id').attr('readonly', true);
+                                radioyes.removeAttr('disabled');
+                                radiono.removeAttr('disabled');
+                                    $('#action-form-modal').modal('show');
+                                    $(".modal-title").text("Edit @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                    $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Update');
+                                $("#action-form :submit").removeAttr("onclick");
+
+                                    $("#action-form").attr("action", "@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"])");
+                                break;
+                            case "delete":
+                                $(".modal-title").text("Are you sure you want to delete this?");
+                                GM.Trader.Get({
+                                        id: key,
+                                        form: 'action-form',
+                                        handler: function (response, status, jqxhr) {
+                                            //console.log("response:", response);
+                                        }
+                                });
+                                radioyes.attr('disabled', 'disabled');
+                                radiono.attr('disabled', 'disable');
+                                $('#FormAction_trader_id').attr('readonly', true);
+                                $('#FormAction_trader_engname').attr('readonly', true);
+                                $('#FormAction_trader_thainame').attr('readonly', true);
+                                    $('#action-form-modal').modal('show');
+                                    $("#action-form :submit").removeClass('btn-primary').addClass('btn-delete').text('Delete');
+                                    //console.log("Show form delete -> local");
+                                    $("#action-form :submit").attr("onclick", "Delete(" + key + ")");
+                                    $("#action-form").attr("action", "notpost");
+                                   // $("#action-form").attr("action", "@Url.Action("Delete", (string)this.ViewContext.RouteData.Values["controller"])");
+                                break;
+                            case "view":
+                                GM.Trader.Get({
+                                    id: key,
+                                    form: 'action-form',
+                                    handler: function (response, status, jqxhr) {
+                                        //console.log("response:", response);
+                                    }
+                                });
+                                radioyes.attr('disabled', 'disabled');
+                                radiono.attr('disabled', 'disable');
+                                $('#FormAction_trader_id').attr('readonly', true);
+                                $('#FormAction_trader_engname').attr('readonly', true);
+                                $('#FormAction_trader_thainame').attr('readonly', true);
+
+                                $('#action-form-modal').modal('show');
+                                $(".modal-title").text("View @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])");
+                                $('#action-form :submit').attr('disabled', "disabled");
+                                $("#action-form :submit").removeAttr("onclick");
+                                $("#action-form :submit").removeClass('btn-delete').addClass('btn-primary').text('Update');
+                                break;
+                        }
+                    }
+            };
+
+            GM.Trader.Get = function (op) {
+                    $.get("@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"])", { id: op.id, t: GM.Time })
+                 .done(function (response, status, jqxhr) {
+                        // this is the "success" callback
+                     GM.Trader.Form.DataBinding({ form: op.form, data: response });
+                        op.handler(response)
+                 })
+                 .fail(function (jqxhr, status, error) {
+                  });
+            };
+        });
+    </script>
+    @Scripts.Render("~/module/trader")
+    @Scripts.Render("~/module/validation")
+}
+
