@@ -1,0 +1,547 @@
+﻿@model GM.Data.View.Security.SecurityViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar"></ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Security Def
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.instrument_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_instrument_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.instrument_code, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.instrument_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.instrument_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillInstrument", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrument_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_instrument_code"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.instrument_desc, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorFor(model => model.FormSearch.instrument_desc, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.instrumenttype, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_instrumenttype" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.instrumenttype_text, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.instrumenttype, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.instrumenttype_text, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillBondType", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_instrumenttype" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_instrumenttype"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.ISIN_code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_isin_code" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.ISIN_code, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.ISIN_code, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.ISIN_code, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillISINCode", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_isin_code" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_isin_code"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.issue_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.issue_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.maturity_date, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="input-group date">
+                                                    @Html.EditDateFor(model => model.FormSearch.maturity_date, new { @class = "form-control date-time-picker-weekend" })
+                                                    <span class="input-group-addon">
+                                                        <span class="feather-icon icon-calendar-weekend"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.issuer_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_issuer" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.issuer_name, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.issuer_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.issuer_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillIssuer", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_issuer" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_issuer"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Data Table(new) -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                                <div class="add-data">
+                                    <!-- <button class="btn btn-primary btn-round" type="button" data-toggle="modal" data-target="#edit-modal">
+                                      + Add User
+                                    </button> -->
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-round dropdown-toggle disabled" type="button" id="btnAdd" form-mode="add">
+                                            + Add @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])
+                                        </button>
+                                        <button class="btn btn-primary btn-round dropdown-toggle" type="button" id="btnAddEquity" form-mode="add">
+                                            Requset Equity
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.instrument_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.ISIN_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.instrument_desc)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.instrumenttype)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.begining_par)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.xa_day)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.xi_day)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.issuer_name)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.issue_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.maturity_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.cur)</th>
+                                    @*<th>@Html.LabelFor(mode => mode.FormTable.redemption_method_id)</th>*@
+                                    <th>@Html.LabelFor(mode => mode.FormTable.redemp_method)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.coupon_rate)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.coupon_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormTable.instrument_owner)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Add Form Right Modal -->
+<div class="modal right fade" id="action-form-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2"> Request Equity Symbol</h4>
+            </div>
+
+            <div class="modal-body group">
+
+                @using (Html.BeginForm("RequestEquity", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))
+                {
+                    <div class="form-container form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12 form-wrapper-max">
+                                <div class="form-group">
+                                    @Html.LabelForRequired(mode => Model.FormAction.asof_date, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        <div class="input-group input-date date">
+                                            @Html.EditDateFor(model => model.FormAction.asof_date, new { @class = "form-control date-time-picker-weekend" })
+                                            <span class="input-group-addon">
+                                                <span class="feather-icon icon-calendar-weekend"></span>
+                                            </span>
+                                        </div>
+                                        <span id="asofdate_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelForRequired(mode => Model.FormAction.code, htmlAttributes: new { @class = "control-label col-xs-3" })
+                                    <div class="col-xs-6">
+                                        @Html.EditorFor(model => model.FormAction.code, new { htmlAttributes = new { @class = "form-control" } })
+                                        <span id="equity_code_error" class="field-validation-error text-danger" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="button" id="btnReq" class="btn btn-primary btn-round btn-main btn-form-save">Request</button>
+                            <button type="button" id="btnCancel" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+</div>
+<!-- modal-dialog -->
+
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script>
+        function Delete(instrument_id) {
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $('.spinner').css('display', 'block');
+                    var data = { instrumentid: instrument_id };
+                    //console.log("Show form delete -> local");
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Deletes", (string)this.ViewContext.RouteData.Values["controller"])",
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        success: function (d) {
+                            $('.spinner').css('display', 'none');
+                            if (d.success) {
+                                setTimeout(function () {
+                                    swal("Deleted!", "Delete Success.", "success");
+                                }, 100);
+                                //$('#action-form-modal').modal('hide');
+                                GM.Message.Clear();
+                                GM.Security.Search();
+                                GM.Security.Table.draw();
+                            } else {
+                                // DoSomethingElse()
+                                swal("Deleted!", "Error : " + d.responseText, "error");
+                            }
+                        },
+                        error: function (d) {
+                            $('.spinner').css('display', 'none');
+                            // TODO: Show error
+                            GM.Message.Clear();
+                        }
+                    });
+                } else {
+                    GM.Message.Clear();
+                    swal("Cancelled", "Your Data don't delete", "error");
+                }
+            });
+    }
+    $(document).ready(function () {
+
+        $("#NavBar").html($('#NavSecurity').val());
+
+        GM.Security = {};
+        GM.Security.Table = $('#x-table-data').DataTable({
+            dom: 'Bfrtip',
+            select: false,
+            searching: true,
+            scrollY: '80vh',
+            scrollX: true,
+            order: [
+                [1, "asc"]
+            ],
+            buttons:
+            [
+                //{
+                //    text: 'Refresh',
+                //    action: function (e, dt, node, config) {
+                //        dt.ajax.reload();
+                //    }
+                //}
+            ],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                "type": "POST",
+                "error": function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            },
+
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            select: true,
+            columnDefs:
+            [
+                { targets: 0, orderable: false, data: "RowNumber", width: 30, },
+                { targets: 1, data: "instrument_code" },
+                { targets: 2, data: "ISIN_code" },
+                { targets: 3, data: "instrument_desc" },
+                { targets: 4, data: "instrumenttype" },
+                { targets: 5, data: "begining_par" },
+                { targets: 6, data: "xa_day" },
+                { targets: 7, data: "xi_day" },
+                { targets: 8, data: "issuer_name" },
+                {
+                    targets: 9, data: "issue_date",
+                    render: function (data, type, row, meta) {
+                        if (data != null) {
+                            return (row.instrument_code.indexOf("BOTN") !== 0 || row.instrumenttype !== 'BPN') ? moment(data).format('DD/MM/YYYY') : "";
+                        }
+                        return "";
+                    }
+                },
+                {
+                    targets: 10, data: "maturity_date",
+                    render: function (data, type, row, meta) {
+                        if (data != null) {
+                             return (row.instrument_code.indexOf("BOTN") !== 0 || row.instrumenttype !== 'BPN') ? moment(data).format('DD/MM/YYYY') : "";
+                        }
+                        return "";
+                    }
+                },
+                { targets: 11, data: "cur" },
+                //{ targets: 12, data: "redemption_method_id" },
+                { targets: 12, data: "redemp_method" },
+                { targets: 13, data: "coupon_rate" },
+                { targets: 14, data: "coupon_type" },
+                { targets: 15, data: "instrument_owner" } ,
+                {
+                    targets: 16,
+                    orderable: false,
+                    data: "instrument_id",
+                    className: "dt-body-center",
+                    width: 60,
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<button class="btn btn-default btn-round" form-mode="edit"   onclick="location.href=\'@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"] )?instrumentcode=' + row.instrument_id + '\'" @(!IsView? "disabled":"") ><i class="feather-icon icon-edit"></i></button>';
+                        html += '<button class="btn btn-delete  btn-round" form-mode="delete" key="' + row.instrument_id + '" onclick="GM.Security.Delete(this)" @(!IsDelete? "disabled":"") ><i class="feather-icon icon-trash-2"></i></button>';
+
+                        return html;
+                    }
+                }
+            ],
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 1
+            },
+
+        });
+
+        GM.Security.Delete = function (btn) {
+            var mode = $(btn).attr("form-mode");
+            GM.Message.Clear();
+            if (mode){
+                var key = $(btn).attr("key");
+                switch (mode){
+                    case "delete":
+                        Delete(key);
+                        break;
+                }
+            }
+        };
+
+        GM.Security.Get = function (op) {
+            $.get("@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"])", { id: op.id, t: GM.Time })
+             .done(function (response, status, jqxhr) {
+                    // this is the "success" callback
+                    GM.Security.Form.DataBinding({ form: op.form, data: response });
+                    op.handler(response)
+             })
+             .fail(function (jqxhr, status, error) {
+              });
+        };
+
+        $("#action-form").on('submit', function (e) {
+
+            GM.Message.Clear();
+            e.preventDefault() // prevent the form's normal submission
+
+            var dataToPost = $(this).serialize()
+            var action = $(this).attr('action')
+
+            GM.Mask('#action-form-modal .modal-content');
+            $.post(action, dataToPost)
+
+                .done(function (response, status, jqxhr) {
+                    // this is the "success" callback
+                    GM.Unmask();
+
+                    if (response.Success) {
+                        GM.Message.Success('.modal-body', response.Message);
+                        GM.Defer(function () {
+                            $('#action-form-modal').modal('hide');
+                            GM.Security.Table.draw();
+                        }, 500);
+                    }
+                    else {
+                        GM.Message.Error('.modal-body', response.Message);
+                    }
+                })
+
+                .fail(function (jqxhr, status, error) {
+                    // this is the ""error"" callback
+                    //console.log("fail");
+                });
+        });
+
+
+        //$('#btnAdd').on("click", function () {
+        //    GM.Security.Form(this);
+        //});
+
+
+    });
+    </script>
+    @*@Scripts.Render("~/module/securityindex")*@
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/securityindex")
+    <script src="~/Scripts/GM.SecurityEquityReq.js?nocache=@DateTime.Now.ToString("ddmmyyyyHHmmss")"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            var settings = {
+                urlReq: "@Url.Action("Index", "GLAdjust")"
+            };
+            SecurityEquityReq.initForm();
+        });
+    </script>
+}
