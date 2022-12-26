@@ -1,0 +1,310 @@
+﻿@model GM.Data.View.PaymentProcess.RPMarginInterestViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Repo Margin Interest
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search Repo Margin Interest</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <button id="user-master" class="btn btn-link less-more-option">
+                                Show more option
+                                <i class="feather-icon icon-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FormSearch.trans_no, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            @Html.EditorForValidate(model => model.FormSearch.trans_no, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        @Html.LabelFor(model => model.FormSearch.asof_date, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.asof_date, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="advance-form" style="display: none;">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.FormSearch.counter_party_code, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                @Html.EditorForValidate(model => model.FormSearch.counter_party_code, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                            @Html.LabelFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                            <div class="col-xs-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" id="ddl_currency" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        @Html.SpanFor(model => model.FormSearch.cur, "Select...", new { @class = "selected-data" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                        @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-data hidden" })
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <div class="search-dropdown-menu">
+                                                            <input type="text" data-action="@Url.Action("FillCurrency", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_currency" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                            <i class="feather-icon icon-search"></i>
+                                                        </div>
+                                                        <hr>
+                                                        <ul id="ul_currency"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Data Table(new) -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.RowNumber)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.asof_date)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_no)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.counter_party_code)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.trans_deal_type)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.cur)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.purchase_price)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.repo_int_rate)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.period)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.int_amt)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.total_int_period)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.accum_int_period)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.int_tax)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.int_tax_period)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.total_int_received)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.total_int_paid_adj)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.total_int_received_adj)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.accum_int_paid)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.accum_int_reveived)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.total_int_tax_adj)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.payment_method)</th>
+                                    <th>@Html.LabelFor(mode => mode.FormSearch.mt_code)</th>
+                                    <th class="action" style="text-align:center;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    <script>
+
+    $(document).ready(function () {
+
+        GM.RPMarginInterest = {};
+        GM.RPMarginInterest.Table = $('#x-table-data').DataTable({
+            dom: 'Bfrtip',
+            select: false,
+            searching: true,
+            scrollY: '80vh',
+            scrollX: true,
+            order: [
+                [1, "desc"]
+            ],
+            buttons:
+            [
+
+            ],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": "@Url.Action("Search", (string)this.ViewContext.RouteData.Values["controller"])",
+                "type": "POST",
+                "error": function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            },
+
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            select: true,
+            columnDefs:
+                [
+                    { targets: 0, orderable: false, data: "RowNumber", width: 30, },
+                    {
+                        targets: 1, data: "asof_date",
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return moment(data).format('DD/MM/YYYY');
+                            }
+                            return data
+                        }
+                    },
+                    {
+                        targets: 2, data: "trans_no"
+                    },
+                    {
+                        targets: 3, data: "counter_party_code"
+                    },
+                    { targets: 4, data: "trans_deal_type" },
+                    { targets: 5, data: "cur" },
+                    { targets: 6, data: "purchase_price" },
+                    { targets: 7, data: "repo_int_rate" },
+                    { targets: 8, data: "period" },
+                    { targets: 9, data: "int_amt" },
+                    { targets: 10, data: "total_int_period" },
+                    { targets: 11, data: "accum_int_period" },
+                    { targets: 12, data: "int_tax" },
+                    { targets: 13, data: "int_tax_period" },
+                    { targets: 14, data: "total_int_received" },
+                    { targets: 15, data: "total_int_paid_adj" }, //****
+                    { targets: 16, data: "total_int_received_adj" },//****
+                    { targets: 17, data: "accum_int_paid" },
+                    { targets: 18, data: "accum_int_reveived" },
+                    { targets: 19, data: "total_int_tax_adj" },//****
+                    { targets: 20, data: "payment_method" },//****
+                    { targets: 21, data: "mt_code" },//****
+                    {
+                    targets: 22,
+                        data: "trans_no",
+                        className: "dt-body-center",
+                        width: 60,
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<td></td>';
+                            html += '<td><button class="btn btn-default btn-round" style="text-align:center;" form-mode="edit" onclick="location.href=\'@Url.Action("Edit", (string)this.ViewContext.RouteData.Values["controller"] )?trans_no=' + row.trans_no + '&asof_date=' + moment(row.asof_date).format('DD/MM/YYYY')  + '\'" ><i class="feather-icon icon-edit"></i></button></td>';
+                            html += '<td></td>';
+                            return html;
+                        }
+                    }
+            ],
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 1
+            },
+        });
+
+        $("#action-form").on('submit', function (e) {
+
+            GM.Message.Clear();
+            e.preventDefault() // prevent the form's normal submission
+
+            var dataToPost = $(this).serialize()
+            var action = $(this).attr('action')
+
+            GM.Mask('#action-form-modal .modal-content');
+            $.post(action, dataToPost)
+
+                .done(function (response, status, jqxhr) {
+                    // this is the "success" callback
+                    GM.Unmask();
+
+                    if (response.Success) {
+                        GM.Message.Success('.modal-body', response.Message);
+                        GM.Defer(function () {
+                            $('#action-form-modal').modal('hide');
+                            GM.RPMarginInterest.Table.draw();
+                        }, 500);
+                    }
+                    else {
+                        GM.Message.Error('.modal-body', response.Message);
+                    }
+                })
+                .fail(function (jqxhr, status, error) {
+                });
+        });
+
+        $("#NavBar").html($('#NavRPMarginInterest').val());
+    });
+    </script>
+    @Scripts.Render("~/module/RPMarginInterestindex")
+}
+

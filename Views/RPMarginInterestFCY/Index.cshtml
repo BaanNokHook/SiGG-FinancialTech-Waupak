@@ -1,0 +1,367 @@
+﻿@model GM.Data.View.PaymentProcess.RPMarginInterestFCYViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- Div Page Title -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb" id="NavBar">
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Repo Margin Interest Received & Paid
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Div Content -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+                <!-- Div Search -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2">EOM Date From</label>
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.eom_date_from, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-xs-2">EOM Date To</label>
+                                        <div class="col-xs-4">
+                                            <div class="input-group date">
+                                                @Html.EditDateFor(model => model.FormSearch.eom_date_to, new { @class = "form-control date-time-picker-weekend" })
+                                                <span class="input-group-addon">
+                                                    <span class="feather-icon icon-calendar-weekend"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2">Counter Party</label>
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_counterparty" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.counter_party_name, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.counter_party_id, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.counter_party_name, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillCounterparty",(string)this.ViewContext.RouteData.Values["controller"])" id="txt_counterparty" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_counterparty"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-xs-2">CCY</label>
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_cur" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.cur, "Select...", new { @class = "selected-data" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-value hidden" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.cur, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <div class="search-dropdown-menu">
+                                                        <input type="text" data-action="@Url.Action("FillCur", (string)this.ViewContext.RouteData.Values["controller"])" id="txt_cur" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
+                                                        <i class="feather-icon icon-search"></i>
+                                                    </div>
+                                                    <hr>
+                                                    <ul id="ul_cur"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-2">Margin Status</label>
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_margin_status" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.margin_status, "Select...", new { @class = "selected-data" })
+                                                    @Html.Hidden("FormSearch.margin_status", null, new { @class = "selected-value" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.margin_status, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <input type="hidden" id="txt_margin_status">
+                                                    <ul id="ul_margin_status">
+                                                        <li class="searchterm">
+                                                            <a onclick='ClearDDL("txt_margin_status", "Select...")'>Select...</a>
+                                                        </li>
+                                                        <li class="searchterm">
+                                                            <a data-toggle="tooltip" title="Interest" onclick='AddTextForDDL4Value("Interest", "txt_margin_status", "int","null","null","null","null","null","null")'>Interest</a>
+                                                        </li>
+                                                        <li class="searchterm">
+                                                            <a data-toggle="tooltip" title="Close Margin" onclick='AddTextForDDL4Value("Close Margin", "txt_margin_status", "close","null","null","null","null","null","null")'>Close Margin</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-xs-2">Paid / Receive</label>
+                                        <div class="col-xs-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default dropdown-toggle" id="ddl_repo_deal_type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    @Html.SpanFor(model => model.FormSearch.rec_pay_status, "Select...", new { @class = "selected-data" })
+                                                    @Html.Hidden("FormSearch.rec_pay_status", null, new { @class = "selected-value" })
+                                                    @Html.TextBoxFor(model => model.FormSearch.rec_pay_status, htmlAttributes: new { @class = "selected-data hidden" })
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <input type="hidden" id="txt_rec_pay_status">
+                                                    <ul id="ul_rec_pay_status">
+                                                        <li class="searchterm">
+                                                            <a onclick='ClearDDL("txt_rec_pay_status", "Select...")'>Select...</a>
+                                                        </li>
+                                                        <li class="searchterm">
+                                                            <a data-toggle="tooltip" title="Paid" onclick='AddTextForDDL4Value("Paid", "txt_rec_pay_status", "paid","null","null","null","null","null","null")'>Paid</a>
+                                                        </li>
+                                                        <li class="searchterm">
+                                                            <a data-toggle="tooltip" title="Receive" onclick='AddTextForDDL4Value("Receive", "txt_rec_pay_status", "receive","null","null","null","null","null","null")'>Receive</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-round btn-main btn-search" type="submit">Confirm</button>
+                                    <button class="btn btn-link btn-link-secondary" type="reset">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="x-table-data" class="table table-striped display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">No.</th>
+                                    <th style="text-align:center;">EOM Date</th>
+                                    <th style="text-align:center;">Counter Party</th>
+                                    <th style="text-align:center;">CCY</th>
+                                    <th style="text-align:center;">Margin Status</th>
+                                    <th style="text-align:center;">Paid / Receive</th>
+                                    <th style="text-align:center;">Margin Balance</th>
+                                    <th style="text-align:center;">Interest Receive</th>
+                                    <th style="text-align:center;">Interest Paid</th>
+                                    <th style="text-align:center;">WHT Tax</th>
+                                    <th class="action" style="text-align:center;width:30px;">
+                                        <i class="feather-icon icon-settings" style="font-size: large;"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal center fade" id="AdjustInterestModal" tabindex="-1" role="dialog" aria-labelledby="AdjustInterestModal">
+    <div class="modal-dialog modal-extra-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="feather-icon icon-x"></i>
+                    </span>
+                </button>
+                <h4 class="modal-title">Interest Receive & Paid</h4>
+            </div>
+            <div class="modal-body group">
+                @* @using (Html.BeginForm("Update", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "action-form" }))*@
+                @*  *@{
+                <div class="form-container form-horizontal">
+                    <div class="row">
+                        <div class="col-xs-12 form-wrapper-max">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">EOM Date</label>
+                                <div class="col-xs-2">
+                                    <p class="form-control-static" id="lbl_eom_date"></p>
+                                </div>
+                                <label class="control-label col-xs-2">CCY</label>
+                                <div class="col-xs-3">
+                                    <p class="form-control-static" id="lbl_cur"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Counter Party</label>
+                                <div class="col-xs-2">
+                                    <p class="form-control-static" id="lbl_counter_party_code"></p>
+                                    <input type="hidden" id="lbl_counter_party_id" />
+                                </div>
+                                <label class="control-label col-xs-2">Margin Balance</label>
+                                <div class="col-xs-3">
+                                    <p class="form-control-static" id="lbl_position_margin"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Margin Status</label>
+                                <div class="col-xs-2">
+                                    <p class="form-control-static" id="lbl_margin_status"></p>
+                                </div>
+                                <label class="control-label col-xs-2">Paid / Receive</label>
+                                <div class="col-xs-3">
+                                    <p class="form-control-static" id="lbl_rec_pay_status"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2">Payment Date <span class="required">*</span></label>
+                                <div class="col-xs-3">
+                                    <div class="input-group date">
+                                        @Html.EditDateFor(model => model.FormAction.payment_date, new { @class = "form-control date-time-picker-weekend" })
+                                        <span class="input-group-addon">
+                                            <span class="feather-icon icon-calendar-weekend"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-2"></div>
+                                <div class="col-xs-3">
+                                    <span id="payment_date_error" class="field-validation-error text-danger" data-valmsg-replace="true">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2">Interest Receive</label>
+                                <div class="col-xs-3">
+                                    <div class="input-group" style="width: 225px;">
+                                        @Html.EditorFor(model => model.FormAction.total_int_rec, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);", @onfocusout = "return auto2digit(this);" } })
+                                    </div>
+                                </div>
+                                <label class="control-label col-xs-2">Interest Paid</label>
+                                <div class="col-xs-4">
+                                    <div class="input-group" style="width: 225px;">
+                                        @Html.EditorFor(model => model.FormAction.total_int_pay, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);", @onfocusout = "return auto2digit(this);" } })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-2"></div>
+                                <div class="col-xs-3"></div>
+                                <label class="control-label col-xs-2">WHT Tax</label>
+                                <div class="col-xs-4">
+                                    <div class="input-group" style="width: 225px;">
+                                        @Html.EditorFor(model => model.FormAction.int_rec_tax, new { htmlAttributes = new { @class = "form-control", @oninput = "return numberOnlyAndDotAndMinute(this);", @onfocusout = "return auto2digit(this);" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <hr>
+                    </div>
+                </div>
+                <div class="modal-option inner-padding">
+                    <button type="button" id="btnSave" class="btn btn-primary btn-round btn-main btn-form-save">Confirm</button>
+                    <button type="reset" class="btn btn-default btn-round btn-main" data-dismiss="modal">Cancel</button>
+                </div>
+                @* }*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+
+        #search-form .text-box {
+            width: 235px !important;
+        }
+
+        #search-form .dropdown {
+            width: 235px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+
+    @*@Scripts.Render("~/module/TraderLimitConfig")*@
+    @*@Scripts.Render("~/module/validation")*@
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}\"></script>", "~/module/RPMarginInterestFCY")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + DateTime.Now.ToString("ddmmyyyyHHmmss") + "\"></script>", "~/module/validation")
+}
