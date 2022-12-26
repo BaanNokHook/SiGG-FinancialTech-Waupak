@@ -1,0 +1,129 @@
+﻿@model GM.Data.View.Static.TransLeqViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="working-content">
+    <div class="container-fluid container-fixed">
+        <!-- PageTitle -->
+        <div class="row row-fixed">
+            <div class="col-lg-12 col-fixed">
+                <div class="page-title">
+                    <div class="breadcrumb-wrap">
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="..\Home\Index">Home</a>
+                            </li>
+                            <li class="active">Admin</li>
+                            <li class="active">Trans LEQ</li>
+                        </ol>
+                    </div>
+                    <div class="title">
+                        <h1>
+                            Trans LEQ
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Zone -->
+        <div class="row row-fixed">
+            <div class="col-xs-12 col-fixed">
+
+                <div id="alert-msg"></div>
+
+                <!-- Search Zone -->
+                <div class="box-content" id="search-form-modal">
+                    <div class="box-header">
+                        <div class="left-item">
+                            <div class="title">
+                                <h3>Search @Html.DisplayString((string)this.ViewContext.RouteData.Values["controller"])</h3>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Search", (string)this.ViewContext.RouteData.Values["controller"], FormMethod.Post, new { @class = "one-col-form", id = "search-form" }))
+                    {
+                        <div class="form-container form-horizontal">
+                            <div class="row">
+                                <div class="col-xs-12 form-wrapper-1100">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SearchDate, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                        <div class="col-xs-10">
+                                            <div class="input-group">
+                                                @Html.EditDateFor(model => model.SearchDate, new { @class = "form-control date-time-picker" })
+                                                <span class="input-group-addon default date-pick-btn">
+                                                    <span class="feather-icon icon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="button" class="btn btn-primary btn-round btn-main" onclick="TransLeq.search('@Url.Action("Search", "TransLeq")')">Search</button>
+                                    <button type="button" class="btn btn-primary btn-round btn-main" onclick="TransLeq.exportExcel('@Url.Action("ExportExcel", "TransLeq")')">Export Excel</button>
+                                    <button type="button" class="btn btn-primary btn-round btn-main" onclick="location.href = '@Url.Action("Dashboard", "Admin")';return false;">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Div Detail -->
+                <div class="box-content table-content">
+                    <div class="group box-header-wrapper">
+                        <div class="box-header">
+                            <div class="left-item">
+                                <div class="title">
+                                    <h3>Details</h3>
+                                </div>
+                            </div>
+                            <div class="right-item">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outer-table-wrapper">
+                        <table id="dataTable" class="table table-striped display"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/bundles/SweetAlertCss")
+    @Styles.Render("~/content/datatable")
+    <style>
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+
+        .dataTables_processing {
+            z-index: 3000;
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/SweetAlert")
+    <script src="~/Scripts/GM.TransLeq.js">
+    </script>
+    <script>
+        TransLeq.init();
+    </script>
+}
